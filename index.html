@@ -82,11 +82,12 @@ function fmtDateJP(d){if(!d)return"";return`${d.getFullYear()}年${d.getMonth()+
 function addMonths(date,m){const d=new Date(date);return new Date(d.getFullYear(),d.getMonth()+m,d.getDate());}
 
 const RATE_PRESETS=[3.00,3.15,5.00,5.15,7.00,8.15,9.00,10.50,11.00,12.00,13.00,13.50,14.00,14.50];
+const RATE_PRESETS_EG=[1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5];
 const AMOUNT_PRESETS=[10,30,50,100,200,300,500,1000];
 const YEAR_PRESETS=[1,2,3,4,5,6,7,8,9,10];
 const PERIOD_MONTHS=[1,2,3,4,5,6,7,8,9,10,11,12];
 
-function buildShosho({P,annualRate,n,repayDay,execDate,method}){
+function buildShosho({P,annualRate,n,repayDay,execDate,method,ppmCustom}){
   const r=annualRate/12;
   if(!P||!annualRate||!n||r<=0)return null;
   const hasExec=!!execDate;
@@ -98,7 +99,13 @@ function buildShosho({P,annualRate,n,repayDay,execDate,method}){
   const monthly=method==="ep"?fl((P*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1)):null;
   const normInt1=method==="ep"?fl(P*r):null;
   const normPri1=method==="ep"?monthly-normInt1:null;
-  const ppm=method==="eg"?fl(P/n):null;
+  // 元金均等の毎月元金：手動入力 or 自動計算(切捨て)
+  const ppmAuto = method==="eg" ? fl(P/n) : null;
+  const ppmExact = method==="eg" ? P/n : null; // 小数第3位まで表示用
+  const ppmCustomVal = method==="eg" && ppmCustom!=="" ? fl(parseFloat(ppmCustom)||0) : null;
+  const ppm = method==="eg" ? (ppmCustomVal!==null && ppmCustomVal>0 ? ppmCustomVal : ppmAuto) : null;
+  // 最終回元金調整額
+  const lastPrincipalAdj = method==="eg" && ppm ? P - ppm*(n-1) : null;
   let bal=P,rows=[],totInt=0;
   for(let i=1;i<=n;i++){
     let int,pri,pay;
@@ -111,7 +118,7 @@ function buildShosho({P,annualRate,n,repayDay,execDate,method}){
       else{int=fl(bal*r);pri=monthly-int;pay=monthly;}
     }else{
       if(i===1&&hasExec){int=firstInt;pri=ppm;pay=ppm+firstInt;}
-      else if(isLast){int=fl(bal*r);pri=bal;pay=bal+int;}
+      else if(isLast){int=fl(bal*r);pri=bal;pay=bal+int;}// 最終回：残高全額精算
       else{int=fl(bal*r);pri=ppm;pay=ppm+int;}
     }
     bal-=pri;totInt+=int;
@@ -122,7 +129,8 @@ function buildShosho({P,annualRate,n,repayDay,execDate,method}){
       isFirst:i===1&&hasExec,isLast,days:i===1&&hasExec?firstDays:null});
   }
   return{rows,totInt,totPay:rows.reduce((s,r)=>s+r.pay,0),
-    monthly,firstPay:rows[0]?.pay,lastPay:rows[rows.length-1]?.pay,firstDays,ppm};
+    monthly,firstPay:rows[0]?.pay,lastPay:rows[rows.length-1]?.pay,firstDays,
+    ppm,ppmAuto,ppmExact,lastPrincipalAdj,lastPay2:rows[rows.length-1]?.pay,lastInt:rows[rows.length-1]?.int};
 }
 
 function buildTegata({P,annualRate,execDate,collectDate,periodMonths,timing}){
@@ -276,6 +284,7 @@ function App(){
   const[repayDayInput,setRepayDayInput]=useState("17");
   const[execDate,setExecDate]=useState("");
   const[method,setMethod]=useState("ep");
+  const[ppmCustom,setPpmCustom]=useState("");// 元金均等：毎月元金手動入力
   const[showAll,setShowAll]=useState(false);
   const[tegataExec,setTegataExec]=useState("");
   const[tegataCollect,setTegataCollect]=useState("");
@@ -285,7 +294,7 @@ function App(){
   const P=useMemo(()=>{const v=parseFloat(principal)||0;return unit==="万円"?v*10000:v;},[principal,unit]);
   const annualRate=useMemo(()=>parseFloat(rate)/100,[rate]);
   const n=useMemo(()=>parseInt(years)*12,[years]);
-  const shosho=useMemo(()=>loanType==="shosho"?buildShosho({P,annualRate,n,repayDay,execDate,method}):null,[loanType,P,annualRate,n,repayDay,execDate,method]);
+  const shosho=useMemo(()=>loanType==="shosho"?buildShosho({P,annualRate,n,repayDay,execDate,method,ppmCustom}):null,[loanType,P,annualRate,n,repayDay,execDate,method,ppmCustom]);
   const tegata=useMemo(()=>loanType==="tegata"?buildTegata({P,annualRate,execDate:tegataExec,collectDate:tegataPeriod===null?tegataCollect:null,periodMonths:tegataPeriod,timing}):null,[loanType,P,annualRate,tegataExec,tegataCollect,tegataPeriod,timing]);
   const displayRows=showAll?shosho?.rows:shosho?.rows?.slice(0,24);
   const prog=shosho?Math.min(100,(shosho.totInt/shosho.totPay)*100):0;
@@ -321,6 +330,38 @@ function App(){
           </div>
         </div>
 
+
+        {loanType==="shosho"&&(
+        <div className="card">
+          <div className="sec">返済方式</div>
+          <div className="g2">
+            <button className={`bigbtn ${method==="ep"?"on":""}`} onClick={()=>setMethod("ep")}>
+              <div className="bn">元利均等返済</div><div className="bd">毎月返済額が一定<br/>計画が立てやすい</div>
+            </button>
+            <button className={`bigbtn ${method==="eg"?"on":""}`} onClick={()=>setMethod("eg")}>
+              <div className="bn">元金均等返済</div><div className="bd">元金返済額が一定<br/>総利息が少ない</div>
+            </button>
+          </div>
+          <div className="formula">
+            <div className="ftit">計算式</div>
+            {method==="ep"?<>
+              <div className="fline">月額=<span className="fhl">P×r(1+r)^n÷((1+r)^n-1)</span> 円未満切捨</div>
+              <div className="fline">各月利息=<span className="fhl">前月残高×年利÷12</span> 切捨（利息後取り）</div>
+              <div className="fline">初回利息=<span className="fhl">元金×年利÷365×日数</span>（実行日含む）</div>
+              <div className="fline">最終回=<span className="fhl">残高+残高×年利÷12</span>（残高精算）</div>
+              <div className="fline fnote">P=借入元金　r=月利（年利÷12）　n=返済回数</div>
+            </>:<>
+              <div className="fline">毎月元金=<span className="fhl">借入元金÷返済回数</span> 円未満切捨</div>
+              <div className="fline">各月利息=<span className="fhl">前月残高×年利÷12</span> 切捨（利息後取り）</div>
+              <div className="fline">各月返済=<span className="fhl">毎月元金+各月利息</span>（徐々に減少）</div>
+              <div className="fline">初回利息=<span className="fhl">元金×年利÷365×日数</span>（実行日含む）</div>
+              <div className="fline">最終回=<span className="fhl">残高全額+残高×年利÷12</span>（残高精算）</div>
+            </>}
+          </div>
+        </div>
+
+        )}
+
         {/* 借入条件 */}
         <div className="card">
           <div className="sec">借入条件</div>
@@ -355,45 +396,22 @@ function App(){
                 <span className="sunit">%</span>
               </div>
               <div className="slim"><span>0.01%</span><span>14.5%</span></div>
-              <div className="btnwrap">
+              {method==="ep"&&<div className="btnwrap">
                 {RATE_PRESETS.map(p=>(
                   <button key={p} className={`btn ${parseFloat(rate)===p?"on":""}`} onClick={()=>setRt(p)}>{p.toFixed(2)}%</button>
                 ))}
-              </div>
+              </div>}
+              {method==="eg"&&<div className="btnwrap">
+                {RATE_PRESETS_EG.map(p=>(
+                  <button key={p} className={`btn ${parseFloat(rate)===p?"on":""}`} onClick={()=>setRt(p)}>{p.toFixed(1)}%</button>
+                ))}
+              </div>}
             </div>
           </div>
         </div>
 
         {/* 証書貸付 */}
         {loanType==="shosho"&&<>
-          <div className="card">
-            <div className="sec">返済方式</div>
-            <div className="g2">
-              <button className={`bigbtn ${method==="ep"?"on":""}`} onClick={()=>setMethod("ep")}>
-                <div className="bn">元利均等返済</div><div className="bd">毎月返済額が一定<br/>計画が立てやすい</div>
-              </button>
-              <button className={`bigbtn ${method==="eg"?"on":""}`} onClick={()=>setMethod("eg")}>
-                <div className="bn">元金均等返済</div><div className="bd">元金返済額が一定<br/>総利息が少ない</div>
-              </button>
-            </div>
-            <div className="formula">
-              <div className="ftit">計算式</div>
-              {method==="ep"?<>
-                <div className="fline">月額=<span className="fhl">P×r(1+r)^n÷((1+r)^n-1)</span> 円未満切捨</div>
-                <div className="fline">各月利息=<span className="fhl">前月残高×年利÷12</span> 切捨（利息後取り）</div>
-                <div className="fline">初回利息=<span className="fhl">元金×年利÷365×日数</span>（実行日含む）</div>
-                <div className="fline">最終回=<span className="fhl">残高+残高×年利÷12</span>（残高精算）</div>
-                <div className="fline fnote">P=借入元金　r=月利（年利÷12）　n=返済回数</div>
-              </>:<>
-                <div className="fline">毎月元金=<span className="fhl">借入元金÷返済回数</span> 円未満切捨</div>
-                <div className="fline">各月利息=<span className="fhl">前月残高×年利÷12</span> 切捨（利息後取り）</div>
-                <div className="fline">各月返済=<span className="fhl">毎月元金+各月利息</span>（徐々に減少）</div>
-                <div className="fline">初回利息=<span className="fhl">元金×年利÷365×日数</span>（実行日含む）</div>
-                <div className="fline">最終回=<span className="fhl">残高全額+残高×年利÷12</span>（残高精算）</div>
-              </>}
-            </div>
-          </div>
-
           <div className="card">
             <div className="sec">返済期間・返済日・実行日</div>
             <div className="gap">
@@ -441,6 +459,36 @@ function App(){
                   </div>
                 )}
               </div>
+
+              {/* 元金均等：毎月元金設定 */}
+              {method==="eg"&&<div>
+                <label className="flabel">毎月の元金返済額</label>
+                {shosho&&<div style={{fontSize:"0.68rem",color:"#94a3b8",marginBottom:"0.35rem"}}>
+                  自動計算：<span style={{color:"var(--blue)",fontWeight:600}}>{fmtYen(shosho.ppmAuto)}</span>
+                  　（{P}÷{n}回 = <span style={{color:"var(--pur)",fontWeight:600}}>{shosho.ppmExact?.toFixed(3)}円</span>）
+                </div>}
+                <div style={{display:"flex",alignItems:"center",gap:"0.5rem"}}>
+                  <input className="tinput" type="number" inputMode="numeric"
+                    placeholder={shosho?String(shosho.ppmAuto):"自動計算"}
+                    value={ppmCustom}
+                    onChange={e=>setPpmCustom(e.target.value)}
+                    onBlur={e=>{const v=parseFloat(e.target.value);if(!isNaN(v)&&v>0)setPpmCustom(String(fl(v)));else setPpmCustom("");}}
+                    style={{flex:1,minWidth:0}}/>
+                  <span style={{fontSize:"0.9rem",color:"#475569",fontWeight:600,flexShrink:0}}>円</span>
+                  {ppmCustom!==""&&<button className="btn" style={{flexShrink:0,fontSize:"0.7rem",padding:"0.35rem 0.6rem"}}
+                    onClick={()=>setPpmCustom("")}>自動に戻す</button>}
+                </div>
+                {shosho&&ppmCustom!==""&&shosho.lastPrincipalAdj>0&&<div style={{fontSize:"0.65rem",color:"var(--amb)",marginTop:"0.25rem"}}>
+                  最終回元金（調整）：<span style={{fontWeight:600}}>{fmtYen(shosho.lastPrincipalAdj)}</span>　最終回合計：<span style={{fontWeight:600}}>{fmtYen(shosho.lastPay)}</span>
+                </div>}
+                {shosho&&ppmCustom!==""&&shosho.lastPrincipalAdj<=0&&<div style={{fontSize:"0.65rem",color:"var(--red)",marginTop:"0.25rem"}}>
+                  ⚠ 毎月元金が大きすぎます（{n}回以内に完済できません）
+                </div>}
+                {shosho&&ppmCustom===""&&shosho.lastPrincipalAdj!==shosho.ppm&&<div style={{fontSize:"0.65rem",color:"#94a3b8",marginTop:"0.25rem"}}>
+                  最終回元金（端数精算）：<span style={{fontWeight:600,color:"var(--amb)"}}>{fmtYen(shosho.lastPrincipalAdj)}</span>
+                </div>}
+              </div>}
+
               <div>
                 <label className="flabel">融資実行日<span className="opt">任意</span></label>
                 <input type="date" value={execDate} onChange={e=>setExecDate(e.target.value)}/>
@@ -469,9 +517,18 @@ function App(){
                   </div>
                 ):(
                   <div className="scard main">
-                    <div className="sl">毎月の元金返済額（固定）</div>
-                    <div className="sv">{fmtYen(shosho.ppm)}</div>
-                    <div className="ssub">初回：{fmtYen(shosho.firstPay)}　最終回：{fmtYen(shosho.lastPay)}</div>
+                    <div className="sl">毎月の元金返済額</div>
+                    <div className="sv">{fmtYen(shosho.ppm)}
+                      <span style={{fontSize:"0.7rem",fontWeight:400,color:"var(--blue)",marginLeft:"0.4rem"}}>元金/月</span>
+                    </div>
+                    <div className="ssub">
+                      実行額÷回数 = <span style={{color:"var(--pur)"}}>{shosho.ppmExact?.toFixed(3)}円</span>　切捨：{fmtYen(shosho.ppmAuto)}
+                    </div>
+                    <div className="ssub" style={{marginTop:"0.15rem"}}>
+                      初回返済：{fmtYen(shosho.firstPay)}　
+                      最終回元金：<span style={{color:"var(--amb)",fontWeight:600}}>{fmtYen(shosho.lastPrincipalAdj)}</span>
+                      　最終回合計：<span style={{color:"var(--amb)",fontWeight:600}}>{fmtYen(shosho.lastPay)}</span>
+                    </div>
                   </div>
                 )}
                 <div className="scard">
