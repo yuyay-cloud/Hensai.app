@@ -17,8 +17,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;}
-body{background:#f0f4f8;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;color:#1a202c;min-height:100vh;-webkit-font-smoothing:antialiased;}
-:root{--g1:#1e293b;}
+body{background:#f0f4f8;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;color:#1a202c;min-height:100vh;}
 button{-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 input{-webkit-appearance:none;border-radius:0;}
 .twrap{-webkit-overflow-scrolling:touch;}
@@ -161,8 +160,6 @@ const S=`
   padding-bottom:calc(env(safe-area-inset-bottom,0px) + 1.5rem);}
 .card{background:#fff;border-radius:13px;
   box-shadow:0 1px 3px rgba(0,0,0,0.06),0 2px 8px rgba(0,0,0,0.04);padding:0.95rem 0.85rem;}
-.card-table{background:#fff;border-radius:13px;
-  box-shadow:0 1px 3px rgba(0,0,0,0.06),0 2px 8px rgba(0,0,0,0.04);overflow:visible;}
 .sec{font-size:0.57rem;font-weight:700;letter-spacing:0.24em;color:var(--g5);
   text-transform:uppercase;margin-bottom:0.7rem;padding-bottom:0.38rem;border-bottom:2px solid var(--g8);}
 .flabel{display:block;font-size:0.68rem;font-weight:600;color:var(--g3);margin-bottom:0.3rem;}
@@ -229,13 +226,12 @@ input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:0.4;w
   border-radius:8px;padding:0.45rem 0.68rem;margin-top:0.58rem;line-height:1.7;}
 .twrap{overflow-x:auto;border-radius:9px;border:1px solid var(--g8);margin-top:0.48rem;-webkit-overflow-scrolling:touch;}
 table{width:100%;border-collapse:collapse;font-size:0.73rem;}
-th{background:#f8faff;color:var(--g5);font-weight:700;padding:0.55rem 0.5rem;text-align:right;
-  border-bottom:1.5px solid var(--g7);white-space:nowrap;font-size:0.62rem;letter-spacing:0.05em;}
+th{background:#f8faff;color:var(--g5);font-weight:700;padding:0.48rem 0.5rem;text-align:right;
+  border-bottom:1.5px solid var(--g7);white-space:nowrap;font-size:0.6rem;letter-spacing:0.05em;}
 th:first-child{text-align:center;}
-td{padding:0.45rem 0.5rem;text-align:right;border-bottom:1px solid var(--g8);color:var(--g2);white-space:nowrap;font-size:0.75rem;font-weight:500;}
-td:first-child{text-align:center;color:var(--g4);font-size:0.68rem;font-weight:600;}
+td{padding:0.4rem 0.5rem;text-align:right;border-bottom:1px solid var(--g8);color:var(--g2);white-space:nowrap;}
+td:first-child{text-align:center;color:var(--g5);font-size:0.63rem;}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:#f8faff;}
 tr.yrend td{border-bottom:1.5px solid var(--bbd);}
 tr.tlast td{background:#fffbeb;}
 .badge{display:inline-block;font-size:0.5rem;font-weight:700;border-radius:4px;
@@ -561,34 +557,25 @@ function App(){
               <div className="twrap">
                 <table>
                   <thead><tr>
-                    <th>回</th>
-                    {execDate&&<th>返済日</th>}
-                    <th>返済額</th><th>利息</th><th>元金</th><th>残高</th>
+                    <th>回</th>{execDate&&<th>返済日</th>}<th>返済額</th><th>利息</th><th>元金</th><th>残高</th>
                   </tr></thead>
                   <tbody>
-                    {displayRows.map(row=>{
-                      const isYrEnd=row.month%12===0&&!row.isLast;
-                      return(
-                      <tr key={row.month} className={[isYrEnd?"yrend":"",row.isLast?"tlast":""].join(" ")}>
-                        <td>
-                          {isYrEnd
-                            ?<span style={{color:"var(--blue)",fontWeight:700}}>{row.year}年</span>
-                            :<span>
-                                {row.month}回
-                                {row.isFirst&&<span className="badge bw">日割</span>}
-                                {row.isLast&&<span className="badge bl">精算</span>}
-                              </span>}
+                    {displayRows.map(row=>(
+                      <tr key={row.month} className={[row.month%12===0&&!row.isLast?"yrend":"",row.isLast?"tlast":""].join(" ")}>
+                        <td>{row.month%12===0&&!row.isLast
+                          ?<span style={{color:"var(--blue)",fontWeight:700}}>{row.year}年</span>
+                          :<span>{row.month}回{row.isFirst&&<span className="badge bw">日割</span>}{row.isLast&&<span className="badge bl">精算</span>}</span>}
                         </td>
-                        {execDate&&<td style={{fontSize:"0.62rem",color:row.rdBizShifted?"var(--amb)":"var(--g5)"}}>
-                          {fmtDateJP(row.rd)}
-                          {row.rdBizShifted&&<span className="badge" style={{background:"#fef3c7",color:"var(--amb)",marginLeft:3}}>振替</span>}
+                        {execDate&&<td style={{fontSize:"0.63rem",whiteSpace:"nowrap"}}>
+                          <span style={{color:row.rdBizShifted?"var(--amb)":"#94a3b8"}}>{fmtDateJP(row.rd)}</span>
+                          {row.rdBizShifted&&<span className="badge" style={{background:"#fef3c7",color:"var(--amb)",marginLeft:"2px"}}>振替</span>}
                         </td>}
                         <td style={{fontWeight:600,color:row.isLast?"var(--amb)":row.isFirst?"var(--pur)":"var(--g0)"}}>{fmtNum(row.pay)}</td>
                         <td style={{color:"var(--red)"}}>{fmtNum(row.int)}</td>
                         <td style={{color:"var(--blue)"}}>{fmtNum(row.pri)}</td>
                         <td style={{color:"var(--g4)"}}>{fmtNum(row.bal)}</td>
                       </tr>
-                    );})}
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -598,3 +585,118 @@ function App(){
                 </button>
               )}
             </div>
+          </>}
+        </>}
+
+        {/* 手形貸付 */}
+        {loanType==="tegata"&&<>
+          <div className="card">
+            <div className="sec">手形貸付の条件</div>
+            <div className="gap">
+              <div>
+                <label className="flabel">利息の徴収タイミング</label>
+                <div className="timing-grid">
+                  <button className={`tbtn ${timing==="start"?"ts":""}`} onClick={()=>setTiming("start")}>
+                    <div className="tbn">🔴 実行時</div><div className="tbd">利息を天引きして交付<br/>回収時は元金のみ</div>
+                  </button>
+                  <button className={`tbtn ${timing==="end"?"te":""}`} onClick={()=>setTiming("end")}>
+                    <div className="tbn">🔵 回収時</div><div className="tbd">元金をそのまま交付<br/>回収時に元金＋利息</div>
+                  </button>
+                </div>
+                <div className="formula" style={{marginTop:"0.62rem"}}>
+                  <div className="ftit">計算式</div>
+                  <div className="fline">利息=<span className="fhl">元金×年利÷365×日数（実行日当日含む）</span> 円未満切捨</div>
+                  {timing==="start"
+                    ?<div className="fline">交付額=<span className="fhl">元金−利息</span>　回収額=<span className="fhl">元金のみ</span></div>
+                    :<div className="fline">交付額=<span className="fhl">元金そのまま</span>　回収額=<span className="fhl">元金＋利息</span></div>}
+                </div>
+              </div>
+              <div>
+                <label className="flabel">実行日<span className="opt">任意</span></label>
+                <input type="date" value={tegataExec} onChange={e=>{
+                  setTegataExec(e.target.value);
+                  if(tegataPeriod&&e.target.value)setTegataCollect(fmtDate(addMonths(new Date(e.target.value),tegataPeriod)).replace(/\//g,"-"));
+                }}/>
+              </div>
+              <div>
+                <label className="flabel">期間</label>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"0.3rem"}}>
+                  {PERIOD_MONTHS.map(m=>(
+                    <button key={m} className={`btn ${tegataPeriod===m?"on":""}`} onClick={()=>handlePeriod(m)}>{m}ヶ月</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="flabel">回収日を直接指定<span className="opt">任意</span></label>
+                <input type="date" value={tegataCollect} onChange={e=>{setTegataCollect(e.target.value);setTegataPeriod(null);}}/>
+              </div>
+              {tegata&&<div className="einfo">
+                {tegata.collectDate&&<div>回収日：<span className="hl">{tegata.collectDate}</span></div>}
+                <div>計算日数：<span className="hl">{tegata.days}日</span>
+                  {!tegataExec&&tegataPeriod?` (${tegataPeriod}ヶ月×30日)`:tegataExec?" (実行日当日含む)":""}
+                </div>
+              </div>}
+            </div>
+          </div>
+
+          {tegata&&<div className="card">
+            <div className="sec">計算結果</div>
+            <div className="g2" style={{marginBottom:"0.62rem"}}>
+              <div className={`tcard ${timing==="start"?"red2":"amb2"}`}>
+                <div className="sl">利息額</div>
+                <div className="sv" style={{fontSize:"1.38rem",color:timing==="start"?"#dc2626":"var(--amb)"}}>{fmtYen(tegata.interest)}</div>
+                <div className="ssub">{tegata.days}日分　{(tegata.interest/P*100).toFixed(3)}%</div>
+              </div>
+              <div className="tcard">
+                <div className="sl">計算日数</div>
+                <div className="sv" style={{fontSize:"1.38rem"}}>{tegata.days}<span style={{fontSize:"0.78rem",fontWeight:400,color:"#94a3b8",marginLeft:"0.22rem"}}>日</span></div>
+                <div className="ssub">実行日当日を含む</div>
+              </div>
+            </div>
+            <div className={`tcard ${timing==="start"?"red2":"blue"}`} style={{marginBottom:"0.62rem"}}>
+              <div className="sl">📅 実行時　{timing==="start"?"利息天引きで交付":"元金をそのまま交付"}</div>
+              <div className="eqrow">
+                <div><div className="eqlabel">元金</div><div className="eqval">{fmtYen(P)}</div></div>
+                {timing==="start"&&<>
+                  <div className="eqop" style={{color:"var(--red)"}}>−</div>
+                  <div><div className="eqlabel">利息(天引)</div><div className="eqval" style={{color:"var(--red)"}}>{fmtYen(tegata.interest)}</div></div>
+                  <div className="eqop">=</div>
+                </>}
+                <div><div className="eqlabel">交付額</div><div className="eqbig" style={{color:timing==="start"?"#dc2626":"var(--blue)"}}>{fmtYen(tegata.receiveAmt)}</div></div>
+              </div>
+            </div>
+            <div className={`tcard ${timing==="end"?"red2":"grn2"}`}>
+              <div className="sl">📅 回収時{tegata.collectDate?"　"+tegata.collectDate:""}　{timing==="end"?"元金＋利息を返済":"元金のみ返済"}</div>
+              <div className="eqrow">
+                <div><div className="eqlabel">元金</div><div className="eqval">{fmtYen(P)}</div></div>
+                {timing==="end"&&<>
+                  <div className="eqop" style={{color:"var(--red)"}}>＋</div>
+                  <div><div className="eqlabel">利息</div><div className="eqval" style={{color:"var(--red)"}}>{fmtYen(tegata.interest)}</div></div>
+                  <div className="eqop">=</div>
+                </>}
+                <div><div className="eqlabel">回収額</div><div className="eqbig" style={{color:timing==="end"?"#dc2626":"var(--grn)"}}>{fmtYen(tegata.collectAmt)}</div></div>
+              </div>
+            </div>
+            <div className="note" style={{marginTop:"0.62rem"}}>
+              <b>計算式：</b>利息=元金×{rate}%÷365×{tegata.days}日　円未満切捨　{timing==="start"?"実行時前払い（天引き）":"回収時後払い"}
+            </div>
+          </div>}
+        </>}
+
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js")
+      .then(r=>console.log("SW registered"))
+      .catch(e=>console.log("SW error",e));
+  });
+}
+</script>
+</body>
+</html>
