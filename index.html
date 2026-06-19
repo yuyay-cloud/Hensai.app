@@ -25,22 +25,10 @@ input{-webkit-appearance:none;border-radius:0;}
 </head>
 <body> 
 <div id="root"></div>
-<body>
-<div id="root"></div>
 
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations().then(rs => {
-    rs.forEach(r => r.unregister());
-  });
-}
-if ("caches" in window) {
-  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-}
-</script>
 
 <script type="text/babel">
-<script type="text/babel">
+data-presets="env,react">
 const{useState,useMemo}=React;
 const fl=Math.floor;
 const fmtYen=n=>new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n));
