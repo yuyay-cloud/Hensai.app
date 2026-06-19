@@ -702,7 +702,14 @@ function App(){
     </div>
   );
 }
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+try{
+  ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+}catch(e){
+  document.body.innerHTML =
+    "<pre style='padding:20px;white-space:pre-wrap;font-size:14px;color:red'>" +
+    e.stack +
+    "</pre>";
+}
 </script>
 </body>
 </html> 
