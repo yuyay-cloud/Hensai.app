@@ -26,9 +26,21 @@ input{-webkit-appearance:none;border-radius:0;}
 <body> 
 <div id="root"></div>
 
+<script>
+/* 古いService Worker/キャッシュの掃除 */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then(regs => regs.forEach(reg => reg.unregister()))
+    .catch(() => {});
+}
+if ("caches" in window) {
+  caches.keys()
+    .then(keys => keys.forEach(key => caches.delete(key)))
+    .catch(() => {});
+}
+</script>
 
-<script type="text/babel">
-data-presets="env,react">
+<script type="text/babel" data-presets="env,react">
 const{useState,useMemo}=React;
 const fl=Math.floor;
 const fmtYen=n=>new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n));
