@@ -1,4 +1,4 @@
-// Cleanup-only service worker. It removes old caches and unregisters itself.
+// cleanup-only service worker. It removes older caches and unregisters itself.
 self.addEventListener('install', event => self.skipWaiting());
 self.addEventListener('activate', event => {
   event.waitUntil(
@@ -8,4 +8,3 @@ self.addEventListener('activate', event => {
       .then(() => self.registration.unregister())
   );
 });
-// No fetch handler: do not cache or intercept GitHub Pages files.

@@ -2,55 +2,453 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#1d4ed8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f3f5f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="返済試算">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<title>返済試算</title>
+<title>返済試算 Ver2.0</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{background:#f0f4f8;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',system-ui,sans-serif;color:#0f172a;min-height:100vh}button{touch-action:manipulation} .hero{background:linear-gradient(135deg,#1d4ed8,#312e81);padding:1.2rem 1rem;text-align:center;color:#fff}.hero h1{font-size:1.45rem;letter-spacing:.08em}.hero p{font-size:.65rem;opacity:.7;margin-top:.2rem}.wrap{max-width:720px;margin:0 auto;padding:.8rem;display:grid;gap:.75rem}.card{background:#fff;border-radius:14px;box-shadow:0 1px 5px #0001;padding:.95rem}.sec{font-size:.65rem;font-weight:700;letter-spacing:.18em;color:#94a3b8;border-bottom:2px solid #f1f5f9;padding-bottom:.4rem;margin-bottom:.7rem}.g2{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.gap{display:grid;gap:.7rem}.btn,.bigbtn{border:1.5px solid #e2e8f0;border-radius:10px;background:#f8fafc;color:#475569;padding:.58rem .5rem;font-family:inherit;font-weight:600;cursor:pointer}.btn.on,.bigbtn.on{background:#1d4ed8;color:#fff;border-color:#1d4ed8}.bigbtn{padding:.75rem .5rem}.bd{font-size:.62rem;color:inherit;opacity:.75;line-height:1.45;margin-top:.15rem}.flabel{display:block;font-size:.72rem;font-weight:700;color:#475569;margin-bottom:.35rem}.tinput,input[type=date],select{width:100%;border:1.5px solid #e2e8f0;border-radius:10px;padding:.62rem .7rem;font-size:1rem;font-family:inherit;background:#fff}.row{display:flex;gap:.45rem;align-items:center}.presets{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.45rem}.presets .btn{font-size:.72rem;padding:.45rem .5rem}.note{font-size:.68rem;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:.55rem .7rem;line-height:1.7;margin-top:.5rem}.summary{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.sum{border:1.5px solid #e2e8f0;border-radius:11px;background:#f8fafc;padding:.75rem}.sum.main{grid-column:1/-1;background:#eff6ff;border-color:#1d4ed8}.sl{font-size:.62rem;font-weight:700;color:#94a3b8;letter-spacing:.08em;margin-bottom:.25rem}.sv{font-size:1.25rem;font-weight:800;color:#0f172a}.main .sv{color:#1d4ed8;font-size:1.55rem}.twrap{overflow-x:auto;border:1px solid #e2e8f0;border-radius:10px}table{width:100%;border-collapse:collapse;font-size:.78rem;background:#fff}th,td{padding:.48rem .55rem;border-bottom:1px solid #f1f5f9;text-align:right;white-space:nowrap}th{background:#f8fafc;color:#64748b;font-size:.65rem}th:first-child,td:first-child{text-align:center}.red{color:#dc2626}.blue{color:#1d4ed8}.amb{color:#d97706}.hidden{display:none}@media(max-width:430px){.wrap{padding:.6rem}.card{padding:.8rem}.summary{grid-template-columns:1fr}.g2{gap:.45rem}.sv{font-size:1.05rem}th,td{padding:.38rem .42rem}}
+:root{
+  --navy:#0f2f4a;--blue:#1464a5;--sky:#eaf5fb;--cyan:#41b7c4;--gold:#c89b3c;
+  --ink:#102030;--muted:#6b7b8c;--line:#dbe7ef;--bg:#f3f8fb;--card:#ffffff;
+  --red:#dc3b3b;--green:#15865f;--amber:#b77800;--shadow:0 14px 35px rgba(15,47,74,.10);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:linear-gradient(180deg,#e9f5fb 0,#f7fafc 38%,#f3f8fb 100%);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',sans-serif;color:var(--ink);min-height:100vh}
+button,input,select{font:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.app{max-width:760px;margin:0 auto;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}
+.hero{position:sticky;top:0;z-index:5;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 12px;background:rgba(244,250,253,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(219,231,239,.7)}
+.heroRow{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(145deg,#0f3f5f,#2f9aba);box-shadow:0 8px 18px rgba(20,100,165,.22);display:grid;place-items:center;overflow:hidden}
+.logo svg{width:32px;height:32px}
+.titleBlock{flex:1;min-width:0}
+.title{font-size:1.05rem;font-weight:800;letter-spacing:.04em}
+.subtitle{font-size:.68rem;color:var(--muted);letter-spacing:.12em}
+.pill{border:1px solid var(--line);background:#fff;color:var(--blue);border-radius:999px;padding:.38rem .62rem;font-size:.72rem;font-weight:700}
+.wrap{padding:12px 12px 0;display:grid;gap:12px}
+.summary{background:linear-gradient(145deg,#0f3554,#1464a5 58%,#2aa0b5);border-radius:24px;color:#fff;padding:18px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.summary:before{content:"";position:absolute;right:-42px;top:-52px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.11)}
+.summary:after{content:"";position:absolute;left:18px;bottom:-50px;width:220px;height:90px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,0));clip-path:polygon(0 70%,24% 36%,44% 62%,67% 20%,100% 70%,100% 100%,0 100%)}
+.modeRow{position:relative;display:flex;gap:8px;margin-bottom:14px}
+.seg{flex:1;border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.10);color:#dceefa;border-radius:14px;padding:.62rem .4rem;font-size:.82rem;font-weight:800}
+.seg.on{background:#fff;color:var(--blue);box-shadow:0 8px 18px rgba(0,0,0,.12)}
+.mainLabel{position:relative;color:#cde8f5;font-size:.72rem;font-weight:700;letter-spacing:.1em}
+.mainValue{position:relative;font-size:clamp(2rem,9vw,3.25rem);font-weight:900;line-height:1.05;margin:.18rem 0 .65rem;letter-spacing:-.05em}
+.mainSub{position:relative;color:#d8f1f7;font-size:.75rem}
+.kpis{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.kpi{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);border-radius:16px;padding:10px}
+.kpi span{display:block;font-size:.64rem;color:#cde8f5;font-weight:700;margin-bottom:3px}
+.kpi b{font-size:1.02rem}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 8px 24px rgba(15,47,74,.06)}
+.cardHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.cardTitle{font-size:.82rem;font-weight:900;letter-spacing:.12em;color:#466175;text-transform:uppercase}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.field{display:grid;gap:6px}
+label{font-size:.68rem;color:#526b7d;font-weight:800}
+.inputLine{display:flex;align-items:center;gap:8px}
+input,select{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:.72rem .78rem;outline:none;color:var(--ink);font-weight:700}
+input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(65,183,196,.12)}
+.unitBtn,.smallBtn{border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:12px;padding:.62rem .68rem;font-weight:800;min-height:40px}
+.unitBtn.on,.smallBtn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.presetRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.presetRow .smallBtn{font-size:.72rem;padding:.42rem .52rem;min-height:34px}
+.toggle{display:flex;border:1px solid var(--line);border-radius:16px;padding:4px;background:#f7fbfd}
+.toggle button{flex:1;border:0;border-radius:12px;background:transparent;padding:.62rem .4rem;color:var(--muted);font-weight:900}
+.toggle button.on{background:#fff;color:var(--blue);box-shadow:0 4px 12px rgba(15,47,74,.08)}
+.details{display:grid;gap:13px}
+.collapseBtn{width:100%;border:1.5px solid var(--line);border-radius:16px;background:#fff;padding:.82rem;color:var(--blue);font-weight:900}
+.hidden{display:none!important}
+.notice{font-size:.72rem;line-height:1.6;color:var(--muted);background:#f8fbfd;border:1px solid var(--line);border-radius:14px;padding:.62rem .75rem}
+.saveRow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.actionRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.primary{border:0;border-radius:16px;background:linear-gradient(135deg,var(--blue),#2aa0b5);color:#fff;padding:.82rem;font-weight:900;box-shadow:0 8px 18px rgba(20,100,165,.18)}
+.secondary{border:1.5px solid var(--line);border-radius:16px;background:#fff;color:var(--blue);padding:.82rem;font-weight:900}
+.savedList{display:grid;gap:8px;margin-top:10px}
+.savedItem{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;border:1px solid var(--line);border-radius:14px;background:#fff;padding:.62rem}
+.savedMeta{font-size:.68rem;color:var(--muted);margin-top:2px}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:.74rem}
+th{position:sticky;top:0;background:#f8fbfd;color:#62788a;padding:.62rem .5rem;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:center}
+td{padding:.54rem .5rem;text-align:right;border-bottom:1px solid #eef4f7;white-space:nowrap;font-weight:650}
+tr:last-child td{border-bottom:0}
+tr.last td{background:#fff8e7}
+.badge{display:inline-block;font-size:.52rem;font-weight:900;border-radius:5px;padding:.08rem .24rem;margin-left:3px;vertical-align:middle}
+.badge.day{background:#e9ddff;color:#6b38ba}.badge.last{background:#fff0c6;color:#9a6500}.badge.shift{background:#fff0c6;color:#9a6500}
+@media(max-width:430px){
+  .wrap{padding:10px 8px 0;gap:10px}
+  .card{border-radius:18px;padding:12px}
+  .grid2{gap:8px}
+  .mainValue{font-size:2.25rem}
+  table{font-size:.68rem}
+  th,td{padding:.46rem .38rem}
+}
+@media print{
+  body{background:#fff}
+  .hero,.detailsCard,.actionsCard,.collapseBtn{display:none!important}
+  .app{max-width:none;padding:0}
+  .wrap{padding:0}
+  .summary{box-shadow:none;border-radius:0;color:#111;background:#fff;border-bottom:2px solid #111}
+  .summary:before,.summary:after,.modeRow{display:none}
+  .mainLabel,.mainSub,.kpi span{color:#333}
+  .kpi{border:1px solid #ddd;background:#fff;color:#111}
+  .card{box-shadow:none;border:0;border-radius:0}
+  .scheduleBody{display:block!important}
+}
 </style>
 </head>
 <body>
-<div class="hero"><h1>返済試算</h1><p>Loan Repayment Calculator</p></div>
-<div id="app" class="wrap">
-  <div class="card"><div class="sec">貸付方式</div><div class="g2"><button id="type-shosho" class="bigbtn on">📄 証書貸付<div class="bd">分割返済</div></button><button id="type-tegata" class="bigbtn">📝 手形貸付<div class="bd">短期一括</div></button></div></div>
-  <div id="method-card" class="card"><div class="sec">返済方式</div><div class="g2"><button id="method-ep" class="bigbtn on">元利均等返済<div class="bd">毎月返済額が一定</div></button><button id="method-eg" class="bigbtn">元金均等返済<div class="bd">元金返済額が一定</div></button></div></div>
-  <div class="card"><div class="sec">借入条件</div><div class="gap"><div><label class="flabel">借入金額</label><div class="row"><input id="principal" class="tinput" type="number" inputmode="numeric" value="100"><button id="unit-man" class="btn on">万円</button><button id="unit-yen" class="btn">円</button></div><div id="amount-view" class="note"></div><div class="presets" id="amount-presets"></div></div><div><label class="flabel">年利率</label><div class="row"><input id="rate" class="tinput" type="number" step="0.01" value="9.00"><span>%</span></div><div class="presets" id="rate-presets"></div></div></div></div>
-  <div id="shosho-card" class="card"><div class="sec">証書貸付 条件</div><div class="gap"><div><label class="flabel">返済期間</label><div class="row"><input id="years" class="tinput" type="number" min="1" max="50" value="6"><span>年</span></div><div class="presets" id="year-presets"></div></div><div><label class="flabel">毎月の返済日</label><div class="row"><input id="repayDay" class="tinput" type="number" min="1" max="31" value="17"><span>日</span></div></div><div id="ppm-box" class="hidden"><label class="flabel">毎月の元金返済額（任意）</label><input id="ppmCustom" class="tinput" type="number" placeholder="空欄なら自動計算"></div><div><label class="flabel">融資実行日（任意）</label><input id="execDate" type="date"><div id="first-info" class="note"></div></div></div></div>
-  <div id="tegata-card" class="card hidden"><div class="sec">手形貸付 条件</div><div class="gap"><div><label class="flabel">利息の徴収タイミング</label><div class="g2"><button id="timing-end" class="bigbtn on">回収時<div class="bd">元金＋利息</div></button><button id="timing-start" class="bigbtn">実行時<div class="bd">利息天引き</div></button></div></div><div><label class="flabel">実行日（任意）</label><input id="tegataExec" type="date"></div><div><label class="flabel">回収日（任意）</label><input id="tegataCollect" type="date"></div><div><label class="flabel">期間（月）</label><input id="tegataMonths" class="tinput" type="number" min="1" max="12" value="3"></div></div></div>
-  <div class="card"><div class="sec">計算結果</div><div id="summary" class="summary"></div><div id="note" class="note"></div></div>
-  <div id="schedule-card" class="card"><div class="sec">返済スケジュール</div><div class="twrap"><table><thead><tr id="thead"></tr></thead><tbody id="tbody"></tbody></table></div></div>
+<div class="app">
+  <header class="hero">
+    <div class="heroRow">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <path fill="#fff" d="M50 18c8 0 12 11 6 18 10-4 20 2 18 12-2 9-13 10-20 4 6 8 4 19-5 21-9 2-15-8-12-18-7 7-19 7-23-1-4-9 5-17 15-16-9-5-12-16-5-22 7-6 17 0 19 10 1-5 3-8 7-8Z"/>
+          <path fill="#7dd3df" d="M51 29c5 0 8 7 4 11 7-3 13 1 12 7-1 6-8 7-13 3 4 6 2 13-3 14-6 1-10-5-8-12-5 5-12 5-15-1-2-5 3-10 10-9-6-3-8-10-3-14 4-4 11 0 12 7 1-3 2-6 4-6Z"/>
+        </svg>
+      </div>
+      <div class="titleBlock">
+        <div class="title">返済試算 Ver2.0</div>
+        <div class="subtitle">NASUSHIN REPAYMENT TOOL</div>
+      </div>
+      <button class="pill" id="eraToggle">和暦</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="summary">
+      <div class="modeRow">
+        <button class="seg on" data-loan="shosho">証書貸付</button>
+        <button class="seg" data-loan="tegata">手形貸付</button>
+      </div>
+      <div class="mainLabel" id="mainLabel">毎月返済額</div>
+      <div class="mainValue" id="mainValue">—</div>
+      <div class="mainSub" id="mainSub">条件を入力すると即時計算します</div>
+      <div class="kpis">
+        <div class="kpi"><span>総返済額</span><b id="totalPay">—</b></div>
+        <div class="kpi"><span>利息総額</span><b id="totalInterest">—</b></div>
+      </div>
+    </section>
+
+    <section class="card detailsCard">
+      <div class="cardHead">
+        <div class="cardTitle">詳細条件</div>
+        <button class="smallBtn" id="detailsToggle">閉じる</button>
+      </div>
+      <div class="details" id="detailsPanel">
+        <div class="grid2">
+          <div class="field">
+            <label>借入金額</label>
+            <div class="inputLine">
+              <input id="principal" type="number" inputmode="numeric" value="100">
+              <button class="unitBtn on" data-unit="万円">万円</button>
+              <button class="unitBtn" data-unit="円">円</button>
+            </div>
+            <div class="presetRow" id="amountPresets"></div>
+          </div>
+          <div class="field">
+            <label>年利率</label>
+            <div class="inputLine">
+              <input id="rate" type="number" inputmode="decimal" value="9.00" step="0.05">
+              <span style="font-weight:900;color:var(--muted)">%</span>
+            </div>
+            <div class="presetRow" id="ratePresets"></div>
+          </div>
+        </div>
+
+        <div id="shoshoFields" class="details">
+          <div class="toggle">
+            <button class="on" data-method="ep">元利均等</button>
+            <button data-method="eg">元金均等</button>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label>返済期間</label>
+              <div class="inputLine"><input id="years" type="number" inputmode="numeric" value="6" min="1" max="50"><span style="font-weight:900;color:var(--muted)">年</span></div>
+              <div class="presetRow" id="yearPresets"></div>
+            </div>
+            <div class="field">
+              <label>返済日</label>
+              <input id="repayDay" type="number" inputmode="numeric" value="17" min="1" max="31">
+              <div class="presetRow">
+                <button class="smallBtn" data-repay="7">7日</button>
+                <button class="smallBtn on" data-repay="17">17日</button>
+                <button class="smallBtn" data-repay="27">27日</button>
+                <button class="smallBtn" data-repay="31">31日</button>
+              </div>
+            </div>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label>融資実行日</label>
+              <input id="execDate" type="date">
+            </div>
+            <div class="field" id="ppmBox">
+              <label>毎月元金返済額（任意）</label>
+              <input id="ppmCustom" type="number" inputmode="numeric" placeholder="自動計算">
+            </div>
+          </div>
+          <div class="notice" id="dateInfo">実行日を入力すると、初回日割り・返済日営業日補正・最終回精算を反映します。</div>
+        </div>
+
+        <div id="tegataFields" class="details hidden">
+          <div class="toggle">
+            <button data-timing="start">実行時利息天引き</button>
+            <button class="on" data-timing="end">回収時利息受取</button>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>実行日</label><input id="tegataExec" type="date"></div>
+            <div class="field"><label>回収日を直接指定</label><input id="tegataCollect" type="date"></div>
+          </div>
+          <div class="field">
+            <label>期間プリセット</label>
+            <div class="presetRow" id="periodPresets"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card actionsCard">
+      <div class="cardHead"><div class="cardTitle">保存・出力</div></div>
+      <div class="saveRow">
+        <input id="saveName" placeholder="例：A社 運転資金 500万円">
+        <button class="primary" id="saveBtn">保存</button>
+      </div>
+      <div class="actionRow" style="margin-top:8px">
+        <button class="secondary" id="pdfBtn">PDF出力</button>
+        <button class="secondary" id="clearBtn">保存削除</button>
+      </div>
+      <div class="savedList" id="savedList"></div>
+    </section>
+
+    <section class="card">
+      <div class="cardHead">
+        <div class="cardTitle">返済予定表</div>
+        <button class="smallBtn" id="scheduleToggle">表示</button>
+      </div>
+      <div class="scheduleBody hidden" id="scheduleBody">
+        <div class="tableWrap">
+          <table>
+            <thead id="scheduleHead"></thead>
+            <tbody id="scheduleRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
+
 <script>
-(function(){
-'use strict';
-const $=id=>document.getElementById(id);const fl=Math.floor;const MS=86400000;
-const fmtYen=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',maximumFractionDigits:0}).format(Math.round(Number(n)||0));
-const fmtNum=n=>new Intl.NumberFormat('ja-JP').format(Math.round(Number(n)||0));
-const pad=n=>String(n).padStart(2,'0');const fmtDate=d=>d?`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`:'';
-const state={loanType:'shosho',method:'ep',unit:'万円',timing:'end'};
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const fl=Math.floor;
+const yen=n=>new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(Number(n)||0));
+const num=n=>new Intl.NumberFormat("ja-JP").format(Math.round(Number(n)||0));
+const pad=n=>String(n).padStart(2,"0");
+const HKEY="hensai_v2_saves";
+const state={loan:"shosho",unit:"万円",method:"ep",timing:"end",era:"wareki",period:null,showSchedule:false,showDetails:true};
+
+const AMOUNTS=[10,30,50,100,200,300,500,1000];
+const RATES=[3.00,3.15,5.00,5.15,7.00,8.15,9.00,10.50,11.00,12.00,13.00,13.50,14.00,14.50];
+const YEARS=[1,2,3,4,5,6,7,8,9,10];
+const PERIODS=[1,2,3,4,5,6,7,8,9,10,11,12];
+
+function wareki(d){
+  if(!d)return "";
+  const y=d.getFullYear(), m=d.getMonth()+1, day=d.getDate();
+  if(state.era==="ad") return `${y}/${pad(m)}/${pad(day)}`;
+  if(y>=2019) return `令和${y-2018}年${m}月${day}日`;
+  if(y>=1989) return `平成${y-1988}年${m}月${day}日`;
+  if(y>=1926) return `昭和${y-1925}年${m}月${day}日`;
+  return `${y}/${pad(m)}/${pad(day)}`;
+}
+function ymd(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function addMonths(date,m){const d=new Date(date);const day=d.getDate();const last=new Date(d.getFullYear(),d.getMonth()+m+1,0).getDate();return new Date(d.getFullYear(),d.getMonth()+m,Math.min(day,last));}
+function daysIncl(a,b){return Math.round((b-a)/86400000)+1;}
+
 const hCache=new Map();
-function nthWD(y,m,wd,nth){let c=0;for(let d=1;d<=31;d++){const dt=new Date(y,m-1,d);if(dt.getMonth()!=m-1)break;if(dt.getDay()==wd&&++c==nth)return dt;}return null;}
-function calcHolidays(y){const sp=fl(20.8431+0.242194*(y-1980)-fl((y-1980)/4));const sa=fl(23.2488+0.242194*(y-1980)-fl((y-1980)/4));const fixed=[[1,1],[2,11],[2,23],[3,sp],[4,29],[5,3],[5,4],[5,5],[8,11],[9,sa],[11,3],[11,23]];const all=fixed.map(([m,d])=>new Date(y,m-1,d));[nthWD(y,1,1,2),nthWD(y,7,1,3),nthWD(y,9,1,3),nthWD(y,10,1,2)].forEach(d=>d&&all.push(d));const extra=[];all.forEach(d=>{if(d.getDay()===0){const v=new Date(d);v.setDate(v.getDate()+1);while(all.some(h=>h.toDateString()==v.toDateString())||extra.some(h=>h.toDateString()==v.toDateString()))v.setDate(v.getDate()+1);extra.push(v);}});return all.concat(extra).map(d=>d.toDateString());}
+function nthWD(y,m,wd,nth){let c=0;for(let d=1;d<=31;d++){const dt=new Date(y,m-1,d);if(dt.getMonth()!==m-1)break;if(dt.getDay()===wd){c++;if(c===nth)return dt;}}}
+function calcHolidays(y){
+  const sp=Math.floor(20.8431+0.242194*(y-1980)-Math.floor((y-1980)/4));
+  const sa=Math.floor(23.2488+0.242194*(y-1980)-Math.floor((y-1980)/4));
+  const fixed=[[1,1],[2,11],[2,23],[3,sp],[4,29],[5,3],[5,4],[5,5],[8,11],[9,sa],[11,3],[11,23]];
+  const all=fixed.map(([m,d])=>new Date(y,m-1,d));
+  [nthWD(y,1,1,2),nthWD(y,7,1,3),nthWD(y,9,1,3),nthWD(y,10,1,2)].forEach(d=>d&&all.push(d));
+  // 国民の休日
+  const set=new Set(all.map(d=>d.toDateString()));
+  const start=new Date(y,0,1), end=new Date(y,11,31);
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+    const prev=new Date(d);prev.setDate(prev.getDate()-1);
+    const next=new Date(d);next.setDate(next.getDate()+1);
+    if(d.getDay()!==0&&d.getDay()!==6&&set.has(prev.toDateString())&&set.has(next.toDateString())) all.push(new Date(d));
+  }
+  const extra=[];
+  all.forEach(d=>{if(d.getDay()===0){const v=new Date(d);v.setDate(v.getDate()+1);while(all.some(h=>h.toDateString()===v.toDateString())||extra.some(h=>h.toDateString()===v.toDateString()))v.setDate(v.getDate()+1);extra.push(new Date(v));}});
+  return all.concat(extra).map(d=>d.toDateString());
+}
 function isHoliday(d){const y=d.getFullYear();if(!hCache.has(y))hCache.set(y,calcHolidays(y));return hCache.get(y).includes(d.toDateString());}
-function nextBizDay(date){let d=new Date(date);while(d.getDay()===0||d.getDay()===6||isHoliday(d)){d.setDate(d.getDate()+(d.getDay()===6?2:1));}return d;}
-function daysIncl(a,b){return Math.round((b-a)/MS)+1;}function addMonths(date,m){const d=new Date(date);return new Date(d.getFullYear(),d.getMonth()+m,d.getDate());}
-function firstRepay(exec,day){const e=new Date(exec);const base=e.getDate()<day?new Date(e.getFullYear(),e.getMonth(),day):new Date(e.getFullYear(),e.getMonth()+1,day);return nextBizDay(base);}
-function nthRepay(exec,day,n){const e=new Date(exec);const fm=e.getDate()<day?e.getMonth():e.getMonth()+1;return nextBizDay(new Date(e.getFullYear(),fm+n-1,day));}
-function principal(){const v=parseFloat($('principal').value)||0;return state.unit==='万円'?v*10000:v;}function rate(){return (parseFloat($('rate').value)||0)/100;}
-function buildShosho(){const P=principal(),annual=rate(),yrs=parseInt($('years').value)||1,n=yrs*12,day=Math.min(31,Math.max(1,parseInt($('repayDay').value)||1));if(!P||!annual||!n)return null;const r=annual/12,exec=$('execDate').value,has=!!exec;let bal=P,rows=[],totInt=0;const monthly=state.method==='ep'?fl((P*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1)):null;const normInt1=state.method==='ep'?fl(P*r):null;const normPri1=state.method==='ep'?monthly-normInt1:null;const ppmAuto=fl(P/n);const custom=parseFloat($('ppmCustom').value);const ppm=state.method==='eg'&&custom>0?fl(custom):ppmAuto;let firstDays=0,firstInt=0;if(has){const fr=firstRepay(exec,day);firstDays=daysIncl(new Date(exec),fr);firstInt=fl(P*annual/365*firstDays);}for(let i=1;i<=n;i++){const isLast=i===n;let int,pri,pay;if(state.method==='ep'){if(i===1&&has){int=firstInt;pri=normPri1;pay=int+pri;}else if(isLast){int=fl(bal*r);pri=bal;pay=bal+int;}else{int=fl(bal*r);pri=monthly-int;pay=monthly;}}else{if(i===1&&has){int=firstInt;pri=ppm;pay=ppm+int;}else if(isLast){int=fl(bal*r);pri=bal;pay=bal+int;}else{int=fl(bal*r);pri=ppm;pay=ppm+int;}}bal-=pri;totInt+=int;const rd=has?nthRepay(exec,day,i):null;rows.push({i,pay,int,pri,bal:Math.max(0,bal),rd,isLast,first:i===1&&has});}return{P,n,rows,totInt,totPay:rows.reduce((s,r)=>s+r.pay,0),monthly,ppm,firstDays,firstPay:rows[0].pay,lastPay:rows[rows.length-1].pay};}
-function buildTegata(){const P=principal(),annual=rate();if(!P||!annual)return null;let days=0,collect=null;const ex=$('tegataExec').value,co=$('tegataCollect').value,mo=parseInt($('tegataMonths').value)||0;if(ex&&co){collect=new Date(co);days=daysIncl(new Date(ex),collect);}else if(ex&&mo){collect=addMonths(new Date(ex),mo);days=daysIncl(new Date(ex),collect);}else if(mo){days=mo*30;}if(!days)return null;const interest=fl(P*annual/365*days);return{P,days,interest,collect,receive:state.timing==='start'?P-interest:P,collectAmt:state.timing==='end'?P+interest:P};}
-function render(){const P=principal();$('amount-view').textContent=P?fmtYen(P):'';$('type-shosho').classList.toggle('on',state.loanType==='shosho');$('type-tegata').classList.toggle('on',state.loanType==='tegata');$('method-ep').classList.toggle('on',state.method==='ep');$('method-eg').classList.toggle('on',state.method==='eg');$('unit-man').classList.toggle('on',state.unit==='万円');$('unit-yen').classList.toggle('on',state.unit==='円');$('timing-end').classList.toggle('on',state.timing==='end');$('timing-start').classList.toggle('on',state.timing==='start');$('method-card').classList.toggle('hidden',state.loanType!=='shosho');$('shosho-card').classList.toggle('hidden',state.loanType!=='shosho');$('schedule-card').classList.toggle('hidden',state.loanType!=='shosho');$('tegata-card').classList.toggle('hidden',state.loanType!=='tegata');$('ppm-box').classList.toggle('hidden',state.method!=='eg');if(state.loanType==='shosho')renderShosho();else renderTegata();}
-function renderShosho(){const x=buildShosho();if(!x)return;$('summary').innerHTML=`<div class="sum main"><div class="sl">${state.method==='ep'?'毎月返済額（通常回）':'毎月元金返済額'}</div><div class="sv">${fmtYen(state.method==='ep'?x.monthly:x.ppm)}</div></div><div class="sum"><div class="sl">総返済額</div><div class="sv">${fmtYen(x.totPay)}</div></div><div class="sum"><div class="sl">利息総額</div><div class="sv red">${fmtYen(x.totInt)}</div></div>`;$('note').textContent=`${state.method==='ep'?'元利均等':'元金均等'}・円未満切捨て。${$('execDate').value?'初回日割 '+x.firstDays+'日、最終回残高精算。':'実行日未入力のため通常月利計算。'}`;$('first-info').textContent=$('execDate').value?`初回 ${fmtYen(x.firstPay)} / 最終回 ${fmtYen(x.lastPay)}`:'実行日を入れると初回日割りを計算します。';$('thead').innerHTML='<th>回</th><th>返済日</th><th>返済額</th><th>利息</th><th>元金</th><th>残高</th>';$('tbody').innerHTML=x.rows.map(r=>`<tr><td>${r.i}回</td><td>${r.rd?fmtDate(r.rd):'-'}</td><td>${fmtNum(r.pay)}</td><td class="red">${fmtNum(r.int)}</td><td class="blue">${fmtNum(r.pri)}</td><td>${fmtNum(r.bal)}</td></tr>`).join('');}
-function renderTegata(){const x=buildTegata();if(!x){$('summary').innerHTML='';$('note').textContent='条件を入力してください。';return;}$('summary').innerHTML=`<div class="sum main"><div class="sl">利息額</div><div class="sv red">${fmtYen(x.interest)}</div></div><div class="sum"><div class="sl">交付額</div><div class="sv blue">${fmtYen(x.receive)}</div></div><div class="sum"><div class="sl">回収額</div><div class="sv amb">${fmtYen(x.collectAmt)}</div></div>`;$('note').textContent=`利息=元金×年利÷365×${x.days}日。${state.timing==='start'?'実行時天引き':'回収時後払い'}。`;}
-function setupPresets(){[10,30,50,100,200,300,500,1000].forEach(v=>{const b=document.createElement('button');b.className='btn';b.textContent=v+'万';b.onclick=()=>{$('principal').value=v;state.unit='万円';render();};$('amount-presets').appendChild(b);});[3,3.15,5,5.15,7,8.15,9,10.5,11,13,14.5].forEach(v=>{const b=document.createElement('button');b.className='btn';b.textContent=v+'%';b.onclick=()=>{$('rate').value=v;render();};$('rate-presets').appendChild(b);});[1,2,3,4,5,6,7,8,9,10].forEach(v=>{const b=document.createElement('button');b.className='btn';b.textContent=v+'年';b.onclick=()=>{$('years').value=v;render();};$('year-presets').appendChild(b);});}
-function bind(){['principal','rate','years','repayDay','execDate','ppmCustom','tegataExec','tegataCollect','tegataMonths'].forEach(id=>$(id).addEventListener('input',render));$('type-shosho').onclick=()=>{state.loanType='shosho';render();};$('type-tegata').onclick=()=>{state.loanType='tegata';render();};$('method-ep').onclick=()=>{state.method='ep';render();};$('method-eg').onclick=()=>{state.method='eg';render();};$('unit-man').onclick=()=>{state.unit='万円';render();};$('unit-yen').onclick=()=>{state.unit='円';render();};$('timing-end').onclick=()=>{state.timing='end';render();};$('timing-start').onclick=()=>{state.timing='start';render();};}
-try{setupPresets();bind();render();}catch(e){document.body.innerHTML='<pre style="padding:20px;color:red;white-space:pre-wrap">'+e.stack+'</pre>';}
-})();
+function nextBizDay(date){let d=new Date(date);while(d.getDay()===0||d.getDay()===6||isHoliday(d))d.setDate(d.getDate()+1);return d;}
+function baseDate(y,m,day){return new Date(y,m,Math.min(day,new Date(y,m+1,0).getDate()));}
+function firstRepay(exec,day){const e=new Date(exec);const base=e.getDate()<day?baseDate(e.getFullYear(),e.getMonth(),day):baseDate(e.getFullYear(),e.getMonth()+1,day);return nextBizDay(base);}
+function nthRepay(exec,day,n){const e=new Date(exec);const firstBaseMonth=e.getDate()<day?e.getMonth():e.getMonth()+1;return nextBizDay(baseDate(e.getFullYear(),firstBaseMonth+n-1,day));}
+
+function val(id){return $(id).value}
+function principal(){const v=parseFloat(val("#principal"))||0;return state.unit==="万円"?v*10000:v}
+function annual(){return (parseFloat(val("#rate"))||0)/100}
+
+function buildShosho(){
+  const P=principal(), r=annual()/12, ar=annual(), n=(parseInt(val("#years"))||0)*12, repayDay=Math.min(31,Math.max(1,parseInt(val("#repayDay"))||1));
+  if(!P||!ar||!n||r<=0)return null;
+  const exec=val("#execDate"), has=!!exec, ex=has?new Date(exec):null, first=has?firstRepay(exec,repayDay):null;
+  let firstDays=0, firstInt=0;
+  if(has){firstDays=daysIncl(ex,first);firstInt=fl(P*ar/365*firstDays);}
+  const monthly=state.method==="ep"?fl((P*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1)):null;
+  const normInt1=state.method==="ep"?fl(P*r):null;
+  const normPri1=state.method==="ep"?monthly-normInt1:null;
+  const ppmAuto=state.method==="eg"?fl(P/n):null;
+  const custom=val("#ppmCustom")!==""?fl(parseFloat(val("#ppmCustom"))||0):null;
+  const ppm=state.method==="eg"?(custom&&custom>0?custom:ppmAuto):null;
+  let bal=P, rows=[], totalInt=0;
+  for(let i=1;i<=n;i++){
+    const isLast=i===n; let interest, pri, pay;
+    if(state.method==="ep"){
+      if(i===1&&has){interest=firstInt;pri=normPri1;pay=interest+pri;}
+      else if(isLast){interest=fl(bal*r);pri=bal;pay=bal+interest;}
+      else{interest=fl(bal*r);pri=monthly-interest;pay=monthly;}
+    }else{
+      if(i===1&&has){interest=firstInt;pri=ppm;pay=ppm+interest;}
+      else if(isLast){interest=fl(bal*r);pri=bal;pay=bal+interest;}
+      else{interest=fl(bal*r);pri=ppm;pay=ppm+interest;}
+    }
+    const rd=has?nthRepay(exec,repayDay,i):null;
+    const e=has?new Date(exec):null;
+    const raw=has?baseDate(e.getFullYear(),(e.getDate()<repayDay?e.getMonth():e.getMonth()+1)+(i-1),repayDay):null;
+    const shifted=rd&&raw&&rd.toDateString()!==raw.toDateString();
+    bal-=pri; totalInt+=interest;
+    rows.push({i,year:Math.ceil(i/12),pay,interest,pri,bal:Math.max(0,bal),rd,shifted,first:i===1&&has,last:isLast,days:i===1&&has?firstDays:null});
+  }
+  return {rows,monthly,firstPay:rows[0]?.pay,lastPay:rows.at(-1)?.pay,totalInt,totalPay:rows.reduce((s,r)=>s+r.pay,0),firstDays,firstDate:first,finalDate:rows.at(-1)?.rd,ppm,ppmAuto,lastPrincipal:P-ppm*(n-1)};
+}
+
+function buildTegata(){
+  const P=principal(), ar=annual(); if(!P||!ar)return null;
+  const exec=val("#tegataExec"), collect=val("#tegataCollect"); let days=null, collectDate=null;
+  if(exec&&collect){const e=new Date(exec),c=new Date(collect);days=daysIncl(e,c);collectDate=c;}
+  else if(exec&&state.period){const e=new Date(exec);collectDate=addMonths(e,state.period);days=daysIncl(e,collectDate);}
+  else if(state.period){days=state.period*30;}
+  if(!days||days<=0)return null;
+  const interest=fl(P*ar/365*days);
+  return {days,interest,receive:state.timing==="start"?P-interest:P,collect:state.timing==="end"?P+interest:P,collectDate};
+}
+
+function render(){
+  $$(".seg").forEach(b=>b.classList.toggle("on",b.dataset.loan===state.loan));
+  $("#shoshoFields").classList.toggle("hidden",state.loan!=="shosho");
+  $("#tegataFields").classList.toggle("hidden",state.loan!=="tegata");
+  $("#ppmBox").style.display=state.method==="eg"?"grid":"none";
+  $("#eraToggle").textContent=state.era==="wareki"?"和暦":"西暦";
+  let result=state.loan==="shosho"?buildShosho():buildTegata();
+  if(state.loan==="shosho"){
+    $("#mainLabel").textContent=state.method==="ep"?"毎月返済額":"毎月元金返済額";
+    if(result){
+      $("#mainValue").textContent=yen(state.method==="ep"?result.monthly:result.ppm);
+      $("#mainSub").textContent=val("#execDate")?`初回 ${yen(result.firstPay)} / 最終 ${yen(result.lastPay)}`:"実行日未入力の概算";
+      $("#totalPay").textContent=yen(result.totalPay); $("#totalInterest").textContent=yen(result.totalInt);
+      $("#dateInfo").innerHTML=val("#execDate")?`初回返済日：<b>${wareki(result.firstDate)}</b>　初回日数：<b>${result.firstDays}日</b><br>最終返済日：<b>${wareki(result.finalDate)}</b>`:"実行日を入力すると、初回日割り・返済日営業日補正・最終回精算を反映します。";
+    }
+  }else{
+    $("#mainLabel").textContent=state.timing==="start"?"交付額":"回収額";
+    if(result){
+      $("#mainValue").textContent=yen(state.timing==="start"?result.receive:result.collect);
+      $("#mainSub").textContent=`利息 ${yen(result.interest)} / ${result.days}日分`;
+      $("#totalPay").textContent=yen(result.collect); $("#totalInterest").textContent=yen(result.interest);
+    }
+  }
+  if(!result){$("#mainValue").textContent="—";$("#mainSub").textContent="条件を入力すると即時計算します";$("#totalPay").textContent="—";$("#totalInterest").textContent="—";}
+  renderSchedule(result);
+  renderSaved();
+}
+
+function renderSchedule(result){
+  const head=$("#scheduleHead"), body=$("#scheduleRows");
+  body.innerHTML=""; head.innerHTML="";
+  if(!result)return;
+  if(state.loan==="tegata"){
+    head.innerHTML="<tr><th>区分</th><th>金額</th><th>備考</th></tr>";
+    [["交付額",result.receive,"実行時"],["利息",result.interest,`${result.days}日分`],["回収額",result.collect,result.collectDate?wareki(result.collectDate):""]].forEach(r=>body.insertAdjacentHTML("beforeend",`<tr><td>${r[0]}</td><td>${yen(r[1])}</td><td>${r[2]}</td></tr>`));
+    return;
+  }
+  head.innerHTML=`<tr><th>回</th>${val("#execDate")?'<th>返済日</th>':''}<th>返済額</th><th>利息</th><th>元金</th><th>残高</th></tr>`;
+  result.rows.forEach(r=>{
+    body.insertAdjacentHTML("beforeend",`<tr class="${r.last?'last':''}">
+      <td>${r.i%12===0&&!r.last?`${r.year}年`:`${r.i}回${r.first?'<span class="badge day">日割</span>':''}${r.last?'<span class="badge last">精算</span>':''}`}</td>
+      ${val("#execDate")?`<td>${wareki(r.rd)}${r.shifted?'<span class="badge shift">振替</span>':''}</td>`:''}
+      <td>${num(r.pay)}</td><td>${num(r.interest)}</td><td>${num(r.pri)}</td><td>${num(r.bal)}</td>
+    </tr>`);
+  });
+}
+
+function collectState(){
+  return {loan:state.loan,unit:state.unit,method:state.method,timing:state.timing,period:state.period,era:state.era,
+    principal:val("#principal"),rate:val("#rate"),years:val("#years"),repayDay:val("#repayDay"),execDate:val("#execDate"),ppmCustom:val("#ppmCustom"),
+    tegataExec:val("#tegataExec"),tegataCollect:val("#tegataCollect")};
+}
+function applyState(o){
+  Object.assign(state,{loan:o.loan||"shosho",unit:o.unit||"万円",method:o.method||"ep",timing:o.timing||"end",period:o.period||null,era:o.era||state.era});
+  ["principal","rate","years","repayDay","execDate","ppmCustom","tegataExec","tegataCollect"].forEach(k=>{if(o[k]!==undefined)$(`#${k}`).value=o[k]});
+  $$(".unitBtn").forEach(b=>b.classList.toggle("on",b.dataset.unit===state.unit));
+  $$("[data-method]").forEach(b=>b.classList.toggle("on",b.dataset.method===state.method));
+  $$("[data-timing]").forEach(b=>b.classList.toggle("on",b.dataset.timing===state.timing));
+  render();
+}
+function saves(){try{return JSON.parse(localStorage.getItem(HKEY)||"[]")}catch{return []}}
+function renderSaved(){
+  const list=$("#savedList"), data=saves(); list.innerHTML="";
+  data.slice().reverse().forEach((s,idx)=>{
+    const real=data.length-1-idx;
+    list.insertAdjacentHTML("beforeend",`<div class="savedItem"><div><b>${s.name}</b><div class="savedMeta">${s.data.principal}${s.data.unit} / ${s.data.rate}% / ${s.data.loan==="shosho"?s.data.years+"年":"手形"}</div></div><button class="smallBtn" data-load="${real}">読込</button><button class="smallBtn" data-del="${real}">削除</button></div>`);
+  });
+}
+function initPresets(){
+  $("#amountPresets").innerHTML=AMOUNTS.map(a=>`<button class="smallBtn" data-amount="${a}">${a}万</button>`).join("");
+  $("#ratePresets").innerHTML=RATES.map(r=>`<button class="smallBtn" data-rate="${r}">${r.toFixed(2)}%</button>`).join("");
+  $("#yearPresets").innerHTML=YEARS.map(y=>`<button class="smallBtn" data-year="${y}">${y}年</button>`).join("");
+  $("#periodPresets").innerHTML=PERIODS.map(m=>`<button class="smallBtn" data-period="${m}">${m}ヶ月</button>`).join("");
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button"); if(!t)return;
+  if(t.dataset.loan){state.loan=t.dataset.loan;render();}
+  if(t.dataset.unit){state.unit=t.dataset.unit;$$(".unitBtn").forEach(b=>b.classList.toggle("on",b===t));render();}
+  if(t.dataset.method){state.method=t.dataset.method;$$("[data-method]").forEach(b=>b.classList.toggle("on",b===t));render();}
+  if(t.dataset.timing){state.timing=t.dataset.timing;$$("[data-timing]").forEach(b=>b.classList.toggle("on",b===t));render();}
+  if(t.dataset.amount){$("#principal").value=t.dataset.amount;state.unit="万円";$$(".unitBtn").forEach(b=>b.classList.toggle("on",b.dataset.unit==="万円"));render();}
+  if(t.dataset.rate){$("#rate").value=t.dataset.rate;render();}
+  if(t.dataset.year){$("#years").value=t.dataset.year;render();}
+  if(t.dataset.repay){$("#repayDay").value=t.dataset.repay;$$("[data-repay]").forEach(b=>b.classList.toggle("on",b===t));render();}
+  if(t.dataset.period){state.period=Number(t.dataset.period); if($("#tegataExec").value) $("#tegataCollect").value=ymd(addMonths(new Date($("#tegataExec").value),state.period)); render();}
+  if(t.id==="eraToggle"){state.era=state.era==="wareki"?"ad":"wareki";render();}
+  if(t.id==="detailsToggle"){state.showDetails=!state.showDetails;$("#detailsPanel").classList.toggle("hidden",!state.showDetails);t.textContent=state.showDetails?"閉じる":"開く";}
+  if(t.id==="scheduleToggle"){state.showSchedule=!state.showSchedule;$("#scheduleBody").classList.toggle("hidden",!state.showSchedule);t.textContent=state.showSchedule?"閉じる":"表示";}
+  if(t.id==="saveBtn"){const data=saves();data.push({name:$("#saveName").value||`試算 ${new Date().toLocaleString("ja-JP")}`,data:collectState()});localStorage.setItem(HKEY,JSON.stringify(data));$("#saveName").value="";renderSaved();}
+  if(t.id==="clearBtn"){if(confirm("保存した試算をすべて削除しますか？")){localStorage.removeItem(HKEY);renderSaved();}}
+  if(t.id==="pdfBtn"){state.showSchedule=true;$("#scheduleBody").classList.remove("hidden");$("#scheduleToggle").textContent="閉じる";setTimeout(()=>window.print(),50);}
+  if(t.dataset.load){applyState(saves()[Number(t.dataset.load)].data);}
+  if(t.dataset.del){const data=saves();data.splice(Number(t.dataset.del),1);localStorage.setItem(HKEY,JSON.stringify(data));renderSaved();}
+});
+document.addEventListener("input",e=>{if(e.target.matches("input,select"))render();});
+window.addEventListener("DOMContentLoaded",()=>{
+  if("serviceWorker" in navigator) navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});
+  if("caches" in window) caches.keys().then(keys=>keys.forEach(k=>caches.delete(k))).catch(()=>{});
+  initPresets(); render();
+});
 </script>
 </body>
 </html>
