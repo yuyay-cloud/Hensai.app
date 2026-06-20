@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<title>返済試算 Ver2.20</title>
+<title>返済試算 Ver2.24</title>
 <style>
 :root{
   --blue:#1457d9;--blue2:#2f8df7;--cyan:#49c6d9;--ink:#071a3d;--muted:#66758c;
@@ -16,7 +16,19 @@
 html{-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:88px}
 button,input,select{font:inherit}
-button{border:0;background:none;-webkit-tap-highlight-color:transparent}
+button{border:0;background:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+[hidden]{display:none!important}
+
+/* Splash: 1.8s fixed */
+.splash{position:fixed;inset:0;z-index:9999;background:#fff;display:grid;place-items:center;opacity:1;transition:opacity .4s ease,visibility .4s ease}
+.splash.exit{opacity:0;visibility:hidden}
+.splashInner{display:grid;place-items:center;gap:14px;transform:translateY(8px);opacity:0;animation:splashIn .42s cubic-bezier(.2,.8,.2,1) .08s forwards}
+.splashMark{width:84px;height:84px;display:grid;place-items:center}
+.splashMark svg{width:84px;height:84px}
+.splashVersion{font-size:.82rem;letter-spacing:.18em;color:#1457d9;font-weight:800}
+@keyframes splashIn{to{opacity:1;transform:translateY(0)}}
+
 .appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:18px 20px 14px}
 .head{display:flex;align-items:center;gap:14px}
 .logo{width:58px;height:58px;display:grid;place-items:center;flex:none}
@@ -40,14 +52,18 @@ button{border:0;background:none;-webkit-tap-highlight-color:transparent}
 .panel{display:none;padding:18px 20px;border-top:1px solid var(--line)}
 .panel.open{display:block}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.inputBox{border:1.5px solid var(--line);border-radius:13px;background:#fff;display:flex;align-items:center;overflow:hidden}
-.inputBox input{border:0;outline:0;width:100%;font-size:1.25rem;padding:14px 14px;color:var(--ink)}
+.inputBox{border:1.5px solid var(--line);border-radius:13px;background:#fff;display:flex;align-items:center;overflow:hidden;min-height:52px}
+.inputBox input,.inputBox select{border:0;outline:0;width:100%;font-size:1.12rem;padding:14px;color:var(--ink);background:#fff;min-width:0}
+.inputBox select{appearance:auto}
+.inputBox .fixedUnit{padding-right:14px;font-weight:800;white-space:nowrap}
 .pill{border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;font-weight:800;color:var(--muted);min-height:48px}
+.inputBox .pill{border-radius:0;border-top:0;border-bottom:0;border-right:0;min-height:52px;padding:11px 12px}
 .pill.on{background:linear-gradient(135deg,#0d4ed1,#2679ee);color:#fff;border-color:transparent;box-shadow:0 6px 12px rgba(20,87,217,.18)}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:#edf3f9;border:1px solid var(--line);border-radius:15px;padding:4px;gap:4px}
 .seg button{padding:14px;border-radius:12px;font-weight:800;color:var(--muted)}
 .seg button.on{background:#fff;color:var(--blue);box-shadow:0 5px 14px rgba(7,26,61,.08)}
+.methodHint{padding:12px 14px;border:1px solid #dbe8fd;border-radius:12px;background:#f8fbff;color:#46617f;font-size:.82rem;line-height:1.6}
 .result{padding:22px 22px 18px}
 .result h2{font-size:1.08rem;margin-bottom:14px}
 .rrow{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--line)}
@@ -55,6 +71,8 @@ button{border:0;background:none;-webkit-tap-highlight-color:transparent}
 .ico{width:44px;height:44px;border-radius:50%;background:#eef5ff;color:var(--blue);display:inline-grid;place-items:center;margin-right:13px;font-weight:900}
 .rleft{display:flex;align-items:center;font-weight:700}
 .rval{font-size:1.55rem;color:var(--blue);font-weight:800;text-align:right}
+.errorBox{display:none;margin-top:8px;padding:12px 14px;border-radius:12px;background:#fff2f2;color:var(--danger);font-size:.9rem;font-weight:700;line-height:1.55}
+.errorBox.open{display:block}
 .primary{width:100%;padding:19px;border-radius:14px;background:linear-gradient(135deg,#0d4ed1,#2477ee);color:#fff;font-size:1.12rem;font-weight:800;box-shadow:0 8px 18px rgba(20,87,217,.22)}
 .note{padding:16px 18px;line-height:1.8;color:#41516a;font-size:.93rem;background:#fbfdff}
 .small{font-size:.82rem;color:var(--muted);line-height:1.6;margin-top:8px}
@@ -71,28 +89,37 @@ th:first-child,td:first-child{text-align:center}
 .nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px);z-index:25}
 .nav button{display:grid;gap:4px;place-items:center;color:#536178;font-size:.75rem;font-weight:700}
 .nav button.on{color:var(--blue)}
-.err{color:var(--danger);font-weight:700}
 @media(min-width:720px){.wrap{padding:24px}.field{padding:22px 26px}}
 @media(max-width:430px){.title h1{font-size:1.38rem}.logo,.logo svg{width:52px;height:52px}.bigval{font-size:1.75rem}.rval{font-size:1.35rem}.grid2{grid-template-columns:1fr}.pill{padding:10px 12px}}
-@media print{.appbar,.nav,.menu,.toggle,.primary,.actions{display:none!important}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
+@media(prefers-reduced-motion:reduce){.splash,.splashInner{animation:none;transition:none;transform:none;opacity:1}}
+@media print{.splash,.appbar,.nav,.menu,.toggle,.primary,.actions{display:none!important}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
 </style>
 </head>
 <body>
+<div class="splash" id="splash" aria-label="起動画面">
+  <div class="splashInner">
+    <div class="splashMark" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="img">
+        <defs><linearGradient id="splashGradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1c66f0"/><stop offset="1" stop-color="#48d1d4"/></linearGradient></defs>
+        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="url(#splashGradient)"/>
+        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#49c6d9"/>
+      </svg>
+    </div>
+    <div class="splashVersion">v2.24</div>
+  </div>
+</div>
+
 <header class="appbar">
   <div class="head">
     <div class="logo" aria-label="logo">
       <svg viewBox="0 0 64 64" role="img">
-        <defs>
-          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-            <stop stop-color="#1c66f0"/><stop offset="1" stop-color="#48d1d4"/>
-          </linearGradient>
-        </defs>
-        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="url(#g1)" rx="5"/>
+        <defs><linearGradient id="headerGradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1c66f0"/><stop offset="1" stop-color="#48d1d4"/></linearGradient></defs>
+        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="url(#headerGradient)"/>
         <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#49c6d9"/>
       </svg>
     </div>
     <div class="title">
-      <h1>返済試算 <span class="ver">Ver2.20</span></h1>
+      <h1>返済試算 <span class="ver">Ver2.24</span></h1>
       <div class="sub">NASUSHIN REPAYMENT TOOL</div>
     </div>
     <button class="menu" id="menuBtn" aria-label="menu"><span></span></button>
@@ -103,45 +130,77 @@ th:first-child,td:first-child{text-align:center}
   <section class="card">
     <div class="field">
       <div><div class="label">借入金額</div><div class="bigval" id="vAmount">100<span class="unit">万円</span></div></div>
-      <button class="edit" data-open="details">✎</button>
+      <button class="edit" data-open="details" aria-label="借入金額を編集">✎</button>
     </div>
     <div class="field">
       <div><div class="label">年利率</div><div class="bigval" id="vRate">9.00<span class="unit">%</span></div></div>
-      <button class="edit" data-open="details">✎</button>
+      <button class="edit" data-open="details" aria-label="年利率を編集">✎</button>
     </div>
     <div class="field">
-      <div><div class="label">返済期間</div><div class="bigval" id="vYears">6<span class="unit">年</span></div></div>
-      <button class="edit" data-open="details">✎</button>
+      <div><div class="label" id="termSummaryLabel">返済期間</div><div class="bigval" id="vTerm">6<span class="unit">年</span></div></div>
+      <button class="edit" data-open="details" aria-label="返済条件を編集">✎</button>
     </div>
     <button class="toggle" id="detailToggle">詳細条件を見る <span>⌄</span></button>
+
     <div class="panel" id="details">
       <div class="grid2">
         <div>
           <div class="label">借入金額</div>
-          <div class="inputBox"><input id="principal" type="number" inputmode="decimal" value="100"><button class="pill on" id="unitMan">万円</button><button class="pill" id="unitYen">円</button></div>
+          <div class="inputBox"><input id="principal" type="number" inputmode="decimal" value="100" min="0"><button class="pill on" id="unitMan" type="button">万円</button><button class="pill" id="unitYen" type="button">円</button></div>
           <div class="pills" id="amountPills"></div>
         </div>
         <div>
           <div class="label">年利率</div>
-          <div class="inputBox"><input id="rate" type="number" inputmode="decimal" value="9.00" step="0.01"><span style="padding-right:14px;font-weight:800">%</span></div>
+          <div class="inputBox"><input id="rate" type="number" inputmode="decimal" value="9.00" min="0" step="0.01"><span class="fixedUnit">%</span></div>
           <div class="pills" id="ratePills"></div>
         </div>
         <div>
           <div class="label">返済方式</div>
-          <div class="seg"><button id="ep" class="on">元利均等</button><button id="eg">元金均等</button></div>
+          <div class="seg"><button id="ep" class="on" type="button">元利均等</button><button id="eg" type="button">元金均等</button></div>
         </div>
         <div>
           <div class="label">貸付方式</div>
-          <div class="seg"><button id="shosho" class="on">証書貸付</button><button id="tegata">手形貸付</button></div>
+          <div class="seg"><button id="shosho" class="on" type="button">証書貸付</button><button id="tegata" type="button">手形貸付</button></div>
         </div>
-        <div>
+
+        <div id="yearsField">
           <div class="label">返済期間</div>
-          <div class="inputBox"><input id="years" type="number" inputmode="numeric" value="6"><span style="padding-right:14px;font-weight:800">年</span></div>
+          <div class="inputBox"><input id="years" type="number" inputmode="numeric" value="6" min="1" max="50"><span class="fixedUnit">年</span></div>
           <div class="pills" id="yearPills"></div>
         </div>
+
+        <div id="egCountField" hidden>
+          <div class="label">返済回数</div>
+          <div class="inputBox"><input id="egCount" type="number" inputmode="numeric" value="72" min="1" max="600"><span class="fixedUnit">回</span></div>
+          <div class="small">毎月元金とセットで指定します。</div>
+        </div>
+
+        <div id="egPrincipalField" hidden>
+          <div class="label">毎月元金</div>
+          <div class="inputBox"><input id="monthlyPrincipal" type="number" inputmode="decimal" value="1.38" min="0" step="0.01"><span class="fixedUnit" id="monthlyPrincipalUnit">万円</span></div>
+          <div class="small">最終回は残った元金を自動返済します。</div>
+        </div>
+
+        <div id="bonusToggleField">
+          <div class="label">ボーナス払い</div>
+          <div class="seg"><button id="bonusNo" class="on" type="button">なし</button><button id="bonusYes" type="button">あり</button></div>
+        </div>
+
+        <div id="bonusSettings" hidden>
+          <div class="label">ボーナス月（年2回）</div>
+          <div class="inputBox"><select id="bonusMonth1" aria-label="1回目のボーナス月"></select><span class="fixedUnit">・</span><select id="bonusMonth2" aria-label="2回目のボーナス月"></select></div>
+          <div class="small">実際の返済日がこの月のときに加算します。</div>
+        </div>
+
+        <div id="bonusAmountField" hidden>
+          <div class="label">ボーナス加算額（1回あたり）</div>
+          <div class="inputBox"><input id="bonusAmount" type="number" inputmode="decimal" value="0" min="0" step="0.01"><span class="fixedUnit" id="bonusAmountUnit">万円</span></div>
+          <div class="small">通常月の返済額は、指定期間で完済するよう自動計算します。</div>
+        </div>
+
         <div>
           <div class="label">返済日</div>
-          <div class="inputBox"><input id="repayDay" type="number" inputmode="numeric" value="17" min="1" max="31"><span style="padding-right:14px;font-weight:800">日</span></div>
+          <div class="inputBox"><input id="repayDay" type="number" inputmode="numeric" value="17" min="1" max="31"><span class="fixedUnit">日</span></div>
           <div class="pills" id="dayPills"></div>
         </div>
         <div>
@@ -151,21 +210,23 @@ th:first-child,td:first-child{text-align:center}
         </div>
         <div>
           <div class="label">表示形式</div>
-          <div class="seg"><button id="wareki" class="on">和暦</button><button id="seireki">西暦</button></div>
+          <div class="seg"><button id="wareki" class="on" type="button">和暦</button><button id="seireki" type="button">西暦</button></div>
         </div>
+        <div class="methodHint" id="methodHint">元利均等：返済期間を指定して毎月返済額を計算します。</div>
       </div>
     </div>
   </section>
 
   <section class="card result">
     <h2>▥ 試算結果（概要）</h2>
-    <div class="rrow"><div class="rleft"><span class="ico">▣</span>毎月の返済額</div><div class="rval" id="monthly">-</div></div>
+    <div class="rrow"><div class="rleft"><span class="ico">▣</span><span id="monthlyLabel">毎月の返済額</span></div><div class="rval" id="monthly">-</div></div>
     <div class="rrow"><div class="rleft"><span class="ico">￥</span>利息総額</div><div class="rval" id="totalInterest">-</div></div>
     <div class="rrow"><div class="rleft"><span class="ico">≡</span>支払総額</div><div class="rval" id="totalPay">-</div></div>
     <div class="rrow"><div class="rleft"><span class="ico">□</span>返済回数</div><div class="rval" id="count">-</div></div>
+    <div id="calcError" class="errorBox" role="alert"></div>
   </section>
 
-  <button class="primary" id="scheduleBtn">返済予定表を表示</button>
+  <button class="primary" id="scheduleBtn" type="button">返済予定表を表示</button>
   <section class="card tableWrap" id="tableWrap">
     <table>
       <thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead>
@@ -174,106 +235,422 @@ th:first-child,td:first-child{text-align:center}
   </section>
 
   <section class="card note">
-    ⓘ 上記の試算結果は概算です。実際の返済額とは異なる場合があります。
+    ⓘ 上記の試算結果は概算です。元利均等のボーナス払いでは、ボーナス加算額を差し引いた通常月返済額を自動計算します。実際の返済額とは異なる場合があります。
   </section>
 </main>
 
 <div class="actions" id="actions">
   <div class="sheet">
-    <button id="saveBtn">この条件を保存</button>
-    <button id="loadBtn">保存した条件を呼び出す</button>
-    <button id="pdfBtn">PDF出力 / 印刷</button>
-    <button id="resetBtn">入力リセット</button>
-    <button id="closeMenu">閉じる</button>
+    <button id="saveBtn" type="button">この条件を保存</button>
+    <button id="loadBtn" type="button">保存した条件を呼び出す</button>
+    <button id="pdfBtn" type="button">PDF出力 / 印刷</button>
+    <button id="resetBtn" type="button">入力リセット</button>
+    <button id="closeMenu" type="button">閉じる</button>
   </div>
 </div>
 
 <nav class="nav">
-  <button class="on">⌂<span>ホーム</span></button>
-  <button id="navHistory">◷<span>履歴</span></button>
-  <button id="navSave">▱<span>保存した条件</span></button>
-  <button id="navSetting">⚙<span>設定</span></button>
+  <button class="on" type="button">⌂<span>ホーム</span></button>
+  <button id="navHistory" type="button">◷<span>履歴</span></button>
+  <button id="navSave" type="button">▱<span>保存した条件</span></button>
+  <button id="navSetting" type="button">⚙<span>設定</span></button>
 </nav>
 
 <script>
 (function(){
-const $=id=>document.getElementById(id);
-const yen=n=>new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n));
-const num=n=>new Intl.NumberFormat("ja-JP").format(Math.round(n));
-const state={unit:"万円",method:"ep",loan:"shosho",wareki:true,showTable:false};
-const AMOUNTS=[10,30,50,100,200,300,500,1000], RATES_EP=[3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5], RATES_EG=[1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2], YEARS=[1,2,3,4,5,6,7,8,9,10], DAYS=[7,17,27,31];
-function pill(parent,arr,suffix,cb){$(parent).innerHTML="";arr.forEach(v=>{const b=document.createElement("button");b.className="pill";b.textContent=String(v)+suffix;b.onclick=()=>cb(v);$(parent).appendChild(b);});}
-pill("amountPills",AMOUNTS,"万",v=>{state.unit="万円";$("principal").value=v;sync();});
-function renderRatePills(){
-  const rates = state.method==="eg" ? RATES_EG : RATES_EP;
-  pill("ratePills", rates, "%", v=>{$("rate").value=Number(v).toFixed(2);sync();});
-}
-renderRatePills();
-pill("yearPills",YEARS,"年",v=>{$("years").value=v;sync();});
-pill("dayPills",DAYS,"日",v=>{$("repayDay").value=v;sync();});
-["principal","rate","years","repayDay","execDate"].forEach(id=>$(id).addEventListener("input",sync));
-$("unitMan").onclick=()=>{state.unit="万円";sync()}; $("unitYen").onclick=()=>{state.unit="円";sync()};
-$("ep").onclick=()=>{state.method="ep";renderRatePills();sync()}; $("eg").onclick=()=>{state.method="eg";renderRatePills();sync()};
-$("shosho").onclick=()=>{state.loan="shosho";sync()}; $("tegata").onclick=()=>{state.loan="tegata";alert("Ver2.20では手形貸付UIは簡易表示です。証書貸付の試算ロジックは維持しています。");sync()};
-$("wareki").onclick=()=>{state.wareki=true;sync()}; $("seireki").onclick=()=>{state.wareki=false;sync()};
-$("detailToggle").onclick=()=>{$("details").classList.toggle("open");$("detailToggle").innerHTML=$("details").classList.contains("open")?"詳細条件を閉じる <span>⌃</span>":"詳細条件を見る <span>⌄</span>";};
-document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{$("details").classList.add("open");$("detailToggle").innerHTML="詳細条件を閉じる <span>⌃</span>";});
-$("scheduleBtn").onclick=()=>{state.showTable=!state.showTable;$("tableWrap").classList.toggle("open",state.showTable);$("scheduleBtn").textContent=state.showTable?"返済予定表を閉じる":"返済予定表を表示（"+(parseInt($("years").value||0)*12)+"回）";};
-$("menuBtn").onclick=()=>{$("actions").style.display="block"}; $("closeMenu").onclick=()=>{$("actions").style.display="none"};
-$("pdfBtn").onclick=()=>{window.print();};
-$("resetBtn").onclick=()=>{localStorage.removeItem("hensai_v220_current");location.reload();};
-$("saveBtn").onclick=()=>{const name=prompt("保存名を入力してください","返済試算 "+new Date().toLocaleDateString("ja-JP")); if(!name)return; const list=JSON.parse(localStorage.getItem("hensai_v220_saved")||"[]"); list.unshift({name,date:new Date().toISOString(),data:getData()}); localStorage.setItem("hensai_v220_saved",JSON.stringify(list.slice(0,20))); alert("保存しました");};
-$("loadBtn").onclick=$("navSave").onclick=()=>{const list=JSON.parse(localStorage.getItem("hensai_v220_saved")||"[]"); if(!list.length){alert("保存データがありません");return;} const msg=list.map((x,i)=>`${i+1}: ${x.name}`).join("\n"); const n=parseInt(prompt("呼び出す番号を入力\n"+msg)); if(!n||!list[n-1])return; setData(list[n-1].data); $("actions").style.display="none";};
-function getData(){return{principal:$("principal").value,rate:$("rate").value,years:$("years").value,repayDay:$("repayDay").value,execDate:$("execDate").value,unit:state.unit,method:state.method,wareki:state.wareki};}
-function setData(d){Object.assign(state,{unit:d.unit||"万円",method:d.method||"ep",wareki:d.wareki!==false});["principal","rate","years","repayDay","execDate"].forEach(k=>{if(d[k]!=null)$(k).value=d[k]});renderRatePills();sync();}
-function jpDate(d){if(!d)return""; if(!state.wareki)return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`; const y=d.getFullYear(); let era="令和", ey=y-2018; if(y<2019){era="平成";ey=y-1988;} return `${era}${ey===1?"元":ey}年${d.getMonth()+1}月${d.getDate()}日`; }
-function isHol(d){const w=d.getDay();return w===0||w===6}
-function nextBiz(d){d=new Date(d);while(isHol(d))d.setDate(d.getDate()+1);return d}
-function firstDate(exec,day){if(!exec)return null;const e=new Date(exec+"T00:00:00");const base=e.getDate()<day?new Date(e.getFullYear(),e.getMonth(),day):new Date(e.getFullYear(),e.getMonth()+1,day);return nextBiz(base)}
-function nthDate(exec,day,i){if(!exec)return null;const e=new Date(exec+"T00:00:00");const m=e.getDate()<day?e.getMonth():e.getMonth()+1;return nextBiz(new Date(e.getFullYear(),m+i-1,day))}
-function daysIncl(a,b){return Math.round((b-a)/86400000)+1}
-function calc(){
- const p0=parseFloat($("principal").value)||0, P=state.unit==="万円"?p0*10000:p0;
- const rate=(parseFloat($("rate").value)||0)/100, years=parseInt($("years").value)||0, n=years*12, day=Math.min(31,Math.max(1,parseInt($("repayDay").value)||17));
- if(!P||!rate||!n)return null;
- const r=rate/12, exec=$("execDate").value, first=firstDate(exec,day);
- let firstInt=0, firstDays=0;
- if(exec&&first){firstDays=daysIncl(new Date(exec+"T00:00:00"),first); firstInt=Math.floor(P*rate/365*firstDays);}
- const monthly=state.method==="ep"?Math.floor((P*r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1)):null;
- const ppm=state.method==="eg"?Math.floor(P/n):null;
- let bal=P, rows=[], totInt=0, totPay=0;
- for(let i=1;i<=n;i++){
-   let interest, principal, pay;
-   const last=i===n;
-   if(state.method==="ep"){
-     if(i===1&&exec){interest=firstInt; principal=monthly-Math.floor(P*r); pay=interest+principal;}
-     else if(last){interest=Math.floor(bal*r); principal=bal; pay=bal+interest;}
-     else{interest=Math.floor(bal*r); principal=monthly-interest; pay=monthly;}
-   }else{
-     if(i===1&&exec){interest=firstInt; principal=ppm; pay=principal+interest;}
-     else if(last){interest=Math.floor(bal*r); principal=bal; pay=bal+interest;}
-     else{interest=Math.floor(bal*r); principal=ppm; pay=principal+interest;}
-   }
-   bal-=principal; totInt+=interest; totPay+=pay;
-   rows.push({i,date:nthDate(exec,day,i),pay,principal,interest,bal:Math.max(0,bal)});
- }
- return{P,rate,years,n,rows,totInt,totPay,monthly:rows[0]?.pay||0,firstDays,first};
-}
-function sync(){
- $("unitMan").classList.toggle("on",state.unit==="万円");$("unitYen").classList.toggle("on",state.unit==="円");
- $("ep").classList.toggle("on",state.method==="ep");$("eg").classList.toggle("on",state.method==="eg");
- $("shosho").classList.toggle("on",state.loan==="shosho");$("tegata").classList.toggle("on",state.loan==="tegata");
- $("wareki").classList.toggle("on",state.wareki);$("seireki").classList.toggle("on",!state.wareki);
- const p0=$("principal").value||0; $("vAmount").innerHTML=`${num(p0)}<span class="unit">${state.unit}</span>`;
- $("vRate").innerHTML=`${Number($("rate").value||0).toFixed(2)}<span class="unit">%</span>`; $("vYears").innerHTML=`${$("years").value||0}<span class="unit">年</span>`;
- const c=calc(); if(!c){return}
- $("monthly").textContent=yen(c.monthly); $("totalInterest").textContent=yen(c.totInt); $("totalPay").textContent=yen(c.totPay); $("count").textContent=c.n+"回";
- $("scheduleBtn").textContent=state.showTable?"返済予定表を閉じる":"返済予定表を表示（"+c.n+"回）";
- $("dateInfo").textContent=c.first?`初回返済日：${jpDate(c.first)} / ${c.firstDays}日分の日割り利息`:"実行日を入れると初回日割りを計算します。";
- $("tbody").innerHTML=c.rows.map((r,idx)=>`<tr><td>${r.i}</td><td>${r.date?jpDate(r.date):"-"}</td><td>${yen(r.pay)}</td><td>${yen(r.principal)}</td><td>${yen(r.interest)}</td><td>${yen(r.bal)}</td></tr>`).join("");
- localStorage.setItem("hensai_v220_current",JSON.stringify(getData()));
-}
-const current=localStorage.getItem("hensai_v220_current"); if(current){try{setData(JSON.parse(current))}catch(e){sync()}}else sync();
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const STORAGE_CURRENT = "hensai_v224_current";
+  const STORAGE_SAVED = "hensai_v224_saved";
+  const yen = n => new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n || 0));
+  const num = n => new Intl.NumberFormat("ja-JP",{maximumFractionDigits:2}).format(Number(n || 0));
+  const state = {unit:"万円",method:"ep",loan:"shosho",wareki:true,bonus:false,showTable:false};
+  const AMOUNTS=[10,30,50,100,200,300,500,1000];
+  const RATES_EP=[3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5];
+  const RATES_EG=[1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2];
+  const YEARS=[1,2,3,4,5,6,7,8,9,10];
+  const DAYS=[7,17,27,31];
+
+  function moneyFactor(){ return state.unit === "万円" ? 10000 : 1; }
+  function toMoney(value){ return (parseFloat(value) || 0) * moneyFactor(); }
+  function fromMoney(value){ return value / moneyFactor(); }
+  function formatInput(value){
+    const rounded = Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+    return String(rounded);
+  }
+  function setPillGroup(parent, arr, suffix, callback){
+    $(parent).innerHTML = "";
+    arr.forEach(value => {
+      const button = document.createElement("button");
+      button.className = "pill";
+      button.type = "button";
+      button.textContent = String(value) + suffix;
+      button.addEventListener("click", () => callback(value));
+      $(parent).appendChild(button);
+    });
+  }
+  function populateMonthSelect(id, value){
+    const select = $(id);
+    select.innerHTML = "";
+    for(let month = 1; month <= 12; month++){
+      const option = document.createElement("option");
+      option.value = String(month);
+      option.textContent = month + "月";
+      if(month === value) option.selected = true;
+      select.appendChild(option);
+    }
+  }
+  function renderRatePills(){
+    const rates = state.method === "eg" ? RATES_EG : RATES_EP;
+    setPillGroup("ratePills", rates, "%", value => {
+      $("rate").value = Number(value).toFixed(2);
+      sync();
+    });
+  }
+  function updateMethodUI(){
+    const isEG = state.method === "eg";
+    $("yearsField").hidden = isEG;
+    $("egCountField").hidden = !isEG;
+    $("egPrincipalField").hidden = !isEG;
+    $("bonusToggleField").hidden = isEG;
+    $("bonusSettings").hidden = isEG || !state.bonus;
+    $("bonusAmountField").hidden = isEG || !state.bonus;
+    $("monthlyPrincipalUnit").textContent = state.unit;
+    $("bonusAmountUnit").textContent = state.unit;
+    $("methodHint").textContent = isEG
+      ? "元金均等：返済回数と毎月元金を指定し、最終回の元金は残額で自動調整します。"
+      : (state.bonus
+        ? "元利均等：ボーナス月の加算額を反映し、通常月返済額を自動計算します。"
+        : "元利均等：返済期間を指定して毎月返済額を計算します。");
+  }
+  function convertUnit(nextUnit){
+    if(nextUnit === state.unit) return;
+    const oldFactor = moneyFactor();
+    ["principal","monthlyPrincipal","bonusAmount"].forEach(id => {
+      const input = $(id);
+      const yenValue = (parseFloat(input.value) || 0) * oldFactor;
+      input.value = formatInput(yenValue / (nextUnit === "万円" ? 10000 : 1));
+    });
+    state.unit = nextUnit;
+    sync();
+  }
+  function isWeekend(date){ const day = date.getDay(); return day === 0 || day === 6; }
+  function nextBiz(date){
+    const result = new Date(date);
+    while(isWeekend(result)) result.setDate(result.getDate() + 1);
+    return result;
+  }
+  function daysInMonth(year, monthIndex){ return new Date(year, monthIndex + 1, 0).getDate(); }
+  function dueDateInMonth(year, monthIndex, day){ return new Date(year, monthIndex, Math.min(day, daysInMonth(year, monthIndex))); }
+  function firstScheduledRaw(exec, day){
+    if(!exec) return null;
+    const execution = new Date(exec + "T00:00:00");
+    const sameMonthDue = dueDateInMonth(execution.getFullYear(), execution.getMonth(), day);
+    if(execution < sameMonthDue) return sameMonthDue;
+    return dueDateInMonth(execution.getFullYear(), execution.getMonth() + 1, day);
+  }
+  function firstDate(exec, day){
+    const raw = firstScheduledRaw(exec, day);
+    return raw ? nextBiz(raw) : null;
+  }
+  function nthDate(exec, day, index){
+    const rawFirst = firstScheduledRaw(exec, day);
+    if(!rawFirst) return null;
+    return nextBiz(dueDateInMonth(rawFirst.getFullYear(), rawFirst.getMonth() + index - 1, day));
+  }
+  function daysIncl(a,b){ return Math.round((b - a) / 86400000) + 1; }
+  function jpDate(date){
+    if(!date) return "";
+    if(!state.wareki) return `${date.getFullYear()}/${String(date.getMonth()+1).padStart(2,"0")}/${String(date.getDate()).padStart(2,"0")}`;
+    const year = date.getFullYear();
+    let era = "令和", eraYear = year - 2018;
+    if(year < 2019){ era = "平成"; eraYear = year - 1988; }
+    return `${era}${eraYear === 1 ? "元" : eraYear}年${date.getMonth()+1}月${date.getDate()}日`;
+  }
+  function annuityPayment(principal, monthlyRate, count){
+    if(monthlyRate === 0) return principal / count;
+    const factor = Math.pow(1 + monthlyRate, count);
+    return principal * monthlyRate * factor / (factor - 1);
+  }
+  function calc(){
+    const P = toMoney($("principal").value);
+    const rate = (parseFloat($("rate").value) || 0) / 100;
+    const years = parseInt($("years").value, 10) || 0;
+    const n = state.method === "eg" ? (parseInt($("egCount").value, 10) || 0) : years * 12;
+    const day = Math.min(31, Math.max(1, parseInt($("repayDay").value, 10) || 17));
+    if(P <= 0) return {error:"借入金額を入力してください。"};
+    if(rate < 0) return {error:"年利率を確認してください。"};
+    if(n <= 0) return {error: state.method === "eg" ? "返済回数を入力してください。" : "返済期間を入力してください。"};
+
+    const r = rate / 12;
+    const exec = $("execDate").value;
+    const first = firstDate(exec, day);
+    const firstDays = exec && first ? daysIncl(new Date(exec + "T00:00:00"), first) : 0;
+    const firstInterest = exec && first ? Math.floor(P * rate / 365 * firstDays) : 0;
+    const scheduleDates = Array.from({length:n}, (_, i) => nthDate(exec, day, i + 1));
+    const rows = [];
+    let balance = P;
+    let totalInterest = 0;
+    let totalPay = 0;
+    let regularPayment = 0;
+    let bonusAmount = 0;
+    let bonusMonths = [];
+
+    if(state.method === "eg"){
+      const monthlyPrincipal = Math.floor(toMoney($("monthlyPrincipal").value));
+      if(monthlyPrincipal <= 0) return {error:"毎月元金を入力してください。"};
+      if(monthlyPrincipal * Math.max(0, n - 1) > P){
+        return {error:"毎月元金 ×（返済回数−1）が借入金額を超えています。毎月元金または返済回数を見直してください。"};
+      }
+      for(let i = 1; i <= n; i++){
+        const isLast = i === n;
+        const interest = (i === 1 && exec) ? firstInterest : Math.floor(balance * r);
+        const principal = isLast ? balance : Math.min(monthlyPrincipal, balance);
+        const pay = principal + interest;
+        balance = Math.max(0, balance - principal);
+        totalInterest += interest;
+        totalPay += pay;
+        rows.push({i,date:scheduleDates[i-1],pay,principal,interest,bal:balance,bonus:false});
+      }
+      regularPayment = rows[0] ? rows[0].pay : 0;
+    } else {
+      if(state.bonus){
+        if(!exec) return {error:"ボーナス払いを計算するには、融資実行日を入力してください。"};
+        bonusAmount = Math.floor(toMoney($("bonusAmount").value));
+        if(bonusAmount <= 0) return {error:"ボーナス加算額を入力してください。"};
+        const b1 = parseInt($("bonusMonth1").value, 10);
+        const b2 = parseInt($("bonusMonth2").value, 10);
+        if(!b1 || !b2 || b1 === b2) return {error:"ボーナス月は異なる2か月を指定してください。"};
+        bonusMonths = [b1,b2];
+      }
+      const bonusIndexes = state.bonus
+        ? scheduleDates.map((date, index) => date && bonusMonths.includes(date.getMonth() + 1) ? index + 1 : 0).filter(Boolean)
+        : [];
+      if(state.bonus && bonusIndexes.length === 0){
+        return {error:"指定した返済期間内にボーナス月がありません。融資実行日・返済期間・ボーナス月を確認してください。"};
+      }
+      const pvBonus = bonusIndexes.reduce((sum, index) => sum + bonusAmount / Math.pow(1 + r, index), 0);
+      if(pvBonus >= P) return {error:"ボーナス加算額が大きすぎます。加算額または返済期間を見直してください。"};
+      regularPayment = Math.floor(annuityPayment(P - pvBonus, r, n));
+      if(regularPayment <= 0) return {error:"返済条件を確認してください。"};
+
+      for(let i = 1; i <= n; i++){
+        const isLast = i === n;
+        const isBonus = state.bonus && bonusIndexes.includes(i);
+        const scheduledPayment = regularPayment + (isBonus ? bonusAmount : 0);
+        let interest, principal, pay;
+        if(isLast){
+          interest = (i === 1 && exec) ? firstInterest : Math.floor(balance * r);
+          principal = balance;
+          pay = principal + interest;
+        } else if(i === 1 && exec){
+          interest = firstInterest;
+          principal = scheduledPayment - Math.floor(P * r);
+          if(principal <= 0) return {error:"初回利息に対して返済額が不足しています。返済期間または金利を見直してください。"};
+          principal = Math.min(principal, balance);
+          pay = principal + interest;
+        } else {
+          interest = Math.floor(balance * r);
+          principal = Math.min(scheduledPayment - interest, balance);
+          if(principal <= 0) return {error:"返済額が利息を下回っています。返済期間またはボーナス加算額を見直してください。"};
+          pay = principal + interest;
+        }
+        balance = Math.max(0, balance - principal);
+        totalInterest += interest;
+        totalPay += pay;
+        rows.push({i,date:scheduleDates[i-1],pay,principal,interest,bal:balance,bonus:isBonus});
+      }
+    }
+
+    return {P,rate,years,n,rows,totalInterest,totalPay,regularPayment,firstDays,first,bonusAmount,bonusMonths};
+  }
+  function setResultsEmpty(message){
+    $("monthly").textContent = "-";
+    $("totalInterest").textContent = "-";
+    $("totalPay").textContent = "-";
+    $("count").textContent = "-";
+    $("tbody").innerHTML = "";
+    $("calcError").textContent = message || "";
+    $("calcError").classList.toggle("open", Boolean(message));
+    $("scheduleBtn").disabled = true;
+    $("scheduleBtn").textContent = "返済予定表を表示";
+    $("tableWrap").classList.remove("open");
+    state.showTable = false;
+  }
+  function getData(){
+    return {
+      principal:$("principal").value, rate:$("rate").value, years:$("years").value,
+      egCount:$("egCount").value, monthlyPrincipal:$("monthlyPrincipal").value,
+      bonusAmount:$("bonusAmount").value, bonusMonth1:$("bonusMonth1").value, bonusMonth2:$("bonusMonth2").value,
+      repayDay:$("repayDay").value, execDate:$("execDate").value,
+      unit:state.unit, method:state.method, loan:state.loan, wareki:state.wareki, bonus:state.bonus
+    };
+  }
+  function setData(data){
+    state.unit = data.unit || "万円";
+    state.method = data.method === "eg" ? "eg" : "ep";
+    state.loan = data.loan === "tegata" ? "tegata" : "shosho";
+    state.wareki = data.wareki !== false;
+    state.bonus = data.bonus === true;
+    ["principal","rate","years","egCount","monthlyPrincipal","bonusAmount","bonusMonth1","bonusMonth2","repayDay","execDate"].forEach(key => {
+      if(data[key] !== undefined && data[key] !== null) $(key).value = data[key];
+    });
+    renderRatePills();
+    sync();
+  }
+  function getStoredCurrent(){
+    const keys = [STORAGE_CURRENT,"hensai_v223_current","hensai_v222_current","hensai_v220_current"];
+    for(const key of keys){
+      const raw = localStorage.getItem(key);
+      if(!raw) continue;
+      try{return JSON.parse(raw);}catch(_e){}
+    }
+    return null;
+  }
+  function getSavedList(){
+    const keys = [STORAGE_SAVED,"hensai_v223_saved","hensai_v222_saved","hensai_v220_saved"];
+    for(const key of keys){
+      const raw = localStorage.getItem(key);
+      if(!raw) continue;
+      try{
+        const list = JSON.parse(raw);
+        if(Array.isArray(list) && list.length) return list;
+      }catch(_e){}
+    }
+    return [];
+  }
+  function sync(){
+    updateMethodUI();
+    $("unitMan").classList.toggle("on",state.unit === "万円");
+    $("unitYen").classList.toggle("on",state.unit === "円");
+    $("ep").classList.toggle("on",state.method === "ep");
+    $("eg").classList.toggle("on",state.method === "eg");
+    $("shosho").classList.toggle("on",state.loan === "shosho");
+    $("tegata").classList.toggle("on",state.loan === "tegata");
+    $("wareki").classList.toggle("on",state.wareki);
+    $("seireki").classList.toggle("on",!state.wareki);
+    $("bonusNo").classList.toggle("on",!state.bonus);
+    $("bonusYes").classList.toggle("on",state.bonus);
+
+    $("vAmount").innerHTML = `${num($("principal").value)}<span class="unit">${state.unit}</span>`;
+    $("vRate").innerHTML = `${Number($("rate").value || 0).toFixed(2)}<span class="unit">%</span>`;
+    if(state.method === "eg"){
+      $("termSummaryLabel").textContent = "返済回数";
+      $("vTerm").innerHTML = `${num($("egCount").value)}<span class="unit">回</span>`;
+      $("monthlyLabel").textContent = "初回返済額";
+    } else {
+      $("termSummaryLabel").textContent = "返済期間";
+      $("vTerm").innerHTML = `${num($("years").value)}<span class="unit">年</span>`;
+      $("monthlyLabel").textContent = state.bonus ? "通常月の返済額" : "毎月の返済額";
+    }
+
+    const calculation = calc();
+    if(calculation.error){
+      setResultsEmpty(calculation.error);
+      localStorage.setItem(STORAGE_CURRENT,JSON.stringify(getData()));
+      return;
+    }
+    $("calcError").textContent = "";
+    $("calcError").classList.remove("open");
+    $("monthly").textContent = yen(calculation.regularPayment);
+    $("totalInterest").textContent = yen(calculation.totalInterest);
+    $("totalPay").textContent = yen(calculation.totalPay);
+    $("count").textContent = calculation.n + "回";
+    $("scheduleBtn").disabled = false;
+    $("scheduleBtn").textContent = state.showTable ? "返済予定表を閉じる" : `返済予定表を表示（${calculation.n}回）`;
+    $("dateInfo").textContent = calculation.first
+      ? `初回返済日：${jpDate(calculation.first)} / ${calculation.firstDays}日分の日割り利息`
+      : (state.bonus ? "ボーナス払いでは融資実行日の入力が必要です。" : "実行日を入れると初回日割りを計算します。");
+    $("tbody").innerHTML = calculation.rows.map(row => `
+      <tr${row.bonus ? ' title="ボーナス加算月"' : ""}>
+        <td>${row.i}${row.bonus ? " ★" : ""}</td>
+        <td>${row.date ? jpDate(row.date) : "-"}</td>
+        <td>${yen(row.pay)}</td>
+        <td>${yen(row.principal)}</td>
+        <td>${yen(row.interest)}</td>
+        <td>${yen(row.bal)}</td>
+      </tr>`).join("");
+    localStorage.setItem(STORAGE_CURRENT,JSON.stringify(getData()));
+  }
+
+  setPillGroup("amountPills", AMOUNTS, "万", value => {
+    state.unit = "万円";
+    $("principal").value = value;
+    sync();
+  });
+  setPillGroup("yearPills", YEARS, "年", value => { $("years").value = value; sync(); });
+  setPillGroup("dayPills", DAYS, "日", value => { $("repayDay").value = value; sync(); });
+  populateMonthSelect("bonusMonth1", 6);
+  populateMonthSelect("bonusMonth2", 12);
+  renderRatePills();
+
+  ["principal","rate","years","egCount","monthlyPrincipal","bonusAmount","bonusMonth1","bonusMonth2","repayDay","execDate"].forEach(id => {
+    $(id).addEventListener("input", sync);
+    $(id).addEventListener("change", sync);
+  });
+  $("unitMan").addEventListener("click", () => convertUnit("万円"));
+  $("unitYen").addEventListener("click", () => convertUnit("円"));
+  $("ep").addEventListener("click", () => { state.method = "ep"; renderRatePills(); sync(); });
+  $("eg").addEventListener("click", () => { state.method = "eg"; renderRatePills(); sync(); });
+  $("bonusNo").addEventListener("click", () => { state.bonus = false; sync(); });
+  $("bonusYes").addEventListener("click", () => { state.bonus = true; sync(); });
+  $("shosho").addEventListener("click", () => { state.loan = "shosho"; sync(); });
+  $("tegata").addEventListener("click", () => {
+    state.loan = "tegata";
+    alert("Ver2.24では手形貸付UIは簡易表示です。証書貸付の試算ロジックは維持しています。");
+    sync();
+  });
+  $("wareki").addEventListener("click", () => { state.wareki = true; sync(); });
+  $("seireki").addEventListener("click", () => { state.wareki = false; sync(); });
+  $("detailToggle").addEventListener("click", () => {
+    $("details").classList.toggle("open");
+    $("detailToggle").innerHTML = $("details").classList.contains("open") ? "詳細条件を閉じる <span>⌃</span>" : "詳細条件を見る <span>⌄</span>";
+  });
+  document.querySelectorAll("[data-open]").forEach(button => button.addEventListener("click", () => {
+    $("details").classList.add("open");
+    $("detailToggle").innerHTML = "詳細条件を閉じる <span>⌃</span>";
+  }));
+  $("scheduleBtn").addEventListener("click", () => {
+    if($("scheduleBtn").disabled) return;
+    state.showTable = !state.showTable;
+    $("tableWrap").classList.toggle("open",state.showTable);
+    sync();
+  });
+  $("menuBtn").addEventListener("click", () => { $("actions").style.display = "block"; });
+  $("closeMenu").addEventListener("click", () => { $("actions").style.display = "none"; });
+  $("pdfBtn").addEventListener("click", () => window.print());
+  $("resetBtn").addEventListener("click", () => {
+    [STORAGE_CURRENT,"hensai_v223_current","hensai_v222_current","hensai_v220_current"].forEach(key => localStorage.removeItem(key));
+    location.reload();
+  });
+  $("saveBtn").addEventListener("click", () => {
+    const name = prompt("保存名を入力してください", "返済試算 " + new Date().toLocaleDateString("ja-JP"));
+    if(!name) return;
+    const list = getSavedList();
+    list.unshift({name,date:new Date().toISOString(),data:getData()});
+    localStorage.setItem(STORAGE_SAVED,JSON.stringify(list.slice(0,20)));
+    alert("保存しました");
+  });
+  function openSaved(){
+    const list = getSavedList();
+    if(!list.length){ alert("保存データがありません"); return; }
+    const message = list.map((item,index) => `${index+1}: ${item.name}`).join("\n");
+    const selected = parseInt(prompt("呼び出す番号を入力\n" + message), 10);
+    if(!selected || !list[selected-1]) return;
+    setData(list[selected-1].data);
+    $("actions").style.display = "none";
+  }
+  $("loadBtn").addEventListener("click", openSaved);
+  $("navSave").addEventListener("click", openSaved);
+
+  const stored = getStoredCurrent();
+  if(stored) setData(stored); else sync();
+
+  window.setTimeout(() => {
+    const splash = $("splash");
+    splash.classList.add("exit");
+    window.setTimeout(() => splash.remove(), 420);
+  }, 1400);
 })();
 </script>
 </body>
