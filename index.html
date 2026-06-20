@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <meta name="theme-color" content="#071a3d">
 <link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="icon" type="image/png" href="./icon-192-v224.png">
+<link rel="apple-touch-icon" href="./icon-192-v224.png">
 <title>返済試算 Ver2.24</title>
 <style>
 :root{
@@ -24,11 +25,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .splash{position:fixed;inset:0;z-index:9999;background:#071a3d;display:grid;place-items:center;opacity:1;visibility:visible;transition:opacity .34s ease,visibility .34s ease}
 .splash.exit{opacity:0;visibility:hidden}
 .splashInner{display:grid;place-items:center;gap:15px;min-width:150px}
-.splashMark{width:88px;height:88px;display:grid;place-items:center;opacity:0;transform:translateY(13px) scale(.94);animation:splashMarkIn .38s cubic-bezier(.18,.82,.26,1) .13s forwards}
-.splashMark svg{width:88px;height:88px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.22))}
-.splashVersion{font-size:.78rem;letter-spacing:.20em;color:#bed5ee;font-weight:800;opacity:0;transform:translateY(7px);animation:splashTextIn .26s ease .39s forwards}
-.splashTrack{position:relative;width:80px;height:3px;margin-top:13px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.16);opacity:0;animation:splashTrackIn .18s ease .56s forwards}
-.splashTrack::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#6bd6e4;transform:scaleX(0);transform-origin:left;animation:splashTrackRun .34s cubic-bezier(.22,.72,.32,1) .68s forwards}
+.splashMark{width:94px;height:94px;display:grid;place-items:center;opacity:0;transform:translateY(16px) scale(.92);animation:splashMarkIn .56s cubic-bezier(.18,.82,.26,1) .23s forwards}
+.splashMark svg{width:94px;height:94px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.26))}
+.splashVersion{font-size:.78rem;letter-spacing:.20em;color:#bed5ee;font-weight:800;opacity:0;transform:translateY(8px);animation:splashTextIn .34s ease .82s forwards}
+.splashTrack{position:relative;width:84px;height:3px;margin-top:14px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.16);opacity:0;animation:splashTrackIn .18s ease 1.18s forwards}
+.splashTrack::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#6bd6e4;transform:scaleX(0);transform-origin:left;animation:splashTrackRun .72s cubic-bezier(.22,.72,.32,1) 1.30s forwards}
 @keyframes splashMarkIn{to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes splashTextIn{to{opacity:1;transform:translateY(0)}}
 @keyframes splashTrackIn{to{opacity:1}}
@@ -105,8 +106,10 @@ th:first-child,td:first-child{text-align:center}
   <div class="splashInner">
     <div class="splashMark" aria-hidden="true">
       <svg viewBox="0 0 64 64" role="img" aria-label="返済試算ロゴ">
-        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="#ffffff"/>
-        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#6bd6e4"/>
+        <rect x="15" y="12" width="9" height="40" rx="2" fill="#ffffff"/>
+        <rect x="23" y="12" width="27" height="9" rx="2" fill="#ffffff"/>
+        <rect x="23" y="27.5" width="21" height="9" rx="2" fill="#6bd6e4"/>
+        <rect x="23" y="43" width="27" height="9" rx="2" fill="#ffffff"/>
       </svg>
     </div>
     <div class="splashVersion">v2.24</div>
@@ -117,10 +120,11 @@ th:first-child,td:first-child{text-align:center}
 <header class="appbar">
   <div class="head">
     <div class="logo" aria-label="logo">
-      <svg viewBox="0 0 64 64" role="img">
-        <defs><linearGradient id="headerGradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1c66f0"/><stop offset="1" stop-color="#48d1d4"/></linearGradient></defs>
-        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="url(#headerGradient)"/>
-        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#49c6d9"/>
+      <svg viewBox="0 0 64 64" role="img" aria-label="返済試算ロゴ">
+        <rect x="15" y="12" width="9" height="40" rx="2" fill="#1457d9"/>
+        <rect x="23" y="12" width="27" height="9" rx="2" fill="#1457d9"/>
+        <rect x="23" y="27.5" width="21" height="9" rx="2" fill="#49c6d9"/>
+        <rect x="23" y="43" width="27" height="9" rx="2" fill="#1457d9"/>
       </svg>
     </div>
     <div class="title">
@@ -651,15 +655,15 @@ th:first-child,td:first-child{text-align:center}
   const stored = getStoredCurrent();
   if(stored) setData(stored); else sync();
 
-  // Keep this intentionally brief: Android handles the launcher-icon expansion first.
-  // The web layer then shows a dark boot scene for about 1.1s before cross-fading into the app.
+  // Android handles the unavoidable launcher-icon expansion first.
+  // The web layer follows with a 2.8s dark boot scene, then cross-fades into the white app.
   window.setTimeout(() => {
     const splash = $("splash");
     splash.classList.add("exit");
     const themeMeta = document.querySelector('meta[name="theme-color"]');
     if(themeMeta) themeMeta.setAttribute("content", "#ffffff");
     window.setTimeout(() => splash.remove(), 360);
-  }, 1120);
+  }, 2460);
 })();
 </script>
 </body>

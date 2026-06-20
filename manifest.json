@@ -11,25 +11,25 @@
   "lang": "ja",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "./icon-192-v224.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "./icon-512.png",
+      "src": "./icon-512-v224.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "./icon-192-maskable-v224.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon-512-maskable-v224.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
