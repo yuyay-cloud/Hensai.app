@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#071a3d">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <title>返済試算 Ver2.24</title>
@@ -13,26 +13,26 @@
   --line:#dfe7f1;--bg:#f6f9fd;--card:#ffffff;--soft:#eef5ff;--danger:#dc2626;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;background:#071a3d}
 body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:88px}
 button,input,select{font:inherit}
 button{border:0;background:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
 [hidden]{display:none!important}
 
-/* Splash: 1.8s fixed — staged startup animation */
-.splash{position:fixed;inset:0;z-index:9999;background:#fff;display:grid;place-items:center;opacity:1;visibility:visible;transition:opacity .38s ease,visibility .38s ease}
-.splash.exit{opacity:0;visibility:hidden;pointer-events:none}
-.splashInner{display:grid;place-items:center;text-align:center;min-width:180px}
-.splashMark{width:90px;height:90px;display:grid;place-items:center;opacity:0;transform:translateY(9px) scale(.84);animation:splashMarkIn .46s cubic-bezier(.18,.82,.24,1) .16s forwards}
-.splashMark svg{width:90px;height:90px;overflow:visible}
-.splashVersion{margin-top:13px;font-size:.76rem;line-height:1;letter-spacing:.18em;color:#0f4c81;font-weight:800;opacity:0;transform:translateY(5px);animation:splashVersionIn .30s ease .58s forwards}
-.splashPulse{width:38px;height:2px;margin-top:22px;border-radius:99px;background:#e6edf5;overflow:hidden;opacity:0;animation:splashPulseShow .18s ease .82s forwards}
-.splashPulse:before{content:"";display:block;width:100%;height:100%;border-radius:inherit;background:#0f4c81;transform:translateX(-105%);animation:splashBootSweep .46s cubic-bezier(.4,0,.2,1) .90s forwards}
+/* Boot splash: dark navy → white app, designed to follow Android's unavoidable icon-expansion launch. */
+.splash{position:fixed;inset:0;z-index:9999;background:#071a3d;display:grid;place-items:center;opacity:1;visibility:visible;transition:opacity .34s ease,visibility .34s ease}
+.splash.exit{opacity:0;visibility:hidden}
+.splashInner{display:grid;place-items:center;gap:15px;min-width:150px}
+.splashMark{width:88px;height:88px;display:grid;place-items:center;opacity:0;transform:translateY(13px) scale(.94);animation:splashMarkIn .38s cubic-bezier(.18,.82,.26,1) .13s forwards}
+.splashMark svg{width:88px;height:88px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.22))}
+.splashVersion{font-size:.78rem;letter-spacing:.20em;color:#bed5ee;font-weight:800;opacity:0;transform:translateY(7px);animation:splashTextIn .26s ease .39s forwards}
+.splashTrack{position:relative;width:80px;height:3px;margin-top:13px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.16);opacity:0;animation:splashTrackIn .18s ease .56s forwards}
+.splashTrack::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#6bd6e4;transform:scaleX(0);transform-origin:left;animation:splashTrackRun .34s cubic-bezier(.22,.72,.32,1) .68s forwards}
 @keyframes splashMarkIn{to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes splashVersionIn{to{opacity:1;transform:translateY(0)}}
-@keyframes splashPulseShow{to{opacity:1}}
-@keyframes splashBootSweep{to{transform:translateX(0)}}
+@keyframes splashTextIn{to{opacity:1;transform:translateY(0)}}
+@keyframes splashTrackIn{to{opacity:1}}
+@keyframes splashTrackRun{to{transform:scaleX(1)}}
 
 .appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:18px 20px 14px}
 .head{display:flex;align-items:center;gap:14px}
@@ -96,21 +96,21 @@ th:first-child,td:first-child{text-align:center}
 .nav button.on{color:var(--blue)}
 @media(min-width:720px){.wrap{padding:24px}.field{padding:22px 26px}}
 @media(max-width:430px){.title h1{font-size:1.38rem}.logo,.logo svg{width:52px;height:52px}.bigval{font-size:1.75rem}.rval{font-size:1.35rem}.grid2{grid-template-columns:1fr}.pill{padding:10px 12px}}
-@media(prefers-reduced-motion:reduce){.splash{transition:none}.splashMark,.splashVersion,.splashPulse,.splashPulse:before{animation:none;transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.splash,.splashInner{animation:none;transition:none;transform:none;opacity:1}}
 @media print{.splash,.appbar,.nav,.menu,.toggle,.primary,.actions{display:none!important}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
 </style>
 </head>
 <body>
 <div class="splash" id="splash" aria-label="起動画面">
-  <div class="splashInner" aria-hidden="true">
-    <div class="splashMark">
-      <svg viewBox="0 0 64 64" role="img">
-        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="#0f4c81"/>
-        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#0f4c81" opacity=".52"/>
+  <div class="splashInner">
+    <div class="splashMark" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="img" aria-label="返済試算ロゴ">
+        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="#ffffff"/>
+        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#6bd6e4"/>
       </svg>
     </div>
     <div class="splashVersion">v2.24</div>
-    <div class="splashPulse"></div>
+    <div class="splashTrack" aria-hidden="true"></div>
   </div>
 </div>
 
@@ -431,6 +431,9 @@ th:first-child,td:first-child{text-align:center}
       const bonusIndexes = state.bonus
         ? scheduleDates.map((date, index) => date && bonusMonths.includes(date.getMonth() + 1) ? index + 1 : 0).filter(Boolean)
         : [];
+      if(state.bonus && bonusIndexes.length === 0){
+        return {error:"指定した返済期間内にボーナス月がありません。融資実行日・返済期間・ボーナス月を確認してください。"};
+      }
       const pvBonus = bonusIndexes.reduce((sum, index) => sum + bonusAmount / Math.pow(1 + r, index), 0);
       if(pvBonus >= P) return {error:"ボーナス加算額が大きすぎます。加算額または返済期間を見直してください。"};
       regularPayment = Math.floor(annuityPayment(P - pvBonus, r, n));
@@ -622,7 +625,7 @@ th:first-child,td:first-child{text-align:center}
   $("closeMenu").addEventListener("click", () => { $("actions").style.display = "none"; });
   $("pdfBtn").addEventListener("click", () => window.print());
   $("resetBtn").addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_CURRENT);
+    [STORAGE_CURRENT,"hensai_v223_current","hensai_v222_current","hensai_v220_current"].forEach(key => localStorage.removeItem(key));
     location.reload();
   });
   $("saveBtn").addEventListener("click", () => {
@@ -648,13 +651,15 @@ th:first-child,td:first-child{text-align:center}
   const stored = getStoredCurrent();
   if(stored) setData(stored); else sync();
 
-  // Splash: blank → mark → version → subtle startup stroke → fade out (1.8 seconds total)
+  // Keep this intentionally brief: Android handles the launcher-icon expansion first.
+  // The web layer then shows a dark boot scene for about 1.1s before cross-fading into the app.
   window.setTimeout(() => {
     const splash = $("splash");
-    if(!splash) return;
     splash.classList.add("exit");
-    window.setTimeout(() => splash.remove(), 400);
-  }, 1420);
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if(themeMeta) themeMeta.setAttribute("content", "#ffffff");
+    window.setTimeout(() => splash.remove(), 360);
+  }, 1120);
 })();
 </script>
 </body>

@@ -1,7 +1,10 @@
-self.addEventListener('install', e => self.skipWaiting());
-self.addEventListener('activate', e => {
-  e.waitUntil(self.clients.claim());
+const APP_VERSION = '2.24';
+self.addEventListener('install', event => {
+  self.skipWaiting();
 });
-self.addEventListener('fetch', e => {
-  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim());
+});
+self.addEventListener('fetch', event => {
+  event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
 });

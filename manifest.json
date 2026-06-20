@@ -1,13 +1,13 @@
 {
   "name": "返済試算",
   "short_name": "返済試算",
-  "description": "証書貸付・手形貸付の返済試算アプリ",
+  "description": "証書貸付・手形貸付の返済試算アプリ Ver2.24",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#071a3d",
+  "theme_color": "#071a3d",
   "lang": "ja",
   "icons": [
     {
