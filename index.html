@@ -1,137 +1,110 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<meta name="theme-color" content="#071a3d">
+<meta name="theme-color" content="#06142d">
 <link rel="manifest" href="./manifest.json">
-<link rel="icon" type="image/png" href="./icon-192-v224.png">
-<link rel="apple-touch-icon" href="./icon-192-v224.png">
-<title>返済試算 Ver2.24</title>
+<link rel="apple-touch-icon" href="./icon-192-v230.png">
+<title>返済試算 Ver2.30</title>
 <style>
 :root{
-  --blue:#1457d9;--blue2:#2f8df7;--cyan:#49c6d9;--ink:#071a3d;--muted:#66758c;
-  --line:#dfe7f1;--bg:#f6f9fd;--card:#ffffff;--soft:#eef5ff;--danger:#dc2626;
+  color-scheme:dark;
+  --bg:#06101f; --bg-deep:#030815; --appbar:rgba(5,16,33,.88); --card:#0b1930; --card-elev:#10213d;
+  --input:#08182e; --soft:#102a4f; --soft-2:#163762; --ink:#eff6ff; --muted:#9eafd0; --line:rgba(164,193,235,.16);
+  --blue:#5a9cff; --blue2:#2375ff; --cyan:#65d7ff; --danger:#ff7180; --shadow:0 18px 48px rgba(0,0,0,.28); --table-head:#0e2445;
+  --toggle-track:#102442; --switch-ring:rgba(130,180,255,.22);
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f5f8fd; --bg-deep:#ecf3fb; --appbar:rgba(255,255,255,.88); --card:#ffffff; --card-elev:#ffffff;
+  --input:#ffffff; --soft:#eef5ff; --soft-2:#e5f0ff; --ink:#071a3d; --muted:#66758c; --line:#dfe7f1;
+  --blue:#1457d9; --blue2:#2f8df7; --cyan:#278fe9; --danger:#dc2626; --shadow:0 8px 22px rgba(7,26,61,.06); --table-head:#f2f6fb;
+  --toggle-track:#e6eef9; --switch-ring:rgba(20,87,217,.14);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;background:#071a3d}
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:88px}
-button,input,select{font:inherit}
-button{border:0;background:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;background:var(--bg-deep)}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:radial-gradient(1000px 580px at 50% -180px,rgba(42,103,211,.16),transparent 62%),var(--bg);color:var(--ink);padding-bottom:88px;min-height:100vh;transition:background .25s ease,color .25s ease}
+button,input,select{font:inherit} button{border:0;background:none;-webkit-tap-highlight-color:transparent;cursor:pointer;color:inherit}button:disabled{opacity:.5;cursor:not-allowed}[hidden]{display:none!important}
 
-/* Boot splash: dark navy → white app, designed to follow Android's unavoidable icon-expansion launch. */
-.splash{position:fixed;inset:0;z-index:9999;background:#071a3d;display:grid;place-items:center;opacity:1;visibility:visible;transition:opacity .34s ease,visibility .34s ease}
+/* 7-second launch sequence */
+.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(42% 32% at 50% 46%,#112f70 0%,#071a3f 38%,#020713 92%);opacity:1;visibility:visible;transition:opacity .8s ease,visibility .8s ease}
 .splash.exit{opacity:0;visibility:hidden}
-.splashInner{display:grid;place-items:center;gap:15px;min-width:150px}
-.splashMark{width:94px;height:94px;display:grid;place-items:center;opacity:0;transform:translateY(16px) scale(.92);animation:splashMarkIn .56s cubic-bezier(.18,.82,.26,1) .23s forwards}
-.splashMark svg{width:94px;height:94px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.26))}
-.splashVersion{font-size:.78rem;letter-spacing:.20em;color:#bed5ee;font-weight:800;opacity:0;transform:translateY(8px);animation:splashTextIn .34s ease .82s forwards}
-.splashTrack{position:relative;width:84px;height:3px;margin-top:14px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.16);opacity:0;animation:splashTrackIn .18s ease 1.18s forwards}
-.splashTrack::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#6bd6e4;transform:scaleX(0);transform-origin:left;animation:splashTrackRun .72s cubic-bezier(.22,.72,.32,1) 1.30s forwards}
-@keyframes splashMarkIn{to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes splashTextIn{to{opacity:1;transform:translateY(0)}}
-@keyframes splashTrackIn{to{opacity:1}}
-@keyframes splashTrackRun{to{transform:scaleX(1)}}
+.splash::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 40% 48%,rgba(75,160,255,.12),transparent 17%),radial-gradient(circle at 60% 56%,rgba(55,120,255,.12),transparent 23%);filter:blur(12px);animation:splashAtmosphere 4.6s ease-in-out infinite}
+.splash::after{content:"";position:absolute;width:2px;height:2px;border-radius:50%;background:#b7dcff;box-shadow: -180px -165px 0 -1px rgba(132,185,255,.45),130px -118px 0 -1px rgba(132,185,255,.38),235px 98px 0 -1px rgba(132,185,255,.34),-250px 108px 0 -1px rgba(132,185,255,.26),-120px 198px 0 -1px rgba(132,185,255,.3);opacity:0;animation:starsIn .7s ease .12s forwards}
+.splashContent{position:relative;z-index:1;display:grid;place-items:center;gap:16px;transform:translateY(-5px)}
+.splashLogo{width:min(69vw,286px);height:auto;overflow:visible;filter:drop-shadow(0 10px 24px rgba(58,130,255,.18))}
+.splashOrbitPath{stroke-dasharray:1;stroke-dashoffset:1;animation:orbitDraw 1.55s cubic-bezier(.28,.84,.35,1) .75s forwards}
+.splashAccentPath{stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:accentDraw .46s ease 2.05s forwards}
+.splashStartParticle{opacity:0;transform-box:fill-box;transform-origin:center;animation:startParticle .65s ease .3s forwards}
+.splashOrbGlow,.splashOrbCore,.splashOrbHighlight{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.45);animation:orbAppear .55s cubic-bezier(.18,.85,.2,1.2) 2.25s forwards}
+.splashLogo{animation:logoBreathe 2.5s ease-in-out 2.72s infinite}
+.splashVersion{font-size:.94rem;line-height:1;letter-spacing:.22em;font-weight:700;color:#eef7ff;text-shadow:0 0 18px rgba(117,188,255,.55);opacity:0;transform:translateY(7px);animation:versionIn .52s cubic-bezier(.2,.8,.2,1) 3.08s forwards}
+.splashLoader{position:relative;width:96px;height:3px;border-radius:99px;background:rgba(145,188,255,.16);overflow:hidden;opacity:0;animation:loaderIn .38s ease 3.78s forwards;box-shadow:0 0 10px rgba(46,129,255,.14)}
+.splashLoader span{position:absolute;left:-35%;top:0;width:35%;height:100%;border-radius:inherit;background:linear-gradient(90deg,transparent,#9fe2ff 45%,#fff 60%,#59a6ff);box-shadow:0 0 12px #53a6ff;animation:loaderSweep 1.5s ease-in-out 4.35s 2 forwards}
+@keyframes starsIn{to{opacity:.9}}@keyframes splashAtmosphere{50%{transform:scale(1.08);opacity:.7}}@keyframes orbitDraw{to{stroke-dashoffset:0}}@keyframes accentDraw{0%{opacity:0;stroke-dashoffset:1}100%{opacity:1;stroke-dashoffset:0}}@keyframes startParticle{0%{opacity:0;transform:scale(.2)}45%{opacity:1;transform:scale(1.8)}100%{opacity:0;transform:scale(4)}}@keyframes orbAppear{to{opacity:1;transform:scale(1)}}@keyframes logoBreathe{0%,100%{filter:drop-shadow(0 10px 24px rgba(58,130,255,.18))}50%{filter:drop-shadow(0 8px 32px rgba(111,195,255,.52))}}@keyframes versionIn{to{opacity:1;transform:translateY(0)}}@keyframes loaderIn{to{opacity:1}}@keyframes loaderSweep{0%{left:-38%}70%{left:105%}100%{left:105%}}
 
-.appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:18px 20px 14px}
-.head{display:flex;align-items:center;gap:14px}
-.logo{width:58px;height:58px;display:grid;place-items:center;flex:none}
-.logo svg{width:58px;height:58px}
-.title{flex:1;min-width:0}
-.title h1{font-size:1.58rem;letter-spacing:.02em;line-height:1.05;font-weight:800}
-.title .sub{font-size:.78rem;letter-spacing:.12em;color:var(--muted);margin-top:6px}
-.ver{font-size:.8rem;background:#eaf2ff;color:var(--blue);border-radius:9px;padding:3px 8px;margin-left:6px;vertical-align:middle}
-.menu{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;color:var(--ink)}
-.menu span,.menu:before,.menu:after{content:"";display:block;width:28px;height:3px;background:var(--ink);border-radius:5px}
-.menu{gap:5px}
-.wrap{padding:16px;display:grid;gap:14px;max-width:760px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 18px rgba(7,26,61,.04)}
-.field{padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.field + .field{border-top:1px solid var(--line)}
-.label{font-weight:700;color:var(--ink);font-size:.95rem;margin-bottom:10px}
-.bigval{font-size:2rem;font-weight:800;letter-spacing:.01em}
-.unit{font-size:1rem;font-weight:700;margin-left:4px}
-.edit{color:var(--blue);font-size:1.45rem}
-.toggle{padding:18px 20px;color:var(--blue);font-weight:800;text-align:center;display:flex;justify-content:center;gap:12px;align-items:center}
-.panel{display:none;padding:18px 20px;border-top:1px solid var(--line)}
-.panel.open{display:block}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.inputBox{border:1.5px solid var(--line);border-radius:13px;background:#fff;display:flex;align-items:center;overflow:hidden;min-height:52px}
-.inputBox input,.inputBox select{border:0;outline:0;width:100%;font-size:1.12rem;padding:14px;color:var(--ink);background:#fff;min-width:0}
-.inputBox select{appearance:auto}
-.inputBox .fixedUnit{padding-right:14px;font-weight:800;white-space:nowrap}
-.pill{border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;font-weight:800;color:var(--muted);min-height:48px}
-.inputBox .pill{border-radius:0;border-top:0;border-bottom:0;border-right:0;min-height:52px;padding:11px 12px}
-.pill.on{background:linear-gradient(135deg,#0d4ed1,#2679ee);color:#fff;border-color:transparent;box-shadow:0 6px 12px rgba(20,87,217,.18)}
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:#edf3f9;border:1px solid var(--line);border-radius:15px;padding:4px;gap:4px}
-.seg button{padding:14px;border-radius:12px;font-weight:800;color:var(--muted)}
-.seg button.on{background:#fff;color:var(--blue);box-shadow:0 5px 14px rgba(7,26,61,.08)}
-.methodHint{padding:12px 14px;border:1px solid #dbe8fd;border-radius:12px;background:#f8fbff;color:#46617f;font-size:.82rem;line-height:1.6}
-.result{padding:22px 22px 18px}
-.result h2{font-size:1.08rem;margin-bottom:14px}
-.rrow{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--line)}
-.rrow:first-of-type{border-top:0}
-.ico{width:44px;height:44px;border-radius:50%;background:#eef5ff;color:var(--blue);display:inline-grid;place-items:center;margin-right:13px;font-weight:900}
-.rleft{display:flex;align-items:center;font-weight:700}
-.rval{font-size:1.55rem;color:var(--blue);font-weight:800;text-align:right}
-.errorBox{display:none;margin-top:8px;padding:12px 14px;border-radius:12px;background:#fff2f2;color:var(--danger);font-size:.9rem;font-weight:700;line-height:1.55}
-.errorBox.open{display:block}
-.primary{width:100%;padding:19px;border-radius:14px;background:linear-gradient(135deg,#0d4ed1,#2477ee);color:#fff;font-size:1.12rem;font-weight:800;box-shadow:0 8px 18px rgba(20,87,217,.22)}
-.note{padding:16px 18px;line-height:1.8;color:#41516a;font-size:.93rem;background:#fbfdff}
-.small{font-size:.82rem;color:var(--muted);line-height:1.6;margin-top:8px}
-.tableWrap{display:none;overflow:auto;border-top:1px solid var(--line)}
-.tableWrap.open{display:block}
-table{width:100%;border-collapse:collapse;min-width:650px;font-size:.86rem}
-th{background:#f2f6fb;color:#42526b;padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th:first-child,td:first-child{text-align:center}
-.actions{display:none;position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:50}
-.sheet{position:absolute;right:12px;left:12px;bottom:12px;background:#fff;border-radius:20px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
-.sheet button{width:100%;text-align:left;padding:17px;border-bottom:1px solid var(--line);font-weight:800;color:var(--ink)}
-.sheet button:last-child{border-bottom:0}
-.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px);z-index:25}
-.nav button{display:grid;gap:4px;place-items:center;color:#536178;font-size:.75rem;font-weight:700}
-.nav button.on{color:var(--blue)}
-@media(min-width:720px){.wrap{padding:24px}.field{padding:22px 26px}}
-@media(max-width:430px){.title h1{font-size:1.38rem}.logo,.logo svg{width:52px;height:52px}.bigval{font-size:1.75rem}.rval{font-size:1.35rem}.grid2{grid-template-columns:1fr}.pill{padding:10px 12px}}
-@media(prefers-reduced-motion:reduce){.splash,.splashInner{animation:none;transition:none;transform:none;opacity:1}}
-@media print{.splash,.appbar,.nav,.menu,.toggle,.primary,.actions{display:none!important}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
+.appbar{position:sticky;top:0;z-index:20;background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:14px 16px;transition:background .25s ease,border-color .25s ease}
+.head{display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto}.logo{width:46px;height:46px;display:grid;place-items:center;flex:none}.logo svg{width:46px;height:46px}.title{flex:1;min-width:0}.title h1{font-size:1.35rem;letter-spacing:.02em;line-height:1.1;font-weight:800}.ver{font-size:.72rem;background:var(--soft);color:var(--blue);border:1px solid var(--line);border-radius:8px;padding:3px 7px;margin-left:5px;vertical-align:middle;font-weight:800}.headActions{display:flex;align-items:center;gap:7px}.themeToggle{position:relative;width:56px;height:36px;border-radius:18px;border:1px solid var(--line);background:var(--toggle-track);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 8px rgba(0,0,0,.08);transition:background .25s ease}.themeToggle .themeIcon{position:absolute;top:50%;transform:translateY(-50%);width:22px;height:22px;display:grid;place-items:center;font-size:15px;z-index:1;transition:opacity .2s ease}.themeToggle .moon{left:5px;color:#d7e6ff}.themeToggle .sun{right:5px;color:#ffcd63;opacity:.45}.themeToggle .themeKnob{position:absolute;left:3px;top:3px;width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#2a62ca,#7cc7ff);box-shadow:0 0 0 3px var(--switch-ring),0 4px 8px rgba(0,0,0,.26);transition:transform .26s cubic-bezier(.2,.8,.2,1),background .25s}.themeToggle[data-theme="light"] .themeKnob{transform:translateX(20px);background:linear-gradient(145deg,#fff2bd,#ffbb45)}.themeToggle[data-theme="light"] .moon{opacity:.4}.themeToggle[data-theme="light"] .sun{opacity:1}.menu{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;color:var(--ink);border:1px solid transparent}.menu:focus-visible,.themeToggle:focus-visible,.primary:focus-visible,.pill:focus-visible,.seg button:focus-visible{outline:3px solid rgba(84,158,255,.45);outline-offset:2px}.menu span,.menu:before,.menu:after{content:"";display:block;width:22px;height:2px;background:currentColor;border-radius:5px}.menu{gap:4px}
+
+.wrap{padding:16px;display:grid;gap:14px;max-width:760px;margin:0 auto}.card{background:linear-gradient(145deg,var(--card-elev),var(--card));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}.field{padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}.field+.field{border-top:1px solid var(--line)}.label{font-weight:700;color:var(--ink);font-size:.95rem;margin-bottom:10px}.bigval{font-size:2rem;font-weight:800;letter-spacing:.01em}.unit{font-size:1rem;font-weight:700;margin-left:4px;color:var(--muted)}.edit{color:var(--blue);font-size:1.45rem}.toggle{padding:18px 20px;color:var(--blue);font-weight:800;text-align:center;display:flex;justify-content:center;gap:12px;align-items:center}.panel{display:none;padding:18px 20px;border-top:1px solid var(--line)}.panel.open{display:block}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.inputBox{border:1.5px solid var(--line);border-radius:13px;background:var(--input);display:flex;align-items:center;overflow:hidden;min-height:50px}.inputBox input,.inputBox select{border:0;outline:0;width:100%;font-size:1.1rem;padding:13px 14px;color:var(--ink);background:transparent;min-width:0}.inputBox select{padding-right:7px}.fixedUnit{padding-right:14px;font-weight:800;color:var(--muted);white-space:nowrap}.pill{border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--input);font-weight:800;color:var(--muted);min-height:46px;transition:.18s ease}.pill.on{background:linear-gradient(135deg,#155bd7,#4c9fff);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(26,111,245,.28)}.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border:1px solid var(--line);border-radius:15px;padding:4px;gap:4px}.seg button{padding:13px 10px;border-radius:11px;font-weight:800;color:var(--muted);transition:.18s ease}.seg button.on{background:var(--card);color:var(--blue);box-shadow:0 5px 14px rgba(0,0,0,.12)}.methodHint{padding:12px 14px;border:1px solid color-mix(in srgb,var(--blue) 25%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--soft) 72%,transparent);color:var(--muted);font-size:.82rem;line-height:1.6}.small{font-size:.82rem;color:var(--muted);line-height:1.6;margin-top:8px}.result{padding:22px 22px 18px}.result h2{font-size:1.08rem;margin-bottom:14px}.rrow{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--line);gap:12px}.rrow:first-of-type{border-top:0}.ico{width:42px;height:42px;border-radius:50%;background:var(--soft);border:1px solid var(--line);color:var(--blue);display:inline-grid;place-items:center;margin-right:12px;font-weight:900}.rleft{display:flex;align-items:center;font-weight:700;min-width:0}.rval{font-size:1.45rem;color:var(--blue);font-weight:800;text-align:right;white-space:nowrap}.primary{width:100%;padding:19px;border-radius:14px;background:linear-gradient(135deg,#155bd7,#3b92ff);color:#fff;font-size:1.12rem;font-weight:800;box-shadow:0 10px 24px rgba(19,103,236,.28)}.note{padding:16px 18px;line-height:1.8;color:var(--muted);font-size:.9rem;background:color-mix(in srgb,var(--card) 93%,var(--soft))}.errorBox{display:none;margin-top:12px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--danger) 55%,transparent);border-radius:12px;background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--danger);font-weight:800;line-height:1.5}.errorBox.open{display:block}.tableWrap{display:none;overflow:auto;border-top:1px solid var(--line)}.tableWrap.open{display:block}table{width:100%;border-collapse:collapse;min-width:650px;font-size:.86rem}th{background:var(--table-head);color:var(--muted);padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:center}.actions{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50}.sheet{position:absolute;right:12px;left:12px;bottom:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.36)}.sheet button{width:100%;text-align:left;padding:17px;border-bottom:1px solid var(--line);font-weight:800;color:var(--ink)}.sheet button:last-child{border-bottom:0}.nav{position:fixed;left:0;right:0;bottom:0;background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px);z-index:25}.nav button{display:grid;gap:4px;place-items:center;color:var(--muted);font-size:.75rem;font-weight:700}.nav button.on{color:var(--blue)}
+@media(min-width:720px){.wrap{padding:24px}.field{padding:22px 26px}.appbar{padding-left:24px;padding-right:24px}}@media(max-width:430px){.title h1{font-size:1.2rem}.logo,.logo svg{width:42px;height:42px}.bigval{font-size:1.75rem}.rval{font-size:1.22rem}.grid2{grid-template-columns:1fr}.pill{padding:10px 12px}.head{gap:8px}.themeToggle{width:52px}.themeToggle[data-theme="light"] .themeKnob{transform:translateX(16px)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.splash{background:#06142d}.splashOrbitPath,.splashAccentPath{stroke-dashoffset:0}.splashOrbGlow,.splashOrbCore,.splashOrbHighlight,.splashVersion,.splashLoader{opacity:1;transform:none}}
+@media print{.splash,.appbar,.nav,.menu,.themeToggle,.toggle,.primary,.actions{display:none!important}:root,:root[data-theme="light"]{color-scheme:light;--bg:#fff;--card:#fff;--card-elev:#fff;--ink:#071a3d;--muted:#41516a;--line:#dfe7f1;--input:#fff}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
 </style>
 </head>
 <body>
+
 <div class="splash" id="splash" aria-label="起動画面">
-  <div class="splashInner">
-    <div class="splashMark" aria-hidden="true">
-      <svg viewBox="0 0 64 64" role="img" aria-label="返済試算ロゴ">
-        <rect x="15" y="12" width="9" height="40" rx="2" fill="#ffffff"/>
-        <rect x="23" y="12" width="27" height="9" rx="2" fill="#ffffff"/>
-        <rect x="23" y="27.5" width="21" height="9" rx="2" fill="#6bd6e4"/>
-        <rect x="23" y="43" width="27" height="9" rx="2" fill="#ffffff"/>
-      </svg>
-    </div>
-    <div class="splashVersion">v2.24</div>
-    <div class="splashTrack" aria-hidden="true"></div>
+  <div class="splashContent">
+    <svg class="splashLogo" viewBox="0 0 256 256" aria-hidden="true">
+  <defs>
+    <linearGradient id="splashOrbit" x1="42" y1="52" x2="212" y2="202" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ecf7ff"/>
+      <stop offset=".36" stop-color="#d8ecff"/>
+      <stop offset=".72" stop-color="#3a8bff"/>
+      <stop offset="1" stop-color="#72d9ff"/>
+    </linearGradient>
+    <radialGradient id="splashOrb" cx="34%" cy="24%" r="72%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".35" stop-color="#a7ddff"/>
+      <stop offset=".75" stop-color="#4d95ff"/>
+      <stop offset="1" stop-color="#1a49bb"/>
+    </radialGradient>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="orbGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <path class="splashOrbitGhost" d="M196 174 C157 204 79 197 48 157 C17 117 46 75 103 61 C151 49 202 61 214 88" pathLength="1" fill="none" stroke="#1d4da9" stroke-opacity=".18" stroke-width="19" stroke-linecap="round"/>
+  <path class="splashOrbitPath" d="M196 174 C157 204 79 197 48 157 C17 117 46 75 103 61 C151 49 202 61 214 88" pathLength="1" fill="none" stroke="url(#splashOrbit)" stroke-width="19" stroke-linecap="round" filter="url(#softGlow)"/>
+  <path class="splashAccentPath" d="M197 174 C172 190 148 196 126 195" pathLength="1" fill="none" stroke="#3fa0ff" stroke-width="19" stroke-linecap="butt" filter="url(#softGlow)"/>
+  <circle class="splashStartParticle" cx="48" cy="157" r="4.5" fill="#c7edff" filter="url(#softGlow)"/>
+  <circle class="splashOrbGlow" cx="207" cy="116" r="22" fill="#8ac8ff" opacity=".5" filter="url(#orbGlow)"/>
+  <circle class="splashOrbCore" cx="207" cy="116" r="17" fill="url(#splashOrb)" filter="url(#orbGlow)"/>
+  <circle class="splashOrbHighlight" cx="201.5" cy="109.5" r="4.6" fill="#fff" opacity=".78"/>
+</svg>
+    <div class="splashVersion">v2.30</div>
+    <div class="splashLoader" aria-hidden="true"><span></span></div>
   </div>
 </div>
-
 <header class="appbar">
   <div class="head">
-    <div class="logo" aria-label="logo">
-      <svg viewBox="0 0 64 64" role="img" aria-label="返済試算ロゴ">
-        <rect x="15" y="12" width="9" height="40" rx="2" fill="#1457d9"/>
-        <rect x="23" y="12" width="27" height="9" rx="2" fill="#1457d9"/>
-        <rect x="23" y="27.5" width="21" height="9" rx="2" fill="#49c6d9"/>
-        <rect x="23" y="43" width="27" height="9" rx="2" fill="#1457d9"/>
-      </svg>
+    <div class="logo"><svg viewBox="0 0 256 256" role="img" aria-label="返済試算ロゴ">
+  <defs>
+    <linearGradient id="headerOrbit" x1="48" y1="55" x2="200" y2="194" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0c2b72"/><stop offset=".58" stop-color="#1554cb"/><stop offset="1" stop-color="#56b1ff"/></linearGradient>
+    <radialGradient id="headerOrb" cx="35%" cy="26%" r="70%"><stop offset="0" stop-color="#9cc9ff"/><stop offset=".48" stop-color="#2767db"/><stop offset="1" stop-color="#09235e"/></radialGradient>
+  </defs>
+  <path d="M196 174 C157 204 79 197 48 157 C17 117 46 75 103 61 C151 49 202 61 214 88" fill="none" stroke="url(#headerOrbit)" stroke-width="19" stroke-linecap="round"/>
+  <path d="M197 174 C172 190 148 196 126 195" fill="none" stroke="#57acff" stroke-width="19" stroke-linecap="butt"/>
+  <circle cx="207" cy="116" r="17" fill="url(#headerOrb)"/>
+  <circle cx="201.5" cy="109.5" r="4.6" fill="#d5ecff" opacity=".6"/>
+</svg></div>
+    <div class="title"><h1>返済試算 <span class="ver">v2.30</span></h1></div>
+    <div class="headActions">
+      <button class="themeToggle" id="themeToggle" type="button" aria-label="ライトモードに切り替え" title="ライトモードに切り替え" data-theme="dark">
+        <span class="themeIcon moon" aria-hidden="true">☾</span><span class="themeIcon sun" aria-hidden="true">☀</span><span class="themeKnob" aria-hidden="true"></span>
+      </button>
+      <button class="menu" id="menuBtn" aria-label="メニュー" type="button"><span></span></button>
     </div>
-    <div class="title">
-      <h1>返済試算 <span class="ver">Ver2.24</span></h1>
-      <div class="sub">NASUSHIN REPAYMENT TOOL</div>
-    </div>
-    <button class="menu" id="menuBtn" aria-label="menu"><span></span></button>
   </div>
 </header>
 
@@ -264,16 +237,33 @@ th:first-child,td:first-child{text-align:center}
   <button id="navSave" type="button">▱<span>保存した条件</span></button>
   <button id="navSetting" type="button">⚙<span>設定</span></button>
 </nav>
-
 <script>
+
 (function(){
   "use strict";
   const $ = id => document.getElementById(id);
-  const STORAGE_CURRENT = "hensai_v224_current";
-  const STORAGE_SAVED = "hensai_v224_saved";
+  const STORAGE_CURRENT = "hensai_v230_current";
+  const STORAGE_SAVED = "hensai_v230_saved";
   const yen = n => new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n || 0));
   const num = n => new Intl.NumberFormat("ja-JP",{maximumFractionDigits:2}).format(Number(n || 0));
   const state = {unit:"万円",method:"ep",loan:"shosho",wareki:true,bonus:false,showTable:false};
+
+  const THEME_KEY = "hensai_theme";
+  function applyTheme(theme, persist = true){
+    const next = theme === "light" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if(metaTheme) metaTheme.setAttribute("content", next === "dark" ? "#06142d" : "#f5f8fd");
+    const button = $("themeToggle");
+    if(button){
+      button.dataset.theme = next;
+      button.setAttribute("aria-label", next === "dark" ? "ライトモードに切り替え" : "ダークモードに切り替え");
+      button.setAttribute("title", next === "dark" ? "ライトモードに切り替え" : "ダークモードに切り替え");
+    }
+    if(persist) localStorage.setItem(THEME_KEY, next);
+  }
+  const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+  applyTheme(savedTheme, false);
   const AMOUNTS=[10,30,50,100,200,300,500,1000];
   const RATES_EP=[3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5];
   const RATES_EG=[1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2];
@@ -343,10 +333,90 @@ th:first-child,td:first-child{text-align:center}
     state.unit = nextUnit;
     sync();
   }
-  function isWeekend(date){ const day = date.getDay(); return day === 0 || day === 6; }
+  function dateKey(date){
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+  }
+  function nthWeekday(year, monthIndex, weekday, occurrence){
+    const first = new Date(year, monthIndex, 1);
+    const offset = (weekday - first.getDay() + 7) % 7;
+    return new Date(year, monthIndex, 1 + offset + (occurrence - 1) * 7);
+  }
+  function vernalEquinoxDay(year){
+    return Math.floor(20.8431 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4));
+  }
+  function autumnEquinoxDay(year){
+    return Math.floor(23.2488 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4));
+  }
+  function japaneseHolidaySet(year){
+    const dates = new Set();
+    const add = (monthIndex, day) => dates.add(dateKey(new Date(year, monthIndex, day)));
+    const addDate = date => dates.add(dateKey(date));
+    // Current Japanese national holiday rules (1980–2099 approximation for equinox days).
+    add(0,1);
+    addDate(nthWeekday(year,0,1,2));
+    add(1,11);
+    if(year >= 2020) add(1,23);
+    add(2,vernalEquinoxDay(year));
+    add(3,29);
+    add(4,3); add(4,4); add(4,5);
+    if(year >= 2016) add(7,11);
+    add(10,3); add(10,23);
+    if(year >= 2000){
+      addDate(nthWeekday(year,6,1,3));
+      addDate(nthWeekday(year,8,1,3));
+      addDate(nthWeekday(year,9,1,2));
+    } else {
+      add(6,20); add(8,15); add(9,10);
+    }
+    // Tokyo Olympic special dates.
+    if(year === 2020){
+      dates.delete(dateKey(nthWeekday(year,6,1,3))); add(6,23);
+      dates.delete(dateKey(nthWeekday(year,9,1,2))); add(6,24);
+      dates.delete(dateKey(new Date(year,7,11))); add(7,10);
+    }
+    if(year === 2021){
+      dates.delete(dateKey(nthWeekday(year,6,1,3))); add(6,22);
+      dates.delete(dateKey(nthWeekday(year,9,1,2))); add(6,23);
+      dates.delete(dateKey(new Date(year,7,11))); add(7,8);
+    }
+    if(year === 2019){
+      add(4,1); add(9,22); // Enthronement Day and ceremony holiday.
+    }
+    // Citizen's holidays and substitute holidays can affect one another; settle them iteratively.
+    for(let round = 0; round < 4; round++){
+      for(let month = 0; month < 12; month++){
+        const last = new Date(year, month + 1, 0).getDate();
+        for(let day = 2; day < last; day++){
+          const current = new Date(year, month, day);
+          const prev = new Date(year, month, day - 1);
+          const next = new Date(year, month, day + 1);
+          if(!dates.has(dateKey(current)) && dates.has(dateKey(prev)) && dates.has(dateKey(next))){
+            dates.add(dateKey(current));
+          }
+        }
+      }
+      const originals = Array.from(dates);
+      for(const key of originals){
+        const holiday = new Date(key + "T00:00:00");
+        if(holiday.getDay() !== 0) continue;
+        const substitute = new Date(holiday);
+        do { substitute.setDate(substitute.getDate() + 1); } while(dates.has(dateKey(substitute)));
+        dates.add(dateKey(substitute));
+      }
+    }
+    return dates;
+  }
+  const holidayCache = new Map();
+  function isHoliday(date){
+    const day = date.getDay();
+    if(day === 0 || day === 6) return true;
+    const year = date.getFullYear();
+    if(!holidayCache.has(year)) holidayCache.set(year, japaneseHolidaySet(year));
+    return holidayCache.get(year).has(dateKey(date));
+  }
   function nextBiz(date){
     const result = new Date(date);
-    while(isWeekend(result)) result.setDate(result.getDate() + 1);
+    while(isHoliday(result)) result.setDate(result.getDate() + 1);
     return result;
   }
   function daysInMonth(year, monthIndex){ return new Date(year, monthIndex + 1, 0).getDate(); }
@@ -408,7 +478,7 @@ th:first-child,td:first-child{text-align:center}
     if(state.method === "eg"){
       const monthlyPrincipal = Math.floor(toMoney($("monthlyPrincipal").value));
       if(monthlyPrincipal <= 0) return {error:"毎月元金を入力してください。"};
-      if(monthlyPrincipal * Math.max(0, n - 1) > P){
+      if(monthlyPrincipal * Math.max(0, n - 1) >= P){
         return {error:"毎月元金 ×（返済回数−1）が借入金額を超えています。毎月元金または返済回数を見直してください。"};
       }
       for(let i = 1; i <= n; i++){
@@ -435,9 +505,6 @@ th:first-child,td:first-child{text-align:center}
       const bonusIndexes = state.bonus
         ? scheduleDates.map((date, index) => date && bonusMonths.includes(date.getMonth() + 1) ? index + 1 : 0).filter(Boolean)
         : [];
-      if(state.bonus && bonusIndexes.length === 0){
-        return {error:"指定した返済期間内にボーナス月がありません。融資実行日・返済期間・ボーナス月を確認してください。"};
-      }
       const pvBonus = bonusIndexes.reduce((sum, index) => sum + bonusAmount / Math.pow(1 + r, index), 0);
       if(pvBonus >= P) return {error:"ボーナス加算額が大きすぎます。加算額または返済期間を見直してください。"};
       regularPayment = Math.floor(annuityPayment(P - pvBonus, r, n));
@@ -508,7 +575,7 @@ th:first-child,td:first-child{text-align:center}
     sync();
   }
   function getStoredCurrent(){
-    const keys = [STORAGE_CURRENT,"hensai_v223_current","hensai_v222_current","hensai_v220_current"];
+    const keys = [STORAGE_CURRENT,"hensai_v224_current","hensai_v223_current","hensai_v222_current","hensai_v220_current"];
     for(const key of keys){
       const raw = localStorage.getItem(key);
       if(!raw) continue;
@@ -517,7 +584,7 @@ th:first-child,td:first-child{text-align:center}
     return null;
   }
   function getSavedList(){
-    const keys = [STORAGE_SAVED,"hensai_v223_saved","hensai_v222_saved","hensai_v220_saved"];
+    const keys = [STORAGE_SAVED,"hensai_v224_saved","hensai_v223_saved","hensai_v222_saved","hensai_v220_saved"];
     for(const key of keys){
       const raw = localStorage.getItem(key);
       if(!raw) continue;
@@ -606,7 +673,7 @@ th:first-child,td:first-child{text-align:center}
   $("shosho").addEventListener("click", () => { state.loan = "shosho"; sync(); });
   $("tegata").addEventListener("click", () => {
     state.loan = "tegata";
-    alert("Ver2.24では手形貸付UIは簡易表示です。証書貸付の試算ロジックは維持しています。");
+    alert("Ver2.30では手形貸付UIは簡易表示です。証書貸付の試算ロジックは維持しています。");
     sync();
   });
   $("wareki").addEventListener("click", () => { state.wareki = true; sync(); });
@@ -629,7 +696,7 @@ th:first-child,td:first-child{text-align:center}
   $("closeMenu").addEventListener("click", () => { $("actions").style.display = "none"; });
   $("pdfBtn").addEventListener("click", () => window.print());
   $("resetBtn").addEventListener("click", () => {
-    [STORAGE_CURRENT,"hensai_v223_current","hensai_v222_current","hensai_v220_current"].forEach(key => localStorage.removeItem(key));
+    localStorage.removeItem(STORAGE_CURRENT);
     location.reload();
   });
   $("saveBtn").addEventListener("click", () => {
@@ -651,20 +718,24 @@ th:first-child,td:first-child{text-align:center}
   }
   $("loadBtn").addEventListener("click", openSaved);
   $("navSave").addEventListener("click", openSaved);
+  $("themeToggle").addEventListener("click", () => {
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+  });
 
   const stored = getStoredCurrent();
   if(stored) setData(stored); else sync();
 
-  // Android handles the unavoidable launcher-icon expansion first.
-  // The web layer follows with a 2.8s dark boot scene, then cross-fades into the white app.
+  const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const splashExitAt = reducedMotion ? 450 : 6200;
+  const splashRemoveAfter = reducedMotion ? 220 : 820;
   window.setTimeout(() => {
     const splash = $("splash");
+    if(!splash) return;
     splash.classList.add("exit");
-    const themeMeta = document.querySelector('meta[name="theme-color"]');
-    if(themeMeta) themeMeta.setAttribute("content", "#ffffff");
-    window.setTimeout(() => splash.remove(), 360);
-  }, 2460);
+    window.setTimeout(() => splash.remove(), splashRemoveAfter);
+  }, splashExitAt);
 })();
+
 </script>
 </body>
 </html>
