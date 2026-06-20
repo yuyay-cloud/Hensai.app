@@ -20,14 +20,19 @@ button{border:0;background:none;-webkit-tap-highlight-color:transparent;cursor:p
 button:disabled{opacity:.5;cursor:not-allowed}
 [hidden]{display:none!important}
 
-/* Splash: 1.8s fixed */
-.splash{position:fixed;inset:0;z-index:9999;background:#fff;display:grid;place-items:center;opacity:1;transition:opacity .4s ease,visibility .4s ease}
-.splash.exit{opacity:0;visibility:hidden}
-.splashInner{display:grid;place-items:center;gap:14px;transform:translateY(8px);opacity:0;animation:splashIn .42s cubic-bezier(.2,.8,.2,1) .08s forwards}
-.splashMark{width:84px;height:84px;display:grid;place-items:center}
-.splashMark svg{width:84px;height:84px}
-.splashVersion{font-size:.82rem;letter-spacing:.18em;color:#1457d9;font-weight:800}
-@keyframes splashIn{to{opacity:1;transform:translateY(0)}}
+/* Splash: 1.8s fixed — staged startup animation */
+.splash{position:fixed;inset:0;z-index:9999;background:#fff;display:grid;place-items:center;opacity:1;visibility:visible;transition:opacity .38s ease,visibility .38s ease}
+.splash.exit{opacity:0;visibility:hidden;pointer-events:none}
+.splashInner{display:grid;place-items:center;text-align:center;min-width:180px}
+.splashMark{width:90px;height:90px;display:grid;place-items:center;opacity:0;transform:translateY(9px) scale(.84);animation:splashMarkIn .46s cubic-bezier(.18,.82,.24,1) .16s forwards}
+.splashMark svg{width:90px;height:90px;overflow:visible}
+.splashVersion{margin-top:13px;font-size:.76rem;line-height:1;letter-spacing:.18em;color:#0f4c81;font-weight:800;opacity:0;transform:translateY(5px);animation:splashVersionIn .30s ease .58s forwards}
+.splashPulse{width:38px;height:2px;margin-top:22px;border-radius:99px;background:#e6edf5;overflow:hidden;opacity:0;animation:splashPulseShow .18s ease .82s forwards}
+.splashPulse:before{content:"";display:block;width:100%;height:100%;border-radius:inherit;background:#0f4c81;transform:translateX(-105%);animation:splashBootSweep .46s cubic-bezier(.4,0,.2,1) .90s forwards}
+@keyframes splashMarkIn{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes splashVersionIn{to{opacity:1;transform:translateY(0)}}
+@keyframes splashPulseShow{to{opacity:1}}
+@keyframes splashBootSweep{to{transform:translateX(0)}}
 
 .appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:18px 20px 14px}
 .head{display:flex;align-items:center;gap:14px}
@@ -91,21 +96,21 @@ th:first-child,td:first-child{text-align:center}
 .nav button.on{color:var(--blue)}
 @media(min-width:720px){.wrap{padding:24px}.field{padding:22px 26px}}
 @media(max-width:430px){.title h1{font-size:1.38rem}.logo,.logo svg{width:52px;height:52px}.bigval{font-size:1.75rem}.rval{font-size:1.35rem}.grid2{grid-template-columns:1fr}.pill{padding:10px 12px}}
-@media(prefers-reduced-motion:reduce){.splash,.splashInner{animation:none;transition:none;transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.splash{transition:none}.splashMark,.splashVersion,.splashPulse,.splashPulse:before{animation:none;transform:none;opacity:1}}
 @media print{.splash,.appbar,.nav,.menu,.toggle,.primary,.actions{display:none!important}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
 </style>
 </head>
 <body>
 <div class="splash" id="splash" aria-label="起動画面">
-  <div class="splashInner">
-    <div class="splashMark" aria-hidden="true">
+  <div class="splashInner" aria-hidden="true">
+    <div class="splashMark">
       <svg viewBox="0 0 64 64" role="img">
-        <defs><linearGradient id="splashGradient" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1c66f0"/><stop offset="1" stop-color="#48d1d4"/></linearGradient></defs>
-        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="url(#splashGradient)"/>
-        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#49c6d9"/>
+        <path d="M7 47 L22 19 C24 15 30 16 31 21 L38 48 H29 L25 29 L14 47 Z" fill="#0f4c81"/>
+        <path d="M35 47 L46 31 C48 28 53 29 55 33 L60 47 H50 L47 39 L42 47 Z" fill="#0f4c81" opacity=".52"/>
       </svg>
     </div>
     <div class="splashVersion">v2.24</div>
+    <div class="splashPulse"></div>
   </div>
 </div>
 
@@ -426,9 +431,6 @@ th:first-child,td:first-child{text-align:center}
       const bonusIndexes = state.bonus
         ? scheduleDates.map((date, index) => date && bonusMonths.includes(date.getMonth() + 1) ? index + 1 : 0).filter(Boolean)
         : [];
-      if(state.bonus && bonusIndexes.length === 0){
-        return {error:"指定した返済期間内にボーナス月がありません。融資実行日・返済期間・ボーナス月を確認してください。"};
-      }
       const pvBonus = bonusIndexes.reduce((sum, index) => sum + bonusAmount / Math.pow(1 + r, index), 0);
       if(pvBonus >= P) return {error:"ボーナス加算額が大きすぎます。加算額または返済期間を見直してください。"};
       regularPayment = Math.floor(annuityPayment(P - pvBonus, r, n));
@@ -620,7 +622,7 @@ th:first-child,td:first-child{text-align:center}
   $("closeMenu").addEventListener("click", () => { $("actions").style.display = "none"; });
   $("pdfBtn").addEventListener("click", () => window.print());
   $("resetBtn").addEventListener("click", () => {
-    [STORAGE_CURRENT,"hensai_v223_current","hensai_v222_current","hensai_v220_current"].forEach(key => localStorage.removeItem(key));
+    localStorage.removeItem(STORAGE_CURRENT);
     location.reload();
   });
   $("saveBtn").addEventListener("click", () => {
@@ -646,11 +648,13 @@ th:first-child,td:first-child{text-align:center}
   const stored = getStoredCurrent();
   if(stored) setData(stored); else sync();
 
+  // Splash: blank → mark → version → subtle startup stroke → fade out (1.8 seconds total)
   window.setTimeout(() => {
     const splash = $("splash");
+    if(!splash) return;
     splash.classList.add("exit");
-    window.setTimeout(() => splash.remove(), 420);
-  }, 1400);
+    window.setTimeout(() => splash.remove(), 400);
+  }, 1420);
 })();
 </script>
 </body>
