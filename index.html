@@ -201,15 +201,19 @@ const $=id=>document.getElementById(id);
 const yen=n=>new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n));
 const num=n=>new Intl.NumberFormat("ja-JP").format(Math.round(n));
 const state={unit:"万円",method:"ep",loan:"shosho",wareki:true,showTable:false};
-const AMOUNTS=[10,30,50,100,200,300,500,1000], RATES=[3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5], YEARS=[1,2,3,4,5,6,7,8,9,10], DAYS=[7,17,27,31];
+const AMOUNTS=[10,30,50,100,200,300,500,1000], RATES_EP=[3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5], RATES_EG=[1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2], YEARS=[1,2,3,4,5,6,7,8,9,10], DAYS=[7,17,27,31];
 function pill(parent,arr,suffix,cb){$(parent).innerHTML="";arr.forEach(v=>{const b=document.createElement("button");b.className="pill";b.textContent=String(v)+suffix;b.onclick=()=>cb(v);$(parent).appendChild(b);});}
 pill("amountPills",AMOUNTS,"万",v=>{state.unit="万円";$("principal").value=v;sync();});
-pill("ratePills",RATES,"%",v=>{$("rate").value=Number(v).toFixed(v%1?2:2);sync();});
+function renderRatePills(){
+  const rates = state.method==="eg" ? RATES_EG : RATES_EP;
+  pill("ratePills", rates, "%", v=>{$("rate").value=Number(v).toFixed(2);sync();});
+}
+renderRatePills();
 pill("yearPills",YEARS,"年",v=>{$("years").value=v;sync();});
 pill("dayPills",DAYS,"日",v=>{$("repayDay").value=v;sync();});
 ["principal","rate","years","repayDay","execDate"].forEach(id=>$(id).addEventListener("input",sync));
 $("unitMan").onclick=()=>{state.unit="万円";sync()}; $("unitYen").onclick=()=>{state.unit="円";sync()};
-$("ep").onclick=()=>{state.method="ep";sync()}; $("eg").onclick=()=>{state.method="eg";sync()};
+$("ep").onclick=()=>{state.method="ep";renderRatePills();sync()}; $("eg").onclick=()=>{state.method="eg";renderRatePills();sync()};
 $("shosho").onclick=()=>{state.loan="shosho";sync()}; $("tegata").onclick=()=>{state.loan="tegata";alert("Ver2.20では手形貸付UIは簡易表示です。証書貸付の試算ロジックは維持しています。");sync()};
 $("wareki").onclick=()=>{state.wareki=true;sync()}; $("seireki").onclick=()=>{state.wareki=false;sync()};
 $("detailToggle").onclick=()=>{$("details").classList.toggle("open");$("detailToggle").innerHTML=$("details").classList.contains("open")?"詳細条件を閉じる <span>⌃</span>":"詳細条件を見る <span>⌄</span>";};
@@ -221,7 +225,7 @@ $("resetBtn").onclick=()=>{localStorage.removeItem("hensai_v220_current");locati
 $("saveBtn").onclick=()=>{const name=prompt("保存名を入力してください","返済試算 "+new Date().toLocaleDateString("ja-JP")); if(!name)return; const list=JSON.parse(localStorage.getItem("hensai_v220_saved")||"[]"); list.unshift({name,date:new Date().toISOString(),data:getData()}); localStorage.setItem("hensai_v220_saved",JSON.stringify(list.slice(0,20))); alert("保存しました");};
 $("loadBtn").onclick=$("navSave").onclick=()=>{const list=JSON.parse(localStorage.getItem("hensai_v220_saved")||"[]"); if(!list.length){alert("保存データがありません");return;} const msg=list.map((x,i)=>`${i+1}: ${x.name}`).join("\n"); const n=parseInt(prompt("呼び出す番号を入力\n"+msg)); if(!n||!list[n-1])return; setData(list[n-1].data); $("actions").style.display="none";};
 function getData(){return{principal:$("principal").value,rate:$("rate").value,years:$("years").value,repayDay:$("repayDay").value,execDate:$("execDate").value,unit:state.unit,method:state.method,wareki:state.wareki};}
-function setData(d){Object.assign(state,{unit:d.unit||"万円",method:d.method||"ep",wareki:d.wareki!==false});["principal","rate","years","repayDay","execDate"].forEach(k=>{if(d[k]!=null)$(k).value=d[k]});sync();}
+function setData(d){Object.assign(state,{unit:d.unit||"万円",method:d.method||"ep",wareki:d.wareki!==false});["principal","rate","years","repayDay","execDate"].forEach(k=>{if(d[k]!=null)$(k).value=d[k]});renderRatePills();sync();}
 function jpDate(d){if(!d)return""; if(!state.wareki)return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`; const y=d.getFullYear(); let era="令和", ey=y-2018; if(y<2019){era="平成";ey=y-1988;} return `${era}${ey===1?"元":ey}年${d.getMonth()+1}月${d.getDate()}日`; }
 function isHol(d){const w=d.getDay();return w===0||w===6}
 function nextBiz(d){d=new Date(d);while(isHol(d))d.setDate(d.getDate()+1);return d}
