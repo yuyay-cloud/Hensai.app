@@ -53,81 +53,29 @@ button,input,select{font:inherit} button{border:0;background:none;-webkit-tap-hi
 @media print{.splash,.appbar,.nav,.menu,.themeToggle,.toggle,.primary,.actions{display:none!important}:root,:root[data-theme="light"]{color-scheme:light;--bg:#fff;--card:#fff;--card-elev:#fff;--ink:#071a3d;--muted:#41516a;--line:#dfe7f1;--input:#fff}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
 </style>
 
-<style id="v235-hotfix-style">
-/* v2.35 hotfix: isolated logo + launch overlay. Existing UI CSS stays unchanged. */
-#splash{display:none!important}
-.logo.logo--proposal{width:48px;height:46px;display:grid;place-items:center;overflow:visible}
+
+
+<style id="v235-video-splash-style">
+/* Ver2.35: full-screen MP4 splash. Animation and final logo share one fixed video frame. */
+.logo.logo--proposal{width:48px;height:46px;display:grid;place-items:center;overflow:visible;flex:none}
 .logo.logo--proposal img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 7px rgba(33,112,232,.15))}
+.videoSplash{position:fixed;inset:0;z-index:10000;overflow:hidden;background:#030815;opacity:1;visibility:visible;transition:opacity .46s ease,visibility .46s ease}
+.videoSplash.is-exiting{opacity:0;visibility:hidden}
+.videoSplash video{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;background:#030815}
 @media(max-width:430px){.logo.logo--proposal{width:42px;height:42px}}
-
-.particleSplash{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;background:radial-gradient(42% 32% at 50% 46%,#112f70 0%,#071a3f 38%,#020713 92%);opacity:1;visibility:visible;transition:opacity .85s ease,visibility .85s ease}
-.particleSplash.is-exiting{opacity:0;visibility:hidden}
-.particleSplash::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 40% 48%,rgba(75,160,255,.12),transparent 17%),radial-gradient(circle at 60% 56%,rgba(55,120,255,.12),transparent 23%);filter:blur(12px);animation:v235Atmosphere 5.6s ease-in-out infinite}
-.particleSplash::after{content:"";position:absolute;width:2px;height:2px;border-radius:50%;background:#b7dcff;box-shadow:-180px -165px 0 -1px rgba(132,185,255,.45),130px -118px 0 -1px rgba(132,185,255,.38),235px 98px 0 -1px rgba(132,185,255,.34),-250px 108px 0 -1px rgba(132,185,255,.26),-120px 198px 0 -1px rgba(132,185,255,.3);opacity:0;animation:v235Stars .7s ease .12s forwards}
-.particleSplashCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.particleSplashContent{position:relative;z-index:1;display:grid;place-items:center;gap:16px;transform:translateY(-5px)}
-.particleSplashStage{width:min(74vw,320px);height:180px;display:grid;place-items:center}
-.particleSplashFinalLogo{display:block;width:100%;max-height:180px;object-fit:contain;opacity:0;transform:translateY(6px) scale(.985);filter:drop-shadow(0 10px 26px rgba(58,130,255,.16));transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1),filter .4s ease}
-.particleSplashFinalLogo.show{opacity:1;transform:translateY(0) scale(1);filter:drop-shadow(0 10px 30px rgba(80,165,255,.34))}
-.particleSplashFinalLogo.glow{filter:drop-shadow(0 10px 36px rgba(110,195,255,.56))}
-.particleSplashVersion{font-size:.94rem;line-height:1;letter-spacing:.22em;font-weight:700;color:#eef7ff;text-shadow:0 0 18px rgba(117,188,255,.55);opacity:0;transform:translateY(7px);transition:opacity .52s cubic-bezier(.2,.8,.2,1),transform .52s cubic-bezier(.2,.8,.2,1)}
-.particleSplashVersion.show{opacity:1;transform:translateY(0)}
-.particleSplashLoader{position:relative;width:108px;height:3px;border-radius:99px;background:rgba(145,188,255,.16);overflow:hidden;opacity:0;transition:opacity .38s ease;box-shadow:0 0 10px rgba(46,129,255,.14)}
-.particleSplashLoader.show{opacity:1}
-.particleSplashLoader span{position:absolute;left:-35%;top:0;width:35%;height:100%;border-radius:inherit;background:linear-gradient(90deg,transparent,#9fe2ff 45%,#fff 60%,#59a6ff);box-shadow:0 0 12px #53a6ff}
-.particleSplashLoader.run span{animation:v235LoaderSweep 1.75s ease-in-out 1 forwards}
-@keyframes v235Stars{to{opacity:.9}}
-@keyframes v235Atmosphere{50%{transform:scale(1.08);opacity:.75}}
-@keyframes v235LoaderSweep{0%{left:-38%}75%{left:105%}100%{left:105%}}
-@media(prefers-reduced-motion:reduce){.particleSplash::before,.particleSplash::after{animation:none}.particleSplashFinalLogo,.particleSplashVersion,.particleSplashLoader{opacity:1;transform:none}.particleSplashCanvas{display:none}}
+@media(prefers-reduced-motion:reduce){.videoSplash{transition-duration:.12s}.videoSplash video{display:none}}
 </style>
-
 </head>
 <body>
-
-<div class="particleSplash" id="particleSplash" aria-label="起動画面">
-  <canvas class="particleSplashCanvas" id="particleSplashCanvas" aria-hidden="true"></canvas>
-  <div class="particleSplashContent">
-    <div class="particleSplashStage">
-      <img class="particleSplashFinalLogo" id="particleSplashFinalLogo" src="./proposal_logo_dark_transparent.png" alt="">
-    </div>
-    <div class="particleSplashVersion">v2.35</div>
-    <div class="particleSplashLoader" aria-hidden="true"><span></span></div>
-  </div>
+<div class="videoSplash" id="videoSplash" aria-label="起動画面">
+  <video id="splashVideo" muted playsinline autoplay preload="auto" aria-hidden="true">
+    <source src="./splash_v235_orbit.mp4" type="video/mp4">
+  </video>
 </div>
 
 
-<div class="splash" id="splash" aria-label="起動画面">
-  <div class="splashContent">
-    <svg class="splashLogo" viewBox="0 0 256 256" aria-hidden="true">
-  <defs>
-    <linearGradient id="splashOrbit" x1="42" y1="52" x2="212" y2="202" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ecf7ff"/>
-      <stop offset=".36" stop-color="#d8ecff"/>
-      <stop offset=".72" stop-color="#3a8bff"/>
-      <stop offset="1" stop-color="#72d9ff"/>
-    </linearGradient>
-    <radialGradient id="splashOrb" cx="34%" cy="24%" r="72%">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".35" stop-color="#a7ddff"/>
-      <stop offset=".75" stop-color="#4d95ff"/>
-      <stop offset="1" stop-color="#1a49bb"/>
-    </radialGradient>
-    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <filter id="orbGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  </defs>
-  <path class="splashOrbitGhost" d="M196 174 C157 204 79 197 48 157 C17 117 46 75 103 61 C151 49 202 61 214 88" pathLength="1" fill="none" stroke="#1d4da9" stroke-opacity=".18" stroke-width="19" stroke-linecap="round"/>
-  <path class="splashOrbitPath" d="M196 174 C157 204 79 197 48 157 C17 117 46 75 103 61 C151 49 202 61 214 88" pathLength="1" fill="none" stroke="url(#splashOrbit)" stroke-width="19" stroke-linecap="round" filter="url(#softGlow)"/>
-  <path class="splashAccentPath" d="M197 174 C172 190 148 196 126 195" pathLength="1" fill="none" stroke="#3fa0ff" stroke-width="19" stroke-linecap="butt" filter="url(#softGlow)"/>
-  <circle class="splashStartParticle" cx="48" cy="157" r="4.5" fill="#c7edff" filter="url(#softGlow)"/>
-  <circle class="splashOrbGlow" cx="207" cy="116" r="22" fill="#8ac8ff" opacity=".5" filter="url(#orbGlow)"/>
-  <circle class="splashOrbCore" cx="207" cy="116" r="17" fill="url(#splashOrb)" filter="url(#orbGlow)"/>
-  <circle class="splashOrbHighlight" cx="201.5" cy="109.5" r="4.6" fill="#fff" opacity=".78"/>
-</svg>
-    <div class="splashVersion">v2.35</div>
-    <div class="splashLoader" aria-hidden="true"><span></span></div>
-  </div>
-</div>
+
+
 <header class="appbar">
   <div class="head">
     <div class="logo logo--proposal"><img src="./proposal_logo_light_transparent.png" alt="返済試算ロゴ"></div>
@@ -608,7 +556,7 @@ button,input,select{font:inherit} button{border:0;background:none;-webkit-tap-hi
     sync();
   }
   function getStoredCurrent(){
-    const keys = [STORAGE_CURRENT,"hensai_v230_current","hensai_v224_current","hensai_v223_current","hensai_v222_current","hensai_v220_current"];
+    const keys = [STORAGE_CURRENT,"hensai_v224_current","hensai_v223_current","hensai_v222_current","hensai_v220_current"];
     for(const key of keys){
       const raw = localStorage.getItem(key);
       if(!raw) continue;
@@ -617,7 +565,7 @@ button,input,select{font:inherit} button{border:0;background:none;-webkit-tap-hi
     return null;
   }
   function getSavedList(){
-    const keys = [STORAGE_SAVED,"hensai_v230_saved","hensai_v224_saved","hensai_v223_saved","hensai_v222_saved","hensai_v220_saved"];
+    const keys = [STORAGE_SAVED,"hensai_v224_saved","hensai_v223_saved","hensai_v222_saved","hensai_v220_saved"];
     for(const key of keys){
       const raw = localStorage.getItem(key);
       if(!raw) continue;
@@ -757,105 +705,29 @@ button,input,select{font:inherit} button{border:0;background:none;-webkit-tap-hi
 
   const stored = getStoredCurrent();
   if(stored) setData(stored); else sync();
-
-  const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const splashExitAt = reducedMotion ? 450 : 6200;
-  const splashRemoveAfter = reducedMotion ? 220 : 820;
-  window.setTimeout(() => {
-    const splash = $("splash");
-    if(!splash) return;
-    splash.classList.add("exit");
-    window.setTimeout(() => splash.remove(), splashRemoveAfter);
-  }, splashExitAt);
 })();
 
 </script>
 
-<script id="v235-hotfix-script">
+
+
+<script id="v235-video-splash-script">
 (function(){
   "use strict";
-  const splash = document.getElementById("particleSplash");
-  const canvas = document.getElementById("particleSplashCanvas");
-  const finalLogo = document.getElementById("particleSplashFinalLogo");
-  const version = splash && splash.querySelector(".particleSplashVersion");
-  const loader = splash && splash.querySelector(".particleSplashLoader");
-  if(!splash || !canvas || !finalLogo || !version || !loader) return;
-
-  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(reduced){
-    finalLogo.classList.add("show","glow");
-    version.classList.add("show");
-    loader.classList.add("show","run");
-    window.setTimeout(() => { splash.classList.add("is-exiting"); window.setTimeout(()=>splash.remove(), 250); }, 520);
-    return;
-  }
-
-  const ctx = canvas.getContext("2d");
-  let width=0, height=0, dpr=1, particles=[];
-  const easeOut = t => { t=Math.max(0,Math.min(1,t)); return 1-Math.pow(1-t,3); };
-  const easeInOut = t => { t=Math.max(0,Math.min(1,t)); return 3*t*t-2*t*t*t; };
-
-  function orbitPoint(u){
-    const cx=width/2-16, cy=height/2-115, rx=Math.min(width*.23,170), ry=Math.min(height*.10,112);
-    const a0=Math.PI*150/180, a1=Math.PI*345/180, th=a0+(a1-a0)*u;
-    return {x:cx+rx*Math.cos(th), y:cy+ry*Math.sin(th)-18-19*Math.sin((u-.25)*Math.PI)};
-  }
-  function resize(){
-    dpr=Math.min(window.devicePixelRatio||1,2);
-    width=canvas.clientWidth||window.innerWidth; height=canvas.clientHeight||window.innerHeight;
-    canvas.width=Math.round(width*dpr); canvas.height=Math.round(height*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    particles=[];
-    for(let i=0;i<44;i++){
-      const ang=Math.random()*Math.PI*2, radius=32+Math.random()*113, cx=width/2-16, cy=height/2-115;
-      const p=orbitPoint(.06+i/43*.36);
-      particles.push({x0:cx+Math.cos(ang)*radius*(.55+Math.random()*.5),y0:cy+Math.sin(ang)*radius*(.28+Math.random()*.32),xt:p.x,yt:p.y,size:1.8+Math.random()*2.5,phase:Math.random()*Math.PI*2});
-    }
-  }
-  function glow(x,y,r,color,alpha){ctx.beginPath();ctx.fillStyle=`rgba(${color},${alpha})`;ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
-  const start=performance.now();
-  function render(now){
-    const t=(now-start)/1000;
-    ctx.clearRect(0,0,width,height);
-    const particleIntro=easeInOut(t/1.55), converge=easeInOut((t-1.10)/1.75), drawOrbit=easeOut((t-1.55)/1.90), sphereIn=easeOut((t-3.00)/.70);
-    const cx=width/2-16, cy=height/2-115;
-    glow(cx,cy,210,'14,45,125',.10); glow(cx,cy,130,'25,90,200',.08);
-
-    // Visible luminous dust — intentionally larger/brighter to survive mobile compression.
-    if(t<3.10){
-      particles.forEach(p=>{
-        const dx=Math.sin(t*2.2+p.phase)*(6+p.size), dy=Math.cos(t*2.8+p.phase)*(4+p.size*.6), q=converge;
-        const x=(1-q)*(p.x0+dx)+q*p.xt, y=(1-q)*(p.y0+dy)+q*p.yt;
-        const tw=.58+.42*Math.sin(t*7+p.phase), a=(70+165*particleIntro)*tw*(1-.55*q)/255, r=p.size*(1+.16*Math.sin(t*5.5+p.phase));
-        glow(x,y,r*5.5,'60,150,255',a*.16); glow(x,y,r*2.1,'80,185,255',a*.42); glow(x,y,r*.82,'225,248,255',Math.min(1,a+.13));
-      });
-    }
-    if(t>=1.05 && t<3.0){
-      for(let j=0;j<10;j++){const pt=orbitPoint((((t-1.05)*.33)+j/10*.16)%.52); glow(pt.x,pt.y,8,'65,155,255',.11); glow(pt.x,pt.y,2.2,'220,246,255',.75);}
-    }
-    if(t>=1.55 && t<3.42){
-      const u=drawOrbit, steps=Math.max(4,Math.floor(220*u)), pts=[];
-      for(let k=0;k<steps;k++)pts.push(orbitPoint((k/(steps-1))*u));
-      const stroke=(w,style)=>{if(pts.length<2)return;ctx.beginPath();ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=style;ctx.lineWidth=w;ctx.moveTo(pts[0].x,pts[0].y);for(let k=1;k<pts.length;k++)ctx.lineTo(pts[k].x,pts[k].y);ctx.stroke();};
-      // Fade the approximate drawn path before the exact proposal logo arrives: no overlap.
-      const fade=1-easeInOut((t-2.92)/.50);
-      stroke(16,`rgba(47,118,255,${.32*fade})`);stroke(7,`rgba(75,150,255,${.78*fade})`);stroke(3,`rgba(225,247,255,${.88*fade})`);
-      const h=pts[pts.length-1]; glow(h.x,h.y,24,'90,190,255',.28*fade); glow(h.x,h.y,7,'255,255,255',fade);
-    }
-    if(t>=3.0 && t<3.62){
-      const q=sphereIn, sx=cx+Math.min(width*.20,153), sy=cy-12, r=25*(.25+.75*q), fade=1-easeInOut((t-3.22)/.38);
-      glow(sx,sy,r*2.2,'70,160,255',.22*q*fade);glow(sx,sy,r,'30,95,255',.95*q*fade);glow(sx-r*.18,sy-r*.36,r*.28,'230,246,255',.80*q*fade);
-    }
-    if(t>=3.28) finalLogo.classList.add('show');
-    if(t>=3.92) finalLogo.classList.add('glow');
-    if(t>=4.25) version.classList.add('show');
-    if(t>=4.82){loader.classList.add('show'); if(t>=5.08)loader.classList.add('run');}
-    if(t<6.95) requestAnimationFrame(render);
-  }
-  resize(); window.addEventListener('resize',resize,{passive:true}); requestAnimationFrame(render);
-  window.setTimeout(()=>{splash.classList.add('is-exiting');window.setTimeout(()=>splash.remove(),900);},7000);
+  const overlay=document.getElementById("videoSplash");
+  const video=document.getElementById("splashVideo");
+  if(!overlay||!video)return;
+  let closed=false;
+  function closeSplash(){if(closed)return;closed=true;overlay.classList.add("is-exiting");window.setTimeout(()=>overlay.remove(),520);}
+  const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduced){window.setTimeout(closeSplash,180);return;}
+  function startVideo(){const p=video.play();if(p&&typeof p.catch==="function"){p.catch(()=>window.setTimeout(closeSplash,500));}}
+  video.addEventListener("canplay",startVideo,{once:true});
+  video.addEventListener("ended",closeSplash,{once:true});
+  video.addEventListener("error",()=>window.setTimeout(closeSplash,500),{once:true});
+  startVideo();
+  window.setTimeout(closeSplash,9000);
 })();
 </script>
-
 </body>
 </html>
