@@ -6,8 +6,8 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#06142d" name="theme-color"/>
 <link href="./manifest.json" rel="manifest"/>
-<link href="./icon-192-v236.png" rel="apple-touch-icon"/>
-<title>返済試算 Ver2.36</title>
+<link href="./icon-192-v2361.png" rel="apple-touch-icon"/>
+<title>返済試算 Ver2.36.1</title>
 <style>
 :root{
   color-scheme:dark;
@@ -51,7 +51,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 @media (max-width:420px){.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
-@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.tableScroll{overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
+@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36.1";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.tableScroll{overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
 </style>
 </head>
 <body>
@@ -112,7 +112,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 </section>
 </div>
 <div aria-hidden="true" class="sheetLayer" id="sheetLayer"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><button class="sheetClose" id="sheetClose" type="button">閉じる</button></div></div>
-<div aria-label="起動画面" id="splash"><canvas class="splashCanvas" id="splashCanvas"></canvas><div class="splashVersion">v2.36</div><div class="splashCurve"></div></div>
+<div aria-label="起動画面" id="splash"><canvas class="splashCanvas" id="splashCanvas"></canvas><div class="splashVersion">v2.36.1</div><div class="splashCurve"></div></div>
 <script>
 (() => {
 'use strict';
@@ -285,9 +285,48 @@ function bindSheet(){
 }
 
 function initAmbientDust(){
-  const c=$('ambientDust'),ctx=c.getContext('2d');let w=0,h=0,dpr=1,parts=[],last=0;const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function reset(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);parts=[];for(let i=0;i<62;i++)parts.push({x:-18+Math.random()*(w+36),y:h*(.12+Math.random()*.84),r:.28+Math.random()*.62,s:.035+Math.random()*.095,offset:Math.random()*10})}
-  function tick(now){if(reduced)return;requestAnimationFrame(tick);if(now-last<62)return;last=now;ctx.clearRect(0,0,w,h);const light=document.documentElement.dataset.theme==='light';for(const p of parts){p.x+=p.s*1.6;p.y-=p.s*.28+Math.sin(now*.00048+p.offset)*.032;if(p.x>w+18||p.y<-18){p.x=-14;p.y=h*(.16+Math.random()*.76)}const a=light?.095:.19;ctx.beginPath();ctx.fillStyle=`rgba(${light?'54,111,190':'92,176,255'},${a})`;ctx.arc(p.x,p.y,p.r*4.1,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,93,174':'215,245,255'},${light?.30:.48})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}}
+  const c=$('ambientDust'),ctx=c.getContext('2d');
+  let w=0,h=0,dpr=1,parts=[],last=0;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rand=n=>{const x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)};
+  function reset(){
+    dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
+    c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    // 背景は「散らばった星」ではなく、左下→右上へ残る細い粉の流れ。
+    parts=Array.from({length:154},(_,i)=>{
+      const seed=rand(i+1), lane=rand(i+181), band=i%5;
+      return {
+        seed, lane, band,
+        x:-30+rand(i+79)*(w+60),
+        yBase:h*(.18+lane*.70),
+        r:.16+rand(i+241)*.44,
+        s:.038+rand(i+359)*.092,
+        phase:rand(i+487)*Math.PI*2,
+        glow:.45+rand(i+601)*.55
+      };
+    });
+  }
+  function tick(now){
+    if(reduced)return;
+    requestAnimationFrame(tick);
+    // 背景は約18fpsで描画。粒を増やしても電池への負担を抑える。
+    if(now-last<55)return;
+    last=now;ctx.clearRect(0,0,w,h);
+    const light=document.documentElement.dataset.theme==='light';
+    for(const p of parts){
+      p.x+=p.s*1.55;
+      if(p.x>w+24){p.x=-18-rand(p.seed*999+now*.001)*42;p.yBase=h*(.18+rand(p.seed*311+now*.002)*.70)}
+      const wave=Math.sin(p.x/Math.max(w,1)*7.4+p.phase)*h*.018;
+      const sway=Math.sin(now*.00038+p.phase)*3.3;
+      const x=p.x;
+      const y=p.yBase-wave+sway-(p.band-2)*2.4;
+      const pulse=.72+.28*Math.sin(now*.00072+p.phase);
+      const a=(light?.075:.155)*p.glow*pulse;
+      if(a<.012)continue;
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'66,124,206':'72,166,255'},${a*.28})`;ctx.arc(x,y,p.r*3.5,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,92,175':'205,241,255'},${a*(light?.82:1.15)})`;ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
+    }
+  }
   addEventListener('resize',reset,{passive:true});reset();requestAnimationFrame(tick);
 }
 function initSplash(){
@@ -302,116 +341,136 @@ function initSplash(){
   }
   resize();addEventListener('resize',resize,{passive:true});
 
-  // 一度決めた粒子の個性を最後まで使う。フレームごとの乱数をなくし、粉がちらつかないようにする。
+  // 1つの粒子群を、流入→中央集合→ローディング→中央集合→右への散開まで一貫して使う。
+  // 別レイヤーを切り替えないため、各フェーズの「切れ目」が見えにくい構成。
   const hash=n=>{const x=Math.sin(n*91.3458)*43758.5453;return x-Math.floor(x)};
   const clamp=(n,min=0,max=1)=>Math.max(min,Math.min(max,n));
-  const smooth=n=>n*n*(3-2*n);
-  const easeOut=n=>1-Math.pow(1-n,3);
+  const smooth=n=>{n=clamp(n);return n*n*(3-2*n)};
+  const smoother=n=>{n=clamp(n);return n*n*n*(n*(n*6-15)+10)};
+  const easeOut=n=>1-Math.pow(1-clamp(n),3);
   const mix=(a,b,n)=>a+(b-a)*n;
   const bezier=(a,b,c,d,t)=>{const u=1-t;return u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d};
-  const stream=Array.from({length:232},(_,i)=>({
-    seed:hash(i+1),delay:hash(i+31)*.72,lane:hash(i+81),arc:hash(i+141),size:.22+hash(i+211)*.52,twinkle:hash(i+271)*Math.PI*2
+  const TAU=Math.PI*2;
+
+  // 高密度でも軽く保つため、小粒＋固定シード＋2レイヤー描画に統一。
+  const particles=Array.from({length:520},(_,i)=>({
+    seed:hash(i+1), delay:hash(i+37)*.68, lane:hash(i+89),
+    cloudA:hash(i+151)*TAU, cloudR:Math.pow(hash(i+211),.68),
+    u:i/519, size:.15+hash(i+281)*.36, phase:hash(i+349)*TAU,
+    exitDrift:-.52+hash(i+421)*1.04, exitSpeed:.72+hash(i+503)*.72
   }));
-  const ring=Array.from({length:382},(_,i)=>({seed:hash(i+501),size:.24+hash(i+701)*.46,phase:hash(i+911)*Math.PI*2}));
-  const out=Array.from({length:296},(_,i)=>({seed:hash(i+1301),speed:92+hash(i+1531)*186,drift:-44+hash(i+1771)*88,size:.22+hash(i+1991)*.56,phase:hash(i+2201)*Math.PI*2}));
-  const atmosphere=Array.from({length:78},(_,i)=>({seed:hash(i+2501),x:hash(i+2701),y:.14+hash(i+2901)*.66,size:.18+hash(i+3101)*.28,phase:hash(i+3301)*Math.PI*2}));
-  const query=new URLSearchParams(location.search); const debugTime=Number(query.get('splashDebug'));
+  const atmosphere=Array.from({length:108},(_,i)=>({
+    x:hash(i+709), y:.11+hash(i+811)*.73, r:.13+hash(i+919)*.27,
+    phase:hash(i+1031)*TAU, speed:.004+hash(i+1123)*.009
+  }));
+  const query=new URLSearchParams(location.search);const debugTime=Number(query.get('splashDebug'));
   const start=performance.now()-(Number.isFinite(debugTime)?debugTime*1000:0);
 
   function dot(x,y,r,alpha,head=false){
-    if(alpha<=0||r<=0)return;
-    // 小さな芯 + 控えめなグロー。粒自体を大きくせず、発色だけを残す。
-    ctx.beginPath();ctx.fillStyle=`rgba(66,170,255,${alpha*(head?.21:.12)})`;ctx.arc(x,y,r*(head?5.2:3.6),0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.fillStyle=`rgba(168,226,255,${alpha*(head?.62:.40)})`;ctx.arc(x,y,r*(head?1.85:1.35),0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.fillStyle=`rgba(244,252,255,${alpha*(head?.98:.76)})`;ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    if(alpha<=.008||r<=0)return;
+    // 多数の小粒子を重くしないよう、通常粒は2描画・先頭粒だけ強めのグローにする。
+    if(alpha>.075||head){
+      ctx.beginPath();ctx.fillStyle=`rgba(58,163,255,${alpha*(head?.28:.15)})`;ctx.arc(x,y,r*(head?5.0:3.0),0,TAU);ctx.fill();
+    }
+    ctx.beginPath();ctx.fillStyle=`rgba(193,235,255,${alpha*(head?.96:.74)})`;ctx.arc(x,y,r*(head?1.72:1.18),0,TAU);ctx.fill();
   }
 
   function frame(now){
     const t=(now-start)/1000;
-    const cx=w*.5, cy=h*.462, radius=Math.min(w,h)*.129;
+    const cx=w*.5,cy=h*.455;
+    const radius=Math.min(w,h)*.136;
+    const cloudRadius=radius*.34;
     ctx.clearRect(0,0,w,h);ctx.save();ctx.globalCompositeOperation='lighter';
 
-    // 薄い星屑。背景は抑えつつ、起動画面全体に密度感を少し足す。
+    // 控えめな背景の粉。主役の流れと区別して、奥行きだけを足す。
     for(const p of atmosphere){
-      const drift=((t*.010+p.seed)%1);const x=(p.x+drift)*w%w;const y=h*p.y+Math.sin(t*.46+p.phase)*8;
-      const a=.028+.017*Math.sin(t*.95+p.phase);dot(x,y,p.size,a);
+      const x=((p.x+t*p.speed)%1)*w;
+      const y=h*p.y+Math.sin(t*.50+p.phase)*7;
+      dot(x,y,p.r,.020+.014*Math.sin(t*.8+p.phase));
     }
 
-    // Timing design: total about 5.8s
-    const streamEnd=2.35;      // left dust keeps entering longer
-    const ringStart=.96;       // ring begins while dust is still flowing
-    const ringEnd=4.62;        // loading lasts longer
-    const releaseStart=4.12;   // dissolve starts slightly before loading visually ends
-    const releaseEnd=5.55;
+    // 7秒強の一連演出。フェーズ同士は必ず重ね、急な切替を作らない。
+    const expandStart=2.10, expandEnd=2.86;
+    const ringStart=2.86, ringEnd=5.20;
+    const collapseStart=5.20, collapseEnd=5.92;
+    const exitStart=5.92, exitEnd=7.02;
 
-    // 1) Left dust enters in a gentle stream and is guided toward the left edge of the ring.
-    if(t<streamEnd){
-      for(const p of stream){
-        const q=clamp((t-p.delay)/1.58); if(q<=0)continue;
-        const e=smooth(q);
-        const sx=-36-w*.11*p.seed;
-        const sy=h*(.23+p.lane*.55);
-        const ex=cx-radius+Math.cos((p.arc-.5)*.62+Math.PI)*8;
-        const ey=cy+(p.arc-.5)*radius*.70;
-        const c1x=w*.16+w*.15*p.seed;
-        const c1y=sy+(cy-sy)*.18+Math.sin(p.twinkle)*h*.060;
-        const c2x=cx-radius-w*.20*(1-p.arc);
-        const c2y=ey+(sy-ey)*.18;
-        const x=bezier(sx,c1x,c2x,ex,e);
-        const y=bezier(sy,c1y,c2y,ey,e);
-        const fade=Math.sin(Math.PI*q)*(.44+.46*(1-p.seed));
-        const flick=.90+.10*Math.sin(t*4.7+p.twinkle);
-        dot(x,y,p.size,fade*flick);
+    const expand=smoother((t-expandStart)/(expandEnd-expandStart));
+    const collapse=smoother((t-collapseStart)/(collapseEnd-collapseStart));
+    const ringProgress=clamp((t-ringStart)/(ringEnd-ringStart));
+    const turns=2.82;
+    const headBase=-Math.PI*.56;
+    const currentHead=headBase+ringProgress*TAU*turns;
+    const tailSpan=Math.PI*1.72;
+    const ringFade=(1-collapse*.42)*clamp((t-ringStart)/.30);
+
+    let headX=cx,headY=cy;
+    for(const p of particles){
+      const cloudBreath=1+Math.sin(t*.92+p.phase)*.07;
+      const cloudX=cx+Math.cos(p.cloudA+t*.22)*cloudRadius*p.cloudR*cloudBreath;
+      const cloudY=cy+Math.sin(p.cloudA+t*.22)*cloudRadius*.72*p.cloudR*cloudBreath;
+      const q=clamp((t-p.delay)/1.38);
+      const streamE=smoother(q);
+      const sx=-44-w*(.07+.16*p.seed);
+      const sy=h*(.19+p.lane*.61);
+      const c1x=w*(.12+.18*p.seed);
+      const c1y=sy+(cy-sy)*.12+Math.sin(p.phase)*h*.055;
+      const c2x=cx-w*.10*(1-p.seed);
+      const c2y=cloudY+(sy-cloudY)*.11;
+      const streamX=bezier(sx,c1x,c2x,cloudX,streamE);
+      const streamY=bezier(sy,c1y,c2y,cloudY,streamE);
+
+      // 円への展開は中心から半径を増やすため、中央集合→ローディングが一続きになる。
+      const angle=currentHead-tailSpan*p.u;
+      const ringX=cx+Math.cos(angle)*radius;
+      const ringY=cy+Math.sin(angle)*radius;
+      const expandX=mix(cloudX,ringX,expand);
+      const expandY=mix(cloudY,ringY,expand);
+
+      let x=cloudX,y=cloudY,alpha=.0,size=p.size;
+      if(t<expandStart){
+        if(q<=0)continue;
+        x=streamX;y=streamY;
+        // 到着後も中央の粉として淡く残す。流入→集合の最後に暗転しないようにする。
+        alpha=(.22+.50*Math.sin(Math.PI*q))*(.72+.28*(1-p.seed));
+      }else if(t<ringStart){
+        x=expandX;y=expandY;
+        alpha=(.34+.46*(1-p.u))*(.78+.22*expand);
+      }else if(t<collapseStart){
+        const tail=Math.pow(1-p.u,2.25);
+        x=ringX;y=ringY;
+        alpha=ringFade*(.035+.84*tail)*(.92+.08*Math.sin(t*4.2+p.phase));
+        size=p.size*(.70+tail*.66);
+      }else if(t<collapseEnd){
+        // ローディングの粒子そのものを再び中央へ集める。
+        const tail=Math.pow(1-p.u,2.15);
+        x=mix(ringX,cloudX,collapse);
+        y=mix(ringY,cloudY,collapse);
+        alpha=(1-collapse*.18)*(.07+.70*tail);
+        size=p.size*(.76+tail*.44);
+      }else if(t<exitEnd){
+        // 中央の粉を右へ吹き流す。開始点は中央集合なので、終了にも段差が出ない。
+        const e=easeOut((t-exitStart)/(exitEnd-exitStart));
+        const exitX=cx+(w*(.45+.36*p.exitSpeed))*e+Math.sin(p.phase+t*2.2)*8*(1-e);
+        const exitY=cy+(p.exitDrift*h*.24)*Math.pow(e,.78)+Math.sin(p.phase+t*3.1)*10*e*(1-e);
+        x=mix(cloudX,exitX,e);
+        y=mix(cloudY,exitY,e);
+        alpha=(1-e)*(1-e)*(.10+.54*(1-p.u));
+        size=p.size*(.74+.40*(1-p.u));
       }
+      dot(x,y,size,alpha);
     }
 
-    // 2) Dust smoothly becomes a circular loading trail with a bright head and fine tail.
-    let ringOpacity=0;
-    if(t>=ringStart&&t<releaseEnd){
-      const load=clamp((t-ringStart)/(ringEnd-ringStart));
-      const turns=2.88;
-      const head=Math.PI+load*Math.PI*2*turns;
-      const available=Math.min(Math.PI*2*1.72, Math.PI*2*(.12+load*2.36));
-      const release=clamp((t-releaseStart)/(releaseEnd-releaseStart));
-      ringOpacity=(1-release*.90)*clamp((t-ringStart)/.56);
-      for(let i=0;i<ring.length;i++){
-        const p=ring[i],u=i/(ring.length-1);
-        const a=head-available*u;
-        const ripple=Math.sin(t*2.9+p.phase)*.36*(1-u);
-        const x=cx+Math.cos(a)*(radius+ripple);
-        const y=cy+Math.sin(a)*(radius+ripple);
-        const tail=Math.pow(1-u,2.55);
-        const alpha=ringOpacity*(.045+.86*tail)*(0.92+.08*Math.sin(t*4.2+p.phase));
-        const size=p.size*(.70+tail*.64);
-        dot(x,y,size,alpha);
-      }
-      const hx=cx+Math.cos(head)*radius,hy=cy+Math.sin(head)*radius;
-      dot(hx,hy,1.72,ringOpacity*.98,true);
-      dot(cx+Math.cos(head-.09)*radius,cy+Math.sin(head-.09)*radius,1.02,ringOpacity*.76);
-      dot(cx+Math.cos(head-.18)*radius,cy+Math.sin(head-.18)*radius,.78,ringOpacity*.48);
-    }
-
-    // 3) The loading tail loosens and blows softly to the right like extinguished candle smoke.
-    if(t>=releaseStart&&t<5.82){
-      const q=clamp((t-releaseStart)/(releaseEnd-releaseStart)),e=easeOut(q);
-      const finalLoad=clamp((releaseStart-ringStart)/(ringEnd-ringStart));
-      const finalHead=Math.PI+finalLoad*Math.PI*2*2.88;
-      const finalTail=Math.min(Math.PI*2*1.72,Math.PI*2*(.12+finalLoad*2.36));
-      for(let i=0;i<out.length;i++){
-        const p=out[i],u=i/(out.length-1),a=finalHead-finalTail*u;
-        const x0=cx+Math.cos(a)*radius;
-        const y0=cy+Math.sin(a)*radius;
-        const wind=p.speed*e+54*e*e;
-        const x=x0+wind+Math.sin(p.phase+t*2.2)*8*(1-e);
-        const y=y0+p.drift*e+Math.sin(p.phase+t*3.2)*11*e*(1-e);
-        const alpha=(1-e)*(1-e)*(.10+.50*(1-u));
-        dot(x,y,p.size*(.76+.48*(1-u)),alpha);
-      }
+    // ローディングの先頭は粒子群とは別に最小限の強い光だけを足す。
+    if(t>=ringStart&&t<collapseStart){
+      headX=cx+Math.cos(currentHead)*radius;headY=cy+Math.sin(currentHead)*radius;
+      dot(headX,headY,1.60,ringFade*.98,true);
+      dot(cx+Math.cos(currentHead-.095)*radius,cy+Math.sin(currentHead-.095)*radius,.94,ringFade*.72);
     }
 
     ctx.restore();
-    if(t<5.90){requestAnimationFrame(frame);}
-    else {splash.classList.add('splashExit');setTimeout(()=>{splash.remove();openWizard('new')},560);}
+    if(t<7.16){requestAnimationFrame(frame);}
+    else{splash.classList.add('splashExit');setTimeout(()=>{splash.remove();openWizard('new')},560);}
   }
   requestAnimationFrame(frame);
 }function bindTop(){

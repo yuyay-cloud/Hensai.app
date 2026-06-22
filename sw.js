@@ -1,8 +1,8 @@
-const CACHE = 'hensai-v236-shell';
+const CACHE = 'hensai-v2361-shell';
 const ASSETS = [
   './', './index.html', './manifest.json',
-  './icon-192-v236.png', './icon-512-v236.png',
-  './icon-192-maskable-v236.png', './icon-512-maskable-v236.png',
+  './icon-192-v2361.png', './icon-512-v2361.png',
+  './icon-192-maskable-v2361.png', './icon-512-maskable-v2361.png',
   './proposal_logo_light_transparent.png'
 ];
 self.addEventListener('install', event => {
