@@ -1,11 +1,12 @@
-<!doctype html>
-<html lang="ja" data-theme="dark">
+<!DOCTYPE html>
+
+<html data-theme="dark" lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#06142d">
-<link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192-v236.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#06142d" name="theme-color"/>
+<link href="./manifest.json" rel="manifest"/>
+<link href="./icon-192-v236.png" rel="apple-touch-icon"/>
 <title>返済試算 Ver2.36</title>
 <style>
 :root{
@@ -46,7 +47,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 /* Menu */
 .sheetLayer{position:fixed;inset:0;z-index:80;background:rgba(0,6,18,.44);opacity:0;visibility:hidden;transition:.2s ease}.sheetLayer.open{opacity:1;visibility:visible}.sheet{position:absolute;left:12px;right:12px;bottom:12px;max-width:756px;margin:0 auto;max-height:70vh;overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:21px;box-shadow:0 26px 64px rgba(0,0,0,.34);padding:8px}.sheetTitle{padding:12px 12px 8px;color:var(--muted);font-size:.76rem;font-weight:900;letter-spacing:.08em}.sheet button{width:100%;text-align:left;border-radius:13px;padding:15px 13px;font-weight:800}.sheet button:hover{background:var(--soft)}.sheet button+button{border-top:1px solid var(--line)}.historyItem{display:flex!important;align-items:center;gap:10px}.historyItem .hDate{font-size:.72rem;color:var(--muted);font-weight:600}.historyItem .hText{font-size:.86rem;line-height:1.45;flex:1}.sheetClose{color:var(--muted)!important;text-align:center!important}
 /* Splash */
-#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:0;right:0;bottom:12.4%;text-align:center;color:rgba(220,240,255,.72);letter-spacing:.24em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .75s 1.15s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .75s 1.32s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}
+#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:0;right:0;bottom:12.4%;text-align:center;color:rgba(220,240,255,.72);letter-spacing:.24em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .82s 1.45s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .82s 1.62s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}
 @media (max-width:420px){.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
@@ -54,68 +55,64 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 </style>
 </head>
 <body>
-<canvas id="ambientDust" aria-hidden="true"></canvas>
+<canvas aria-hidden="true" id="ambientDust"></canvas>
 <div class="app">
 <header class="appbar">
-  <div class="head">
-    <div class="brandmark"><img src="./proposal_logo_light_transparent.png" alt=""></div>
-    <div class="headTitle"><h1>返済試算</h1><p>REPAYMENT SIMULATOR</p></div>
-    <div class="headActions">
-      <button id="themeToggle" class="themeToggle" type="button" aria-label="ライトモードに切り替え" data-theme="dark"><span class="ico moon">☾</span><span class="ico sun">☀</span><span class="knob"></span></button>
-      <button id="menuBtn" class="iconBtn" type="button" aria-label="メニュー"><span class="hamburger"></span></button>
-    </div>
-  </div>
+<div class="head">
+<div class="brandmark"><img alt="" src="./proposal_logo_light_transparent.png"/></div>
+<div class="headTitle"><h1>返済試算</h1><p>REPAYMENT SIMULATOR</p></div>
+<div class="headActions">
+<button aria-label="ライトモードに切り替え" class="themeToggle" data-theme="dark" id="themeToggle" type="button"><span class="ico moon">☾</span><span class="ico sun">☀</span><span class="knob"></span></button>
+<button aria-label="メニュー" class="iconBtn" id="menuBtn" type="button"><span class="hamburger"></span></button>
+</div>
+</div>
 </header>
-<main id="main" class="wrap">
-  <section id="introCard" class="card hero">
-    <div class="heroTop"><div><div class="eyebrow">REPAYMENT SIMULATION</div><h2>条件を順に入れて、<br>返済の見通しをつくる。</h2><p>金額・金利・期間をステップ形式で入力します。比較が必要なときだけ、あとから2条件目を追加できます。</p></div></div>
-    <div class="summaryActions"><button id="startBtn" class="primaryBtn" type="button">新しく試算する</button><button id="historyBtn" class="outlineBtn" type="button">直近の履歴</button></div>
-  </section>
-  <section id="singleView" hidden></section>
-  <section id="compareView" hidden></section>
+<main class="wrap" id="main">
+<section class="card hero" id="introCard">
+<div class="heroTop"><div><div class="eyebrow">REPAYMENT SIMULATION</div><h2>条件を順に入れて、<br/>返済の見通しをつくる。</h2><p>金額・金利・期間をステップ形式で入力します。比較が必要なときだけ、あとから2条件目を追加できます。</p></div></div>
+<div class="summaryActions"><button class="primaryBtn" id="startBtn" type="button">新しく試算する</button><button class="outlineBtn" id="historyBtn" type="button">直近の履歴</button></div>
+</section>
+<section hidden="" id="singleView"></section>
+<section hidden="" id="compareView"></section>
 </main>
 </div>
-<nav class="bottomNav"><div class="bottomNavInner"><button id="navHome" class="active" type="button">⌂<span>ホーム</span></button><button id="navNew" type="button">＋<span>新規試算</span></button><button id="navHistory" type="button">◷<span>履歴</span></button></div></nav>
+<nav class="bottomNav"><div class="bottomNavInner"><button class="active" id="navHome" type="button">⌂<span>ホーム</span></button><button id="navNew" type="button">＋<span>新規試算</span></button><button id="navHistory" type="button">◷<span>履歴</span></button></div></nav>
+<div aria-hidden="true" class="modalLayer" id="wizardLayer">
+<section aria-labelledby="wizardTitle" aria-modal="true" class="wizard" role="dialog">
+<div class="wizardHead"><div><h2 id="wizardTitle">試算条件を入力</h2><p id="wizardSub">必要な項目を順に決めます。</p><div class="stepDots" id="stepDots"></div></div><button aria-label="閉じる" class="closeWizard" id="closeWizard" type="button">×</button></div>
+<div class="wizardBody">
 
-<div id="wizardLayer" class="modalLayer" aria-hidden="true">
-  <section class="wizard" role="dialog" aria-modal="true" aria-labelledby="wizardTitle">
-    <div class="wizardHead"><div><h2 id="wizardTitle">試算条件を入力</h2><p id="wizardSub">必要な項目を順に決めます。</p><div id="stepDots" class="stepDots"></div></div><button id="closeWizard" class="closeWizard" type="button" aria-label="閉じる">×</button></div>
-    <div class="wizardBody">
-      <div class="wizardStep" data-step="0">
-        <h3>借入金額を入力</h3><p class="lead">単位を選んで金額を入力してください。</p>
-        <div class="segMini" id="unitSeg"><button class="selected" data-unit="万円" type="button">万円</button><button data-unit="円" type="button">円</button></div>
-        <div class="fieldLabel">借入金額</div><div class="inputUnit"><input id="wPrincipal" class="bigInput" type="number" inputmode="decimal" min="0" placeholder="例：100"><span id="wPrincipalUnit">万円</span></div>
-        <div id="amountPills" class="pillGrid"></div>
-      </div>
-      <div class="wizardStep" data-step="1">
-        <h3>年利率を入力</h3><p class="lead">年利率を入力してください。</p>
-        <div class="inputUnit"><input id="wRate" class="bigInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：9.00"><span>%</span></div>
-        <div id="ratePills" class="pillGrid"></div>
-      </div>
-      <div class="wizardStep" data-step="2">
-        <h3>返済方式を選択</h3><p class="lead">返済額を一定にするか、元金を一定にするかを選びます。</p>
-        <div class="choiceGrid"><button id="wEP" class="choiceBtn selected" type="button"><strong>元利均等</strong><small>毎月の返済額をおおむね一定にします。</small></button><button id="wEG" class="choiceBtn" type="button"><strong>元金均等</strong><small>毎月の元金を指定し、最終回で残額を調整します。</small></button></div>
-      </div>
-      <div class="wizardStep" data-step="3">
-        <h3 id="termTitle">返済期間を入力</h3><p id="termLead" class="lead">返済年数を入力してください。</p>
-        <div id="epTermFields"><div class="inputUnit"><input id="wYears" class="bigInput" type="number" inputmode="numeric" min="1" max="50" value="10"><span>年</span></div><div id="yearPills" class="pillGrid"></div></div>
-        <div id="egTermFields" hidden><div class="fieldLabel">返済回数</div><div class="inputUnit"><input id="wCount" class="smallInput" type="number" inputmode="numeric" min="1" max="600" value="120"><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input id="wMonthlyPrincipal" class="smallInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：1"><span id="wMonthlyPrincipalUnit">万円</span></div><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
-      </div>
-      <div class="wizardStep" data-step="4">
-        <h3>詳細条件を確認</h3><p class="lead">返済日と実行日を設定します。ボーナス払いは必要な場合だけ使えます。</p>
-        <div class="inlineFields"><div><div class="fieldLabel">返済日</div><input id="wRepayDay" class="smallInput" type="number" inputmode="numeric" min="1" max="31" value="17"></div><div><div class="fieldLabel">融資実行日</div><input id="wExecDate" class="smallInput" type="date"></div></div>
-        <div id="bonusBlock"><div class="fieldLabel">ボーナス払い</div><div class="switchLine"><div><label>ボーナス加算</label><small>元利均等返済のときだけ設定できます。</small></div><div class="segMini"><button id="wBonusNo" class="selected" type="button">なし</button><button id="wBonusYes" type="button">あり</button></div></div><div id="bonusFields" hidden><div class="inlineFields"><div><div class="fieldLabel">ボーナス月①</div><select id="wBonusMonth1" class="smallInput"></select></div><div><div class="fieldLabel">ボーナス月②</div><select id="wBonusMonth2" class="smallInput"></select></div></div><div class="fieldLabel">加算額（1回あたり）</div><div class="inputUnit"><input id="wBonusAmount" class="smallInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：10"><span id="wBonusUnit">万円</span></div></div></div>
-      </div>
-      <div id="wizardError" class="wizardError"></div>
-    </div>
-    <div class="wizardFoot"><button id="wizardBack" class="ghostBtn" type="button">戻る</button><button id="wizardNext" class="primaryBtn" type="button">次へ</button></div>
-  </section>
+
+
+
+
+<div class="wizardStep" data-step="0">
+<h3>返済方式を選択</h3><p class="lead">最初に返済方式を選びます。選択後、借入金額の入力へ進みます。</p>
+<div class="choiceGrid"><button class="choiceBtn selected" id="wEP" type="button"><strong>元利均等</strong><small>毎月の返済額をおおむね一定にします。</small></button><button class="choiceBtn" id="wEG" type="button"><strong>元金均等</strong><small>毎月の元金を指定し、最終回で残額を調整します。</small></button></div>
+</div><div class="wizardStep" data-step="1">
+<h3>借入金額を入力</h3><p class="lead">単位を選んで金額を入力してください。</p>
+<div class="segMini" id="unitSeg"><button class="selected" data-unit="万円" type="button">万円</button><button data-unit="円" type="button">円</button></div>
+<div class="fieldLabel">借入金額</div><div class="inputUnit"><input class="bigInput" id="wPrincipal" inputmode="decimal" min="0" placeholder="例：100" type="number"/><span id="wPrincipalUnit">万円</span></div>
+<div class="pillGrid" id="amountPills"></div>
+</div><div class="wizardStep" data-step="2">
+<h3>年利率を入力</h3><p class="lead">年利率を入力してください。</p>
+<div class="inputUnit"><input class="bigInput" id="wRate" inputmode="decimal" min="0" placeholder="例：9.00" step="0.01" type="number"/><span>%</span></div>
+<div class="pillGrid" id="ratePills"></div>
+</div><div class="wizardStep" data-step="3">
+<h3 id="termTitle">返済期間を入力</h3><p class="lead" id="termLead">返済年数を入力してください。</p>
+<div id="epTermFields"><div class="inputUnit"><input class="bigInput" id="wYears" inputmode="numeric" max="50" min="1" type="number" value="10"/><span>年</span></div><div class="pillGrid" id="yearPills"></div></div>
+<div hidden="" id="egTermFields"><div class="fieldLabel">返済回数</div><div class="inputUnit"><input class="smallInput" id="wCount" inputmode="numeric" max="600" min="1" type="number" value="120"/><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input class="smallInput" id="wMonthlyPrincipal" inputmode="decimal" min="0" placeholder="例：1" step="0.01" type="number"/><span id="wMonthlyPrincipalUnit">万円</span></div><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
+</div><div class="wizardStep" data-step="4">
+<h3>詳細条件を確認</h3><p class="lead">返済日と実行日を設定します。ボーナス払いは必要な場合だけ使えます。</p>
+<div class="inlineFields"><div><div class="fieldLabel">返済日</div><input class="smallInput" id="wRepayDay" inputmode="numeric" max="31" min="1" type="number" value="17"/></div><div><div class="fieldLabel">融資実行日</div><input class="smallInput" id="wExecDate" type="date"/></div></div>
+<div id="bonusBlock"><div class="fieldLabel">ボーナス払い</div><div class="switchLine"><div><label>ボーナス加算</label><small>元利均等返済のときだけ設定できます。</small></div><div class="segMini"><button class="selected" id="wBonusNo" type="button">なし</button><button id="wBonusYes" type="button">あり</button></div></div><div hidden="" id="bonusFields"><div class="inlineFields"><div><div class="fieldLabel">ボーナス月①</div><select class="smallInput" id="wBonusMonth1"></select></div><div><div class="fieldLabel">ボーナス月②</div><select class="smallInput" id="wBonusMonth2"></select></div></div><div class="fieldLabel">加算額（1回あたり）</div><div class="inputUnit"><input class="smallInput" id="wBonusAmount" inputmode="decimal" min="0" placeholder="例：10" step="0.01" type="number"/><span id="wBonusUnit">万円</span></div></div></div>
+</div><div class="wizardError" id="wizardError"></div>
 </div>
-
-<div id="sheetLayer" class="sheetLayer" aria-hidden="true"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><button id="sheetClose" class="sheetClose" type="button">閉じる</button></div></div>
-
-<div id="splash" aria-label="起動画面"><canvas id="splashCanvas" class="splashCanvas"></canvas><div class="splashVersion">v2.36</div><div class="splashCurve"></div></div>
-
+<div class="wizardFoot"><button class="ghostBtn" id="wizardBack" type="button">戻る</button><button class="primaryBtn" id="wizardNext" type="button">次へ</button></div>
+</section>
+</div>
+<div aria-hidden="true" class="sheetLayer" id="sheetLayer"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><button class="sheetClose" id="sheetClose" type="button">閉じる</button></div></div>
+<div aria-label="起動画面" id="splash"><canvas class="splashCanvas" id="splashCanvas"></canvas><div class="splashVersion">v2.36</div><div class="splashCurve"></div></div>
 <script>
 (() => {
 'use strict';
@@ -264,9 +261,9 @@ function renderWizardPills(){
   const d=wizard.data;function pills(id,arr,label,on){$(id).innerHTML=arr.map(v=>`<button class="pillBtn ${String(v)===String(on)?'selected':''}" type="button" data-v="${v}">${v}${label}</button>`).join('');$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=b.dataset.v;if(id==='amountPills'){d.principal=v;renderWizard();setTimeout(()=>nextWizard(true),180)}else if(id==='ratePills'){d.rate=Number(v).toFixed(2);renderWizard();setTimeout(()=>nextWizard(true),180)}else{d.years=v;renderWizard()}})}
   pills('amountPills',AMOUNTS,'万',d.unit==='万円'?d.principal:'');pills('ratePills',d.method==='eg'?RATES_EG:RATES_EP,'%',Number(d.rate));pills('yearPills',YEARS,'年',d.years);
 }
-function focusStep(){const map=['wPrincipal','wRate',null,'wYears','wRepayDay'];const id=map[wizard.step];if(id)$(id).focus();}
+function focusStep(){const map=[null,'wPrincipal','wRate','wYears','wRepayDay'];const id=map[wizard.step];if(id)$(id).focus();}
 function wizardError(text){const e=$('wizardError');e.textContent=text;e.classList.add('show')}
-function commitStep(){const d=wizard.data; if(wizard.step===0){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===1){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(toMoney(d.monthlyPrincipal,d.unit)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
+function commitStep(){const d=wizard.data; if(wizard.step===1){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===2){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(toMoney(d.monthlyPrincipal,d.unit)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
 function nextWizard(auto=false){const err=commitStep();if(err){if(!auto)wizardError(err);return}if(wizard.step<4){wizard.step++;renderWizard();setTimeout(focusStep,80);return}const result=calc(wizard.data);if(result.error){wizardError(result.error);return}pushHistory(wizard.data,result);const mode=wizard.mode;const data=clone(wizard.data);closeWizard();if(mode==='compare'){const a=clone(currentScenario),ra=currentResult;comparison={a,b:data,ra,rb:result};$('introCard').hidden=true;compareSchedulesOpen=false;renderCompare()}else if(mode==='editA'&&comparison){comparison.a=data;comparison.ra=result;renderCompare()}else if(mode==='editB'&&comparison){comparison.b=data;comparison.rb=result;renderCompare()}else{showCurrent(data,result)}}
 function prevWizard(){if(wizard.step>0){wizard.step--;renderWizard();setTimeout(focusStep,80)}}
 function bindWizard(){
@@ -289,8 +286,8 @@ function bindSheet(){
 
 function initAmbientDust(){
   const c=$('ambientDust'),ctx=c.getContext('2d');let w=0,h=0,dpr=1,parts=[],last=0;const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function reset(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);parts=[];for(let i=0;i<18;i++)parts.push({x:Math.random()*w,y:h*.15+Math.random()*h*.85,r:.55+Math.random()*1.0,s:.06+Math.random()*.12,offset:Math.random()*10})}
-  function tick(now){if(reduced)return;requestAnimationFrame(tick);if(now-last<70)return;last=now;ctx.clearRect(0,0,w,h);const light=document.documentElement.dataset.theme==='light';for(const p of parts){p.x+=p.s*1.5;p.y-=p.s*.36+Math.sin(now*.0005+p.offset)*.04;if(p.x>w+18||p.y<-18){p.x=-12;p.y=h*.34+Math.random()*h*.60}const a=light?.11:.22;ctx.beginPath();ctx.fillStyle=`rgba(${light?'54,111,190':'92,176,255'},${a})`;ctx.arc(p.x,p.y,p.r*4.5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,93,174':'215,245,255'},${light?.33:.54})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}}
+  function reset(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);parts=[];for(let i=0;i<62;i++)parts.push({x:-18+Math.random()*(w+36),y:h*(.12+Math.random()*.84),r:.28+Math.random()*.62,s:.035+Math.random()*.095,offset:Math.random()*10})}
+  function tick(now){if(reduced)return;requestAnimationFrame(tick);if(now-last<62)return;last=now;ctx.clearRect(0,0,w,h);const light=document.documentElement.dataset.theme==='light';for(const p of parts){p.x+=p.s*1.6;p.y-=p.s*.28+Math.sin(now*.00048+p.offset)*.032;if(p.x>w+18||p.y<-18){p.x=-14;p.y=h*(.16+Math.random()*.76)}const a=light?.095:.19;ctx.beginPath();ctx.fillStyle=`rgba(${light?'54,111,190':'92,176,255'},${a})`;ctx.arc(p.x,p.y,p.r*4.1,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,93,174':'215,245,255'},${light?.30:.48})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}}
   addEventListener('resize',reset,{passive:true});reset();requestAnimationFrame(tick);
 }
 function initSplash(){
@@ -312,103 +309,109 @@ function initSplash(){
   const easeOut=n=>1-Math.pow(1-n,3);
   const mix=(a,b,n)=>a+(b-a)*n;
   const bezier=(a,b,c,d,t)=>{const u=1-t;return u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d};
-  const stream=Array.from({length:252},(_,i)=>({
-    seed:hash(i+1),delay:hash(i+31)*.50,lane:hash(i+81),arc:hash(i+141),size:.32+hash(i+211)*.74,twinkle:hash(i+271)*Math.PI*2
+  const stream=Array.from({length:232},(_,i)=>({
+    seed:hash(i+1),delay:hash(i+31)*.72,lane:hash(i+81),arc:hash(i+141),size:.22+hash(i+211)*.52,twinkle:hash(i+271)*Math.PI*2
   }));
-  const ring=Array.from({length:336},(_,i)=>({seed:hash(i+501),size:.32+hash(i+701)*.68,phase:hash(i+911)*Math.PI*2}));
-  const out=Array.from({length:316},(_,i)=>({seed:hash(i+1301),speed:120+hash(i+1531)*230,drift:-54+hash(i+1771)*108,size:.30+hash(i+1991)*.76,phase:hash(i+2201)*Math.PI*2}));
-  const atmosphere=Array.from({length:82},(_,i)=>({seed:hash(i+2501),x:hash(i+2701),y:.14+hash(i+2901)*.66,size:.24+hash(i+3101)*.42,phase:hash(i+3301)*Math.PI*2}));
+  const ring=Array.from({length:382},(_,i)=>({seed:hash(i+501),size:.24+hash(i+701)*.46,phase:hash(i+911)*Math.PI*2}));
+  const out=Array.from({length:296},(_,i)=>({seed:hash(i+1301),speed:92+hash(i+1531)*186,drift:-44+hash(i+1771)*88,size:.22+hash(i+1991)*.56,phase:hash(i+2201)*Math.PI*2}));
+  const atmosphere=Array.from({length:78},(_,i)=>({seed:hash(i+2501),x:hash(i+2701),y:.14+hash(i+2901)*.66,size:.18+hash(i+3101)*.28,phase:hash(i+3301)*Math.PI*2}));
   const query=new URLSearchParams(location.search); const debugTime=Number(query.get('splashDebug'));
   const start=performance.now()-(Number.isFinite(debugTime)?debugTime*1000:0);
 
   function dot(x,y,r,alpha,head=false){
     if(alpha<=0||r<=0)return;
     // 小さな芯 + 控えめなグロー。粒自体を大きくせず、発色だけを残す。
-    ctx.beginPath();ctx.fillStyle=`rgba(62,164,255,${alpha*(head?.28:.19)})`;ctx.arc(x,y,r*(head?5.6:4.25),0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.fillStyle=`rgba(173,228,255,${alpha*(head?.70:.54)})`;ctx.arc(x,y,r*(head?1.75:1.28),0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.fillStyle=`rgba(246,253,255,${alpha*(head?.99:.92)})`;ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.fillStyle=`rgba(66,170,255,${alpha*(head?.21:.12)})`;ctx.arc(x,y,r*(head?5.2:3.6),0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.fillStyle=`rgba(168,226,255,${alpha*(head?.62:.40)})`;ctx.arc(x,y,r*(head?1.85:1.35),0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.fillStyle=`rgba(244,252,255,${alpha*(head?.98:.76)})`;ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
   }
 
   function frame(now){
     const t=(now-start)/1000;
-    const cx=w*.5, cy=h*.462, radius=Math.min(w,h)*.178;
+    const cx=w*.5, cy=h*.462, radius=Math.min(w,h)*.129;
     ctx.clearRect(0,0,w,h);ctx.save();ctx.globalCompositeOperation='lighter';
 
-    // 背景はごく薄い星屑。主役の粉を邪魔しない密度に抑える。
+    // 薄い星屑。背景は抑えつつ、起動画面全体に密度感を少し足す。
     for(const p of atmosphere){
-      const drift=((t*.012+p.seed)%1);const x=(p.x+drift)*w%w;const y=h*p.y+Math.sin(t*.55+p.phase)*7;
-      const a=.032+.018*Math.sin(t*1.1+p.phase);dot(x,y,p.size,a);
+      const drift=((t*.010+p.seed)%1);const x=(p.x+drift)*w%w;const y=h*p.y+Math.sin(t*.46+p.phase)*8;
+      const a=.028+.017*Math.sin(t*.95+p.phase);dot(x,y,p.size,a);
     }
 
-    // 1) 左から舞い込む粉。少し弧を描きながら、円の左側へ吸い込まれる。
-    if(t<1.68){
+    // Timing design: total about 5.8s
+    const streamEnd=2.35;      // left dust keeps entering longer
+    const ringStart=.96;       // ring begins while dust is still flowing
+    const ringEnd=4.62;        // loading lasts longer
+    const releaseStart=4.12;   // dissolve starts slightly before loading visually ends
+    const releaseEnd=5.55;
+
+    // 1) Left dust enters in a gentle stream and is guided toward the left edge of the ring.
+    if(t<streamEnd){
       for(const p of stream){
-        const q=clamp((t-p.delay)/1.18); if(q<=0)continue;
+        const q=clamp((t-p.delay)/1.58); if(q<=0)continue;
         const e=smooth(q);
-        const sx=-42-w*.13*p.seed;
-        const sy=cy+(p.lane-.5)*h*.31;
-        const ex=cx-radius+Math.cos((p.arc-.5)*.58+Math.PI)*5;
-        const ey=cy+(p.arc-.5)*radius*.68;
-        const c1x=w*.19+w*.12*p.seed;
-        const c1y=sy+(cy-sy)*.22+Math.sin(p.twinkle)*h*.035;
-        const c2x=cx-radius-w*.18*(1-p.arc);
-        const c2y=ey+(sy-ey)*.20;
+        const sx=-36-w*.11*p.seed;
+        const sy=h*(.23+p.lane*.55);
+        const ex=cx-radius+Math.cos((p.arc-.5)*.62+Math.PI)*8;
+        const ey=cy+(p.arc-.5)*radius*.70;
+        const c1x=w*.16+w*.15*p.seed;
+        const c1y=sy+(cy-sy)*.18+Math.sin(p.twinkle)*h*.060;
+        const c2x=cx-radius-w*.20*(1-p.arc);
+        const c2y=ey+(sy-ey)*.18;
         const x=bezier(sx,c1x,c2x,ex,e);
         const y=bezier(sy,c1y,c2y,ey,e);
-        const fade=Math.sin(Math.PI*q)*(.42+.48*(1-p.seed));
-        const flick=.88+.12*Math.sin(t*5.2+p.twinkle);
+        const fade=Math.sin(Math.PI*q)*(.44+.46*(1-p.seed));
+        const flick=.90+.10*Math.sin(t*4.7+p.twinkle);
         dot(x,y,p.size,fade*flick);
       }
     }
 
-    // 2) 流れ込んだ粉が、そのまま2.55周のローディング円になる。
-    const ringStart=.62, ringEnd=3.34;
+    // 2) Dust smoothly becomes a circular loading trail with a bright head and fine tail.
     let ringOpacity=0;
-    if(t>=ringStart&&t<3.55){
+    if(t>=ringStart&&t<releaseEnd){
       const load=clamp((t-ringStart)/(ringEnd-ringStart));
-      const turns=2.62;
+      const turns=2.88;
       const head=Math.PI+load*Math.PI*2*turns;
-      const available=Math.min(Math.PI*2*1.66, Math.PI*2*(.18+load*2.18));
-      const release=clamp((t-3.28)/.48);
-      ringOpacity=(1-release*.84)*clamp((t-ringStart)/.34);
+      const available=Math.min(Math.PI*2*1.72, Math.PI*2*(.12+load*2.36));
+      const release=clamp((t-releaseStart)/(releaseEnd-releaseStart));
+      ringOpacity=(1-release*.90)*clamp((t-ringStart)/.56);
       for(let i=0;i<ring.length;i++){
         const p=ring[i],u=i/(ring.length-1);
         const a=head-available*u;
-        const ripple=(Math.sin(t*3.2+p.phase)*.52+(p.seed-.5)*3.4)*(1-u*.42);
+        const ripple=Math.sin(t*2.9+p.phase)*.36*(1-u);
         const x=cx+Math.cos(a)*(radius+ripple);
         const y=cy+Math.sin(a)*(radius+ripple);
-        const tail=Math.pow(1-u,2.05);
-        const alpha=ringOpacity*(.13+.94*tail)*(0.90+.10*Math.sin(t*5+p.phase));
-        const size=p.size*(.72+tail*.68);
+        const tail=Math.pow(1-u,2.55);
+        const alpha=ringOpacity*(.045+.86*tail)*(0.92+.08*Math.sin(t*4.2+p.phase));
+        const size=p.size*(.70+tail*.64);
         dot(x,y,size,alpha);
       }
-      // 先端だけ一段明るく。コアは小さく、光量で存在感を出す。
       const hx=cx+Math.cos(head)*radius,hy=cy+Math.sin(head)*radius;
-      dot(hx,hy,1.92,ringOpacity*.98,true);
-      dot(cx+Math.cos(head-.12)*radius,cy+Math.sin(head-.12)*radius,1.05,ringOpacity*.74);
+      dot(hx,hy,1.72,ringOpacity*.98,true);
+      dot(cx+Math.cos(head-.09)*radius,cy+Math.sin(head-.09)*radius,1.02,ringOpacity*.76);
+      dot(cx+Math.cos(head-.18)*radius,cy+Math.sin(head-.18)*radius,.78,ringOpacity*.48);
     }
 
-    // 3) ローディングの残光が、ろうそくを吹き消すように右へほどける。
-    if(t>=3.25&&t<4.42){
-      const q=clamp((t-3.25)/1.12),e=easeOut(q);
-      const finalLoad=clamp((3.25-ringStart)/(ringEnd-ringStart));
-      const finalHead=Math.PI+finalLoad*Math.PI*2*2.55;
-      const finalTail=Math.min(Math.PI*2*1.66,Math.PI*2*(.18+finalLoad*2.18));
+    // 3) The loading tail loosens and blows softly to the right like extinguished candle smoke.
+    if(t>=releaseStart&&t<5.82){
+      const q=clamp((t-releaseStart)/(releaseEnd-releaseStart)),e=easeOut(q);
+      const finalLoad=clamp((releaseStart-ringStart)/(ringEnd-ringStart));
+      const finalHead=Math.PI+finalLoad*Math.PI*2*2.88;
+      const finalTail=Math.min(Math.PI*2*1.72,Math.PI*2*(.12+finalLoad*2.36));
       for(let i=0;i<out.length;i++){
         const p=out[i],u=i/(out.length-1),a=finalHead-finalTail*u;
         const x0=cx+Math.cos(a)*radius;
         const y0=cy+Math.sin(a)*radius;
-        const wind=p.speed*e+52*e*e;
-        const x=x0+wind+Math.sin(p.phase+t*2.4)*9*(1-e);
-        const y=y0+p.drift*e+Math.sin(p.phase+t*4)*14*e*(1-e);
-        const alpha=Math.pow(1-e,1.34)*(.22+.76*(1-u));
-        dot(x,y,p.size*(.84+.62*(1-u)),alpha);
+        const wind=p.speed*e+54*e*e;
+        const x=x0+wind+Math.sin(p.phase+t*2.2)*8*(1-e);
+        const y=y0+p.drift*e+Math.sin(p.phase+t*3.2)*11*e*(1-e);
+        const alpha=(1-e)*(1-e)*(.10+.50*(1-u));
+        dot(x,y,p.size*(.76+.48*(1-u)),alpha);
       }
     }
 
     ctx.restore();
-    if(t<4.58){requestAnimationFrame(frame);}
-    else {splash.classList.add('splashExit');setTimeout(()=>{splash.remove();openWizard('new')},540);}
+    if(t<5.90){requestAnimationFrame(frame);}
+    else {splash.classList.add('splashExit');setTimeout(()=>{splash.remove();openWizard('new')},560);}
   }
   requestAnimationFrame(frame);
 }function bindTop(){
