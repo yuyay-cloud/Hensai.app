@@ -1,4 +1,4 @@
-const CACHE = 'hensai-v2361-shell';
+const CACHE = 'hensai-v2361-hero-splash-r1';
 const ASSETS = [
   './', './index.html', './manifest.json',
   './icon-192-v2361.png', './icon-512-v2361.png',

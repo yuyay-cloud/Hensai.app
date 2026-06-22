@@ -292,38 +292,38 @@ function initAmbientDust(){
   function reset(){
     dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
     c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
-    // 背景は「散らばった星」ではなく、左下→右上へ残る細い粉の流れ。
-    parts=Array.from({length:154},(_,i)=>{
-      const seed=rand(i+1), lane=rand(i+181), band=i%5;
+    // ダークホームには、起動画面から残った「粉の流れ」を少し濃いめに残す。
+    // 粒自体は小さく、18fps相当で描画して負荷を抑える。
+    parts=Array.from({length:236},(_,i)=>{
+      const seed=rand(i+1), lane=rand(i+181), band=i%7;
       return {
-        seed, lane, band,
+        seed,lane,band,
         x:-30+rand(i+79)*(w+60),
-        yBase:h*(.18+lane*.70),
-        r:.16+rand(i+241)*.44,
-        s:.038+rand(i+359)*.092,
+        yBase:h*(.15+lane*.74),
+        r:.13+rand(i+241)*.42,
+        s:.032+rand(i+359)*.086,
         phase:rand(i+487)*Math.PI*2,
-        glow:.45+rand(i+601)*.55
+        glow:.38+rand(i+601)*.62
       };
     });
   }
   function tick(now){
     if(reduced)return;
     requestAnimationFrame(tick);
-    // 背景は約18fpsで描画。粒を増やしても電池への負担を抑える。
     if(now-last<55)return;
     last=now;ctx.clearRect(0,0,w,h);
     const light=document.documentElement.dataset.theme==='light';
     for(const p of parts){
-      p.x+=p.s*1.55;
-      if(p.x>w+24){p.x=-18-rand(p.seed*999+now*.001)*42;p.yBase=h*(.18+rand(p.seed*311+now*.002)*.70)}
-      const wave=Math.sin(p.x/Math.max(w,1)*7.4+p.phase)*h*.018;
-      const sway=Math.sin(now*.00038+p.phase)*3.3;
+      p.x+=p.s*1.50;
+      if(p.x>w+26){p.x=-18-rand(p.seed*999+now*.001)*46;p.yBase=h*(.15+rand(p.seed*311+now*.002)*.74)}
+      const wave=Math.sin(p.x/Math.max(w,1)*7.5+p.phase)*h*.020;
+      const sway=Math.sin(now*.00038+p.phase)*3.8;
       const x=p.x;
-      const y=p.yBase-wave+sway-(p.band-2)*2.4;
-      const pulse=.72+.28*Math.sin(now*.00072+p.phase);
-      const a=(light?.075:.155)*p.glow*pulse;
-      if(a<.012)continue;
-      ctx.beginPath();ctx.fillStyle=`rgba(${light?'66,124,206':'72,166,255'},${a*.28})`;ctx.arc(x,y,p.r*3.5,0,Math.PI*2);ctx.fill();
+      const y=p.yBase-wave+sway-(p.band-3)*2.2;
+      const pulse=.70+.30*Math.sin(now*.00072+p.phase);
+      const a=(light?.065:.175)*p.glow*pulse;
+      if(a<.010)continue;
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'66,124,206':'72,166,255'},${a*.25})`;ctx.arc(x,y,p.r*3.4,0,Math.PI*2);ctx.fill();
       ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,92,175':'205,241,255'},${a*(light?.82:1.15)})`;ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
     }
   }
@@ -334,145 +334,145 @@ function initSplash(){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced){setTimeout(()=>{splash.remove();openWizard('new')},120);return;}
 
-  let w=0,h=0,dpr=1;
+  let w=0,h=0,dpr=1,lastPaint=0;
   function resize(){
     dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
     canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   resize();addEventListener('resize',resize,{passive:true});
 
-  // 1つの粒子群を、流入→中央集合→ローディング→中央集合→右への散開まで一貫して使う。
-  // 別レイヤーを切り替えないため、各フェーズの「切れ目」が見えにくい構成。
+  // 1つの高密度粒子群を下からの湧き上がり〜円運動〜消失まで一貫利用する。
+  // 各粒子の移動を逐次ブレンドすることで「別アニメーションへ切り替わった感」を消す。
+  const TAU=Math.PI*2;
   const hash=n=>{const x=Math.sin(n*91.3458)*43758.5453;return x-Math.floor(x)};
   const clamp=(n,min=0,max=1)=>Math.max(min,Math.min(max,n));
   const smooth=n=>{n=clamp(n);return n*n*(3-2*n)};
-  const smoother=n=>{n=clamp(n);return n*n*n*(n*(n*6-15)+10)};
-  const easeOut=n=>1-Math.pow(1-clamp(n),3);
   const mix=(a,b,n)=>a+(b-a)*n;
   const bezier=(a,b,c,d,t)=>{const u=1-t;return u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d};
-  const TAU=Math.PI*2;
 
-  // 高密度でも軽く保つため、小粒＋固定シード＋2レイヤー描画に統一。
-  const particles=Array.from({length:520},(_,i)=>({
-    seed:hash(i+1), delay:hash(i+37)*.68, lane:hash(i+89),
-    cloudA:hash(i+151)*TAU, cloudR:Math.pow(hash(i+211),.68),
-    u:i/519, size:.15+hash(i+281)*.36, phase:hash(i+349)*TAU,
-    exitDrift:-.52+hash(i+421)*1.04, exitSpeed:.72+hash(i+503)*.72
+  const PARTICLE_COUNT=1080;
+  const particles=Array.from({length:PARTICLE_COUNT},(_,i)=>({
+    seed:hash(i+1),drop:hash(i+2711),phase:hash(i+101)*TAU,lane:hash(i+211),
+    delay:hash(i+307)*.94,speed:.78+hash(i+401)*.62,
+    size:.13+hash(i+503)*.45,twinkle:hash(i+607)*TAU
   }));
-  const atmosphere=Array.from({length:108},(_,i)=>({
-    x:hash(i+709), y:.11+hash(i+811)*.73, r:.13+hash(i+919)*.27,
-    phase:hash(i+1031)*TAU, speed:.004+hash(i+1123)*.009
+  const atmosphere=Array.from({length:92},(_,i)=>({
+    x:hash(i+701),y:.10+hash(i+809)*.76,r:.12+hash(i+919)*.26,
+    phase:hash(i+1021)*TAU,speed:.003+hash(i+1103)*.007
   }));
+
   const query=new URLSearchParams(location.search);const debugTime=Number(query.get('splashDebug'));
   const start=performance.now()-(Number.isFinite(debugTime)?debugTime*1000:0);
 
-  function dot(x,y,r,alpha,head=false){
+  function dot(x,y,r,alpha,glow=false){
     if(alpha<=.008||r<=0)return;
-    // 多数の小粒子を重くしないよう、通常粒は2描画・先頭粒だけ強めのグローにする。
-    if(alpha>.075||head){
-      ctx.beginPath();ctx.fillStyle=`rgba(58,163,255,${alpha*(head?.28:.15)})`;ctx.arc(x,y,r*(head?5.0:3.0),0,TAU);ctx.fill();
+    if(glow||alpha>.13){
+      ctx.beginPath();ctx.fillStyle=`rgba(63,169,255,${alpha*(glow?.20:.10)})`;ctx.arc(x,y,r*(glow?5.4:3.2),0,TAU);ctx.fill();
     }
-    ctx.beginPath();ctx.fillStyle=`rgba(193,235,255,${alpha*(head?.96:.74)})`;ctx.arc(x,y,r*(head?1.72:1.18),0,TAU);ctx.fill();
+    ctx.beginPath();ctx.fillStyle=`rgba(205,241,255,${alpha*(glow?.98:.78)})`;ctx.arc(x,y,r*(glow?1.75:1.14),0,TAU);ctx.fill();
   }
 
-  function frame(now){
+  function drawHero(cx,cy,t,fade){
+    const heroQ=smooth((t-.10)/2.75);
+    const sx=w*.52,sy=h*1.01;
+    const c1x=w*.54,c1y=h*.80;
+    const c2x=w*.51,c2y=h*.62;
+    let x=bezier(sx,c1x,c2x,cx,heroQ),y=bezier(sy,c1y,c2y,cy,heroQ);
+    if(heroQ>=1){x=cx;y=cy;}
+
+    // 中心に到着後、強すぎない2回の瞬き。ロゴやボタンには見せない。
+    const tw1=Math.exp(-Math.pow((t-3.18)/.14,2));
+    const tw2=Math.exp(-Math.pow((t-3.62)/.17,2));
+    const pulse=.58+1.02*tw1+.78*tw2;
+    const alpha=.88*clamp((t-.12)/.70)*fade;
+    const rr=1.55+1.75*tw1+1.28*tw2;
+
+    // 上昇中のごく短い粉の尾。
+    if(heroQ<1){
+      for(let i=1;i<=8;i++){
+        const q=Math.max(0,heroQ-i*.030);if(q<=0)continue;
+        const tx=bezier(sx,c1x,c2x,cx,q),ty=bezier(sy,c1y,c2y,cy,q);
+        dot(tx,ty,.46,alpha*(.075+(8-i)*.010));
+      }
+    }
+    dot(x,y,rr,alpha*pulse,true);
+    dot(x,y,Math.max(.65,rr*.48),alpha,true);
+  }
+
+  function paint(now){
     const t=(now-start)/1000;
+    // 30fps上限。粒を増やしても端末上での負荷を抑え、時間は連続で進める。
+    if(now-lastPaint<33&&t<6.56){requestAnimationFrame(paint);return;}
+    lastPaint=now;
+
     const cx=w*.5,cy=h*.455;
-    const radius=Math.min(w,h)*.136;
-    const cloudRadius=radius*.34;
+    const radius=Math.min(w,h)*.214;
     ctx.clearRect(0,0,w,h);ctx.save();ctx.globalCompositeOperation='lighter';
 
-    // 控えめな背景の粉。主役の流れと区別して、奥行きだけを足す。
+    // 起動画面に奥行きを出す、非常に薄い背景粉。
     for(const p of atmosphere){
       const x=((p.x+t*p.speed)%1)*w;
-      const y=h*p.y+Math.sin(t*.50+p.phase)*7;
-      dot(x,y,p.r,.020+.014*Math.sin(t*.8+p.phase));
+      const y=h*p.y+Math.sin(t*.48+p.phase)*7;
+      dot(x,y,p.r,.018+.013*Math.sin(t*.76+p.phase));
     }
 
-    // 7秒強の一連演出。フェーズ同士は必ず重ね、急な切替を作らない。
-    const expandStart=2.10, expandEnd=2.86;
-    const ringStart=2.86, ringEnd=5.20;
-    const collapseStart=5.20, collapseEnd=5.92;
-    const exitStart=5.92, exitEnd=7.02;
+    // 時間の流れ
+    // 0.0–2.7: 下から湧き上がる
+    // 1.3–3.5: 上昇の勢いを残したまま円運動へブレンド
+    // 3.5–4.9: 大まかな円運動
+    // 4.9–6.3: 回転しながら粒子数そのものを減らす
+    const ringStart=1.28,ringComplete=3.30;
+    const ringBlend=smooth((t-ringStart)/(ringComplete-ringStart));
+    const fadeStart=4.90,fadeEnd=6.30;
+    const remaining=1-clamp((t-fadeStart)/(fadeEnd-fadeStart));
 
-    const expand=smoother((t-expandStart)/(expandEnd-expandStart));
-    const collapse=smoother((t-collapseStart)/(collapseEnd-collapseStart));
-    const ringProgress=clamp((t-ringStart)/(ringEnd-ringStart));
-    const turns=2.82;
-    const headBase=-Math.PI*.56;
-    const currentHead=headBase+ringProgress*TAU*turns;
-    const tailSpan=Math.PI*1.72;
-    const ringFade=(1-collapse*.42)*clamp((t-ringStart)/.30);
-
-    let headX=cx,headY=cy;
     for(const p of particles){
-      const cloudBreath=1+Math.sin(t*.92+p.phase)*.07;
-      const cloudX=cx+Math.cos(p.cloudA+t*.22)*cloudRadius*p.cloudR*cloudBreath;
-      const cloudY=cy+Math.sin(p.cloudA+t*.22)*cloudRadius*.72*p.cloudR*cloudBreath;
-      const q=clamp((t-p.delay)/1.38);
-      const streamE=smoother(q);
-      const sx=-44-w*(.07+.16*p.seed);
-      const sy=h*(.19+p.lane*.61);
-      const c1x=w*(.12+.18*p.seed);
-      const c1y=sy+(cy-sy)*.12+Math.sin(p.phase)*h*.055;
-      const c2x=cx-w*.10*(1-p.seed);
-      const c2y=cloudY+(sy-cloudY)*.11;
-      const streamX=bezier(sx,c1x,c2x,cloudX,streamE);
-      const streamY=bezier(sy,c1y,c2y,cloudY,streamE);
+      // フェードアウトでは粒子をランダム順に実際に消し、輪が薄くなる印象を作る。
+      if(p.drop>remaining+.018)continue;
 
-      // 円への展開は中心から半径を増やすため、中央集合→ローディングが一続きになる。
-      const angle=currentHead-tailSpan*p.u;
-      const ringX=cx+Math.cos(angle)*radius;
-      const ringY=cy+Math.sin(angle)*radius;
-      const expandX=mix(cloudX,ringX,expand);
-      const expandY=mix(cloudY,ringY,expand);
+      const sx=w*(.035+.93*p.seed);
+      const sy=h*(.915+.085*p.lane);
+      const gatherX=cx+(p.lane-.5)*68;
+      const gatherY=h*(.64-.12*(1-p.lane));
 
-      let x=cloudX,y=cloudY,alpha=.0,size=p.size;
-      if(t<expandStart){
-        if(q<=0)continue;
-        x=streamX;y=streamY;
-        // 到着後も中央の粉として淡く残す。流入→集合の最後に暗転しないようにする。
-        alpha=(.22+.50*Math.sin(Math.PI*q))*(.72+.28*(1-p.seed));
-      }else if(t<ringStart){
-        x=expandX;y=expandY;
-        alpha=(.34+.46*(1-p.u))*(.78+.22*expand);
-      }else if(t<collapseStart){
-        const tail=Math.pow(1-p.u,2.25);
-        x=ringX;y=ringY;
-        alpha=ringFade*(.035+.84*tail)*(.92+.08*Math.sin(t*4.2+p.phase));
-        size=p.size*(.70+tail*.66);
-      }else if(t<collapseEnd){
-        // ローディングの粒子そのものを再び中央へ集める。
-        const tail=Math.pow(1-p.u,2.15);
-        x=mix(ringX,cloudX,collapse);
-        y=mix(ringY,cloudY,collapse);
-        alpha=(1-collapse*.18)*(.07+.70*tail);
-        size=p.size*(.76+tail*.44);
-      }else if(t<exitEnd){
-        // 中央の粉を右へ吹き流す。開始点は中央集合なので、終了にも段差が出ない。
-        const e=easeOut((t-exitStart)/(exitEnd-exitStart));
-        const exitX=cx+(w*(.45+.36*p.exitSpeed))*e+Math.sin(p.phase+t*2.2)*8*(1-e);
-        const exitY=cy+(p.exitDrift*h*.24)*Math.pow(e,.78)+Math.sin(p.phase+t*3.1)*10*e*(1-e);
-        x=mix(cloudX,exitX,e);
-        y=mix(cloudY,exitY,e);
-        alpha=(1-e)*(1-e)*(.10+.54*(1-p.u));
-        size=p.size*(.74+.40*(1-p.u));
-      }
-      dot(x,y,size,alpha);
+      const angle=p.phase+Math.max(0,t-2.05)*p.speed*1.12;
+      const radiusVar=radius+Math.sin(p.phase*2.7+t*1.8)*4.6+(p.lane-.5)*17;
+      const orbitX=cx+Math.cos(angle)*radiusVar;
+      const orbitY=cy+Math.sin(angle)*radiusVar*.96;
+
+      const flowT=smooth((t-p.delay)/2.48);
+      if(flowT<=0)continue;
+      const c1x=sx+(gatherX-sx)*.18+Math.sin(p.phase)*42;
+      const c1y=h*(.80-.13*p.lane);
+      const c2x=gatherX+Math.cos(p.phase*1.7)*30;
+      const c2y=gatherY-18-56*(1-p.lane);
+      const flowX=bezier(sx,c1x,c2x,gatherX,flowT);
+      const flowY=bezier(sy,c1y,c2y,gatherY,flowT);
+
+      // 粒ごとに少し異なるタイミングで円運動へ入り、切替を見えにくくする。
+      const localRing=clamp((ringBlend-p.lane*.16+p.seed*.05)/.83);
+      const blend=smooth(localRing);
+      let x=mix(flowX,orbitX,blend),y=mix(flowY,orbitY,blend);
+      const residual=(1-blend)*18;
+      x+=Math.cos(p.phase*2.1+t*1.4)*residual;
+      y+=Math.sin(p.phase*1.5+t*1.2)*residual*.55;
+
+      const riseAlpha=(.10+.70*(1-p.lane))*Math.pow(Math.sin(Math.PI*Math.min(flowT,1)),.72);
+      const orbitAlpha=(.08+.71*(1-p.lane))*(.72+.28*Math.sin(t*3.1+p.twinkle));
+      let alpha=mix(riseAlpha,orbitAlpha,blend);
+      if(t>=fadeStart)alpha*=1-.42*clamp((t-fadeStart)/(fadeEnd-fadeStart));
+      dot(x,y,p.size,alpha);
     }
 
-    // ローディングの先頭は粒子群とは別に最小限の強い光だけを足す。
-    if(t>=ringStart&&t<collapseStart){
-      headX=cx+Math.cos(currentHead)*radius;headY=cy+Math.sin(currentHead)*radius;
-      dot(headX,headY,1.60,ringFade*.98,true);
-      dot(cx+Math.cos(currentHead-.095)*radius,cy+Math.sin(currentHead-.095)*radius,.94,ringFade*.72);
-    }
+    // 中心の1粒は、円の中心で短く瞬く。円の先端マーカーは置かない。
+    const heroFade=1-clamp((t-5.18)/1.05);
+    drawHero(cx,cy,t,heroFade);
 
     ctx.restore();
-    if(t<7.16){requestAnimationFrame(frame);}
+    if(t<6.62){requestAnimationFrame(paint);}
     else{splash.classList.add('splashExit');setTimeout(()=>{splash.remove();openWizard('new')},560);}
   }
-  requestAnimationFrame(frame);
+  requestAnimationFrame(paint);
 }function bindTop(){
   $('themeToggle').onclick=()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');$('startBtn').onclick=()=>openWizard('new');$('historyBtn').onclick=openSheet;$('navNew').onclick=()=>openWizard('new');$('navHistory').onclick=openSheet;$('navHome').onclick=()=>{if(currentScenario)renderSingle();else showIntro()};
 }
