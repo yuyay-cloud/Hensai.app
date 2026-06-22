@@ -66,6 +66,93 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
 @media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36.1";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.scheduleMobileList{display:none!important}.tableScroll{display:block!important;overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
+
+/* ---- Ver2.36.1 result-screen + print refinement ---- */
+.printBrand{display:none}
+.resultHero{position:relative;overflow:hidden;padding:20px;background:linear-gradient(138deg,rgba(20,75,166,.96),rgba(14,43,99,.96) 60%,rgba(11,29,64,.98));border-color:rgba(123,186,255,.32);box-shadow:0 18px 34px rgba(3,20,55,.22)}
+:root[data-theme="light"] .resultHero{background:linear-gradient(138deg,#eaf4ff,#dbeeff 60%,#e7f4ff);border-color:#c8def7;box-shadow:0 14px 28px rgba(34,93,174,.10)}
+.resultHero:after{content:"";position:absolute;right:-68px;top:-78px;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle,rgba(126,209,255,.25),rgba(66,143,255,.08) 48%,transparent 70%);pointer-events:none}
+.resultHeroTop{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.resultHeroTop h2{margin:5px 0 0;font-size:1.12rem}.resultHero .eyebrow{color:rgba(218,239,255,.76)}
+:root[data-theme="light"] .resultHero .eyebrow{color:#52719b}.resultMethod{display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;border:1px solid rgba(180,224,255,.28);border-radius:999px;background:rgba(255,255,255,.10);color:#eff8ff;font-size:.73rem;font-weight:900;white-space:nowrap}.resultPayment{position:relative;z-index:1;margin-top:22px;font-size:clamp(2rem,9vw,3rem);line-height:1;color:#fff;font-weight:950;letter-spacing:-.035em;text-shadow:0 7px 20px rgba(2,16,43,.20)}.resultPayment small{font-size:.78rem;letter-spacing:.04em;margin-left:8px;color:rgba(228,245,255,.80);font-weight:800}.resultPaymentFoot{position:relative;z-index:1;margin-top:10px;color:rgba(221,240,255,.80);font-size:.82rem;font-weight:700}
+:root[data-theme="light"] .resultMethod{color:#1d5da7;background:rgba(255,255,255,.56);border-color:rgba(45,113,198,.17)}:root[data-theme="light"] .resultPayment{color:#0d4b9e;text-shadow:none}:root[data-theme="light"] .resultPayment small,:root[data-theme="light"] .resultPaymentFoot{color:#5a7597}
+.resultConditionCompact{position:relative;z-index:1;margin-top:17px;padding-top:13px;border-top:1px solid rgba(218,239,255,.20);display:flex;flex-wrap:wrap;gap:7px 12px;color:rgba(223,240,255,.82);font-size:.80rem;line-height:1.5}.resultConditionCompact strong{color:#fff;flex-basis:100%;font-size:.88rem}.resultConditionCompact span{white-space:nowrap}
+:root[data-theme="light"] .resultConditionCompact{border-color:rgba(44,111,191,.17);color:#5d7393}:root[data-theme="light"] .resultConditionCompact strong{color:#123d78}
+.resultSecondary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.resultStat{padding:15px 14px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--card) 88%,transparent);box-shadow:0 8px 20px rgba(4,20,49,.05)}.resultStat.wide{grid-column:span 2;display:flex;align-items:end;justify-content:space-between;gap:12px}.resultStat span{display:block;color:var(--muted);font-size:.74rem;font-weight:800}.resultStat strong{display:block;margin-top:6px;color:var(--ink);font-size:1.16rem;line-height:1.15;letter-spacing:-.015em}.resultStat.highlight strong{color:var(--blue)}.resultStat .statHint{margin-top:5px;color:var(--muted);font-size:.72rem;font-weight:700}.resultStat.wide strong{font-size:1rem;text-align:right}
+.resultActionRow{display:grid;grid-template-columns:1fr 1fr;gap:9px}.resultActionRow button{min-width:0;padding:12px 13px;font-size:.88rem}.resultSectionLead{margin:0;color:var(--muted);font-size:.78rem;line-height:1.5}
+@media(max-width:380px){.resultPayment{font-size:2rem}.resultStat{padding:13px 12px}.resultStat strong{font-size:1.06rem}.resultConditionCompact span{white-space:normal}}
+@media print{
+  @page{size:A4;margin:10mm}
+  html,body{background:#edf5ff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{padding:0!important}
+  .printBrand{display:flex!important;align-items:flex-end;justify-content:space-between;gap:12px;padding:7mm 7mm 5mm!important;margin:0 0 6mm!important;border:1px solid #bdd4ee!important;border-radius:4mm!important;background:#eaf4ff!important;color:#0b3978!important;break-inside:avoid}
+  .printBrandTitle{font-size:17pt!important;font-weight:900!important;letter-spacing:.04em!important}.printBrandSub{margin-top:1.5mm!important;font-size:8.5pt!important;color:#547296!important;font-weight:700!important}.printBrandMeta{text-align:right!important;font-size:8pt!important;color:#5d7799!important;line-height:1.55!important}
+  .resultHero{padding:6mm!important;margin:0 0 4mm!important;background:#f3f8ff!important;border:1px solid #c9dcf1!important;border-radius:4mm!important;box-shadow:none!important;color:#0b3978!important;break-inside:avoid}.resultHero:after{display:none!important}.resultHero .eyebrow{color:#5c7a9d!important}.resultHeroTop h2{color:#173d70!important}.resultMethod{background:#e2efff!important;border-color:#c6dcf5!important;color:#235b9a!important}.resultPayment{margin-top:4mm!important;color:#0d4b9e!important;text-shadow:none!important;font-size:25pt!important}.resultPayment small,.resultPaymentFoot{color:#5a7597!important}.resultConditionCompact{border-color:#d6e4f3!important;color:#5d7393!important}.resultConditionCompact strong{color:#173d70!important}
+  .resultSecondary{gap:3mm!important;margin-bottom:4mm!important}.resultStat{padding:4mm!important;background:#fff!important;border:1px solid #d5e2f0!important;border-radius:3mm!important;box-shadow:none!important}.resultStat strong{color:#173d70!important}.resultStat.highlight strong{color:#1259b5!important}.resultStat .statHint{color:#637791!important}
+  .resultActionRow{display:none!important}.summaryActions{display:none!important}.scheduleCard{margin-top:4mm!important;background:#fff!important;border:1px solid #cfddea!important;border-radius:4mm!important;box-shadow:none!important}.scheduleHead{padding:5mm!important;background:#f2f7fd!important;border-bottom:1px solid #d5e2ef!important}.scheduleHead h2{color:#173d70!important}.scheduleHead p{color:#617894!important}.note{margin-top:4mm!important;background:#f8fbff!important;border:1px solid #d9e6f3!important;border-radius:3mm!important;color:#526c8c!important}.tableScroll{border-top:0!important}th{background:#eaf3ff!important;color:#3d5d83!important}tr:nth-child(even) td{background:#f9fbfe!important}
+}
+
+
+
+/* ---- Ver2.36.1 PDF Print: Concept C / dark brand cover + white schedule ---- */
+.printCover{display:contents}
+@media print{
+  @page{size:A4 portrait;margin:9mm}
+  html,body{background:#fff!important;color:#12284a!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .printCover{
+    display:block!important;position:relative!important;isolation:isolate!important;overflow:hidden!important;
+    min-height:64mm!important;margin:0 0 6mm!important;padding:0!important;
+    border:1px solid #102f69!important;border-radius:4mm!important;
+    background:
+      radial-gradient(circle at 80% 18%,rgba(104,205,255,.33) 0 1.2mm,transparent 1.35mm),
+      radial-gradient(circle at 87% 28%,rgba(152,222,255,.22) 0 .8mm,transparent 1mm),
+      radial-gradient(circle at 73% 36%,rgba(109,196,255,.18) 0 .65mm,transparent .85mm),
+      radial-gradient(42mm 35mm at 84% 22%,rgba(73,165,255,.30),transparent 72%),
+      radial-gradient(58mm 42mm at 12% 96%,rgba(45,130,255,.22),transparent 72%),
+      linear-gradient(135deg,#06142d 0%,#0b2d67 52%,#103c86 100%)!important;
+    color:#f5fbff!important;box-shadow:none!important;break-inside:avoid!important;
+  }
+  .printCover:before{
+    content:"";position:absolute!important;z-index:0!important;inset:auto -14mm -14mm auto!important;
+    width:80mm!important;height:80mm!important;border-radius:50%!important;
+    border:1px solid rgba(155,222,255,.24)!important;box-shadow:0 0 0 8mm rgba(95,179,255,.04),0 0 0 18mm rgba(95,179,255,.025)!important;
+  }
+  .printCover:after{
+    content:"";position:absolute!important;z-index:0!important;left:-8mm!important;bottom:8mm!important;width:94mm!important;height:20mm!important;
+    border-top:1px solid rgba(159,220,255,.26)!important;border-radius:50%!important;transform:rotate(-10deg)!important;
+  }
+  .printCover .printBrand{
+    display:flex!important;position:relative!important;z-index:1!important;align-items:flex-start!important;justify-content:space-between!important;gap:12mm!important;
+    margin:0!important;padding:7mm 8mm 0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#f5fbff!important;
+  }
+  .printCover .printBrandTitle{font-size:18pt!important;font-weight:900!important;letter-spacing:.06em!important;color:#ffffff!important}
+  .printCover .printBrandSub{margin-top:1.4mm!important;font-size:8.5pt!important;font-weight:800!important;letter-spacing:.08em!important;color:rgba(215,239,255,.82)!important}
+  .printCover .printBrandMeta{text-align:right!important;font-size:8pt!important;line-height:1.6!important;color:rgba(219,241,255,.82)!important}
+  .printCover .resultHero{
+    position:relative!important;z-index:1!important;min-height:39mm!important;margin:0!important;padding:5mm 8mm 7mm!important;
+    border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#ffffff!important;break-inside:auto!important;
+  }
+  .printCover .resultHero:after{display:none!important}
+  .printCover .resultHero .eyebrow{color:rgba(213,238,255,.76)!important;letter-spacing:.14em!important}
+  .printCover .resultHeroTop h2{color:#ffffff!important;font-size:12pt!important}
+  .printCover .resultMethod{background:rgba(255,255,255,.12)!important;border-color:rgba(199,235,255,.34)!important;color:#f2fbff!important}
+  .printCover .resultPayment{margin-top:5mm!important;color:#ffffff!important;text-shadow:0 5px 16px rgba(0,8,27,.32)!important;font-size:31pt!important;letter-spacing:-.04em!important}
+  .printCover .resultPayment small{color:rgba(221,242,255,.84)!important}
+  .printCover .resultPaymentFoot{margin-top:2mm!important;color:rgba(221,242,255,.84)!important}
+  .printCover .resultConditionCompact{margin-top:4mm!important;padding-top:3mm!important;border-color:rgba(202,234,255,.24)!important;color:rgba(224,243,255,.88)!important}
+  .printCover .resultConditionCompact strong{color:#ffffff!important}
+
+  /* The lower half stays deliberately white and document-like. */
+  .resultSecondary{gap:3mm!important;margin:0 0 4mm!important}
+  .resultStat{padding:4mm!important;background:#fff!important;border:1px solid #cfdded!important;border-radius:3mm!important;box-shadow:none!important}
+  .resultStat strong{color:#193d72!important}.resultStat.highlight strong{color:#0b5cc5!important}.resultStat .statHint{color:#607895!important}
+  .scheduleCard{margin-top:4mm!important;background:#fff!important;border:1px solid #cbd9e8!important;border-radius:4mm!important;box-shadow:none!important}
+  .scheduleHead{padding:5mm!important;background:#f7fbff!important;border-bottom:1px solid #d4e1ed!important}
+  .scheduleHead h2{color:#153e78!important}.scheduleHead p{color:#5a7596!important}
+  th{background:#173f79!important;color:#ffffff!important;border-bottom-color:#173f79!important}
+  th,td{border-bottom-color:#dbe5ee!important}
+  tr:nth-child(even) td{background:#f6faff!important}
+}
+
 </style>
 </head>
 <body>
@@ -244,10 +331,15 @@ function renderSingle(){
   if(!currentScenario||!currentResult||currentResult.error){$('singleView').hidden=true;return;}
   $('singleView').hidden=false;$('compareView').hidden=true;
   const r=currentResult,d=currentScenario; const rows=r.rows;
+  const methodLabel=d.method==='eg'?'元金均等':'元利均等';
+  const monthlyLabel=resultMonthlyLabel(d);
+  const repayNote=d.method==='eg'?'毎月元金：'+nfmt(toMoney(d.monthlyPrincipal,d.unit))+'円':'通常月の返済額';
   $('singleView').innerHTML=`
-  <section class="card summaryCard"><div class="summaryHead"><h2>試算結果</h2><span class="eyebrow">SINGLE</span></div><div class="conditionLine"><strong>${formatScenario(d)}</strong><br>返済日：毎月${d.repayDay}日　実行日：${d.execDate||'未設定'}${d.bonus?'　／　ボーナス払いあり':''}</div><div class="summaryActions"><button id="editCurrent" class="secondaryBtn" type="button">条件を編集</button><button id="startCompare" class="outlineBtn" type="button">この条件と比較</button></div></section>
-  <section class="metrics"><div class="metric"><div class="mLabel">${resultMonthlyLabel(d)}</div><div class="mValue">${yen(r.regularPayment)}</div><div class="mSub">${d.method==='eg'?'毎月元金：'+nfmt(toMoney(d.monthlyPrincipal,d.unit))+'円':'通常月の返済額'}</div></div><div class="metric"><div class="mLabel">利息総額</div><div class="mValue">${yen(r.totalInterest)}</div><div class="mSub">初回日割り：${r.firstDays||0}日</div></div><div class="metric"><div class="mLabel">支払総額</div><div class="mValue">${yen(r.totalPay)}</div><div class="mSub">元金＋利息</div></div><div class="metric"><div class="mLabel">返済回数</div><div class="mValue">${r.n}回</div><div class="mSub">初回返済日：${jpDate(r.first,d.wareki)}</div></div></section>
-  <section class="card scheduleCard"><div class="scheduleHead"><div><h2>返済予定表</h2><p>各回の返済額・内訳・返済後残高</p></div><button id="toggleSchedule" class="outlineBtn scheduleToggle" type="button">${scheduleOpen?'閉じる':'表示する'}</button></div>${scheduleOpen?tableHTML(rows,d):'<div class="emptyState"><span class="spark">✧</span>表示すると、返済日ごとの元金・利息・残高を確認できます。</div>'}</section>
+  <section class="printCover"><section class="printBrand"><div><div class="printBrandTitle">返済予定表</div><div class="printBrandSub">返済試算 Ver2.36.1</div></div><div class="printBrandMeta">${formatScenario(d)}<br>作成日：${new Date().toLocaleDateString('ja-JP')}</div></section>
+  <section class="card resultHero"><div class="resultHeroTop"><div><div class="eyebrow">SIMULATION RESULT</div><h2>${monthlyLabel}</h2></div><span class="resultMethod">${methodLabel}</span></div><div class="resultPayment">${yen(r.regularPayment)}<small>/ 月</small></div><div class="resultPaymentFoot">初回返済日：${jpDate(r.first,d.wareki)}　／　返済回数：${r.n}回</div><div class="resultConditionCompact"><strong>${formatScenario(d)}</strong><span>返済日：毎月${d.repayDay}日</span><span>実行日：${d.execDate||'未設定'}</span>${d.bonus?'<span>ボーナス払いあり</span>':''}</div></section></section>
+  <section class="resultSecondary"><article class="resultStat"><span>利息総額</span><strong>${yen(r.totalInterest)}</strong><div class="statHint">初回日割り：${r.firstDays||0}日</div></article><article class="resultStat highlight"><span>支払総額</span><strong>${yen(r.totalPay)}</strong><div class="statHint">元金＋利息</div></article><article class="resultStat wide"><div><span>返済条件</span><div class="statHint">${repayNote}</div></div><strong>${r.n}回</strong></article></section>
+  <section class="resultActionRow"><button id="editCurrent" class="secondaryBtn" type="button">条件を編集</button><button id="startCompare" class="outlineBtn" type="button">この条件と比較</button></section>
+  <section class="card scheduleCard"><div class="scheduleHead"><div><h2>返済予定表</h2><p>返済日ごとの元金・利息・返済後残高</p></div><button id="toggleSchedule" class="outlineBtn scheduleToggle" type="button">${scheduleOpen?'閉じる':'予定表を表示'}</button></div>${scheduleOpen?tableHTML(rows,d):'<div class="emptyState"><span class="spark">✧</span>必要なときだけ予定表を開いて、返済の内訳を確認できます。</div>'}</section>
   <section class="card note">ⓘ 試算結果は概算です。休日・振替休日・国民の休日は次営業日へ補正して表示します。実際の取扱いは契約条件をご確認ください。</section>`;
   $('editCurrent').onclick=()=>openWizard('edit',clone(currentScenario));$('startCompare').onclick=()=>openWizard('compare',clone(currentScenario));if($('toggleSchedule'))$('toggleSchedule').onclick=()=>{scheduleOpen=!scheduleOpen;renderSingle()};
 }
