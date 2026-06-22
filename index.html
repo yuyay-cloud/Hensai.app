@@ -1,732 +1,323 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#06142d">
 <link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./icon-192-v230.png">
-<title>返済試算 Ver2.35</title>
+<link rel="apple-touch-icon" href="./icon-192-v236.png">
+<title>返済試算 Ver2.36</title>
 <style>
 :root{
   color-scheme:dark;
-  --bg:#06101f; --bg-deep:#030815; --appbar:rgba(5,16,33,.88); --card:#0b1930; --card-elev:#10213d;
-  --input:#08182e; --soft:#102a4f; --soft-2:#163762; --ink:#eff6ff; --muted:#9eafd0; --line:rgba(164,193,235,.16);
-  --blue:#5a9cff; --blue2:#2375ff; --cyan:#65d7ff; --danger:#ff7180; --shadow:0 18px 48px rgba(0,0,0,.28); --table-head:#0e2445;
-  --toggle-track:#102442; --switch-ring:rgba(130,180,255,.22);
+  --bg:#06101f; --bg2:#081a35; --appbar:rgba(5,16,33,.84); --card:#0d1d38; --card2:#102544;
+  --input:#091a31; --ink:#eff6ff; --muted:#9daed0; --line:rgba(164,193,235,.17);
+  --blue:#5a9cff; --blue2:#2476ff; --cyan:#83ddff; --soft:#102a50; --soft2:#173967;
+  --danger:#ff7180; --success:#7ce7c2; --shadow:0 18px 48px rgba(0,0,0,.28);
 }
 :root[data-theme="light"]{
   color-scheme:light;
-  --bg:#f5f8fd; --bg-deep:#ecf3fb; --appbar:rgba(255,255,255,.88); --card:#ffffff; --card-elev:#ffffff;
-  --input:#ffffff; --soft:#eef5ff; --soft-2:#e5f0ff; --ink:#071a3d; --muted:#66758c; --line:#dfe7f1;
-  --blue:#1457d9; --blue2:#2f8df7; --cyan:#278fe9; --danger:#dc2626; --shadow:0 8px 22px rgba(7,26,61,.06); --table-head:#f2f6fb;
-  --toggle-track:#e6eef9; --switch-ring:rgba(20,87,217,.14);
+  --bg:#f5f8fd; --bg2:#e8f0fc; --appbar:rgba(255,255,255,.86); --card:#fff; --card2:#fff;
+  --input:#fff; --ink:#0a1d40; --muted:#66758c; --line:#dfe7f1;
+  --blue:#1457d9; --blue2:#2f8df7; --cyan:#278fe9; --soft:#eef5ff; --soft2:#e4efff;
+  --danger:#dc2626; --success:#168461; --shadow:0 8px 24px rgba(7,26,61,.08);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;background:var(--bg-deep)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:radial-gradient(1000px 580px at 50% -180px,rgba(42,103,211,.16),transparent 62%),var(--bg);color:var(--ink);padding-bottom:88px;min-height:100vh;transition:background .25s ease,color .25s ease}
-button,input,select{font:inherit} button{border:0;background:none;-webkit-tap-highlight-color:transparent;cursor:pointer;color:inherit}button:disabled{opacity:.5;cursor:not-allowed}[hidden]{display:none!important}
-
-/* 7-second launch sequence */
-.splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(42% 32% at 50% 46%,#112f70 0%,#071a3f 38%,#020713 92%);opacity:1;visibility:visible;transition:opacity .8s ease,visibility .8s ease}
-.splash.exit{opacity:0;visibility:hidden}
-.splash::before{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 40% 48%,rgba(75,160,255,.12),transparent 17%),radial-gradient(circle at 60% 56%,rgba(55,120,255,.12),transparent 23%);filter:blur(12px);animation:splashAtmosphere 4.6s ease-in-out infinite}
-.splash::after{content:"";position:absolute;width:2px;height:2px;border-radius:50%;background:#b7dcff;box-shadow: -180px -165px 0 -1px rgba(132,185,255,.45),130px -118px 0 -1px rgba(132,185,255,.38),235px 98px 0 -1px rgba(132,185,255,.34),-250px 108px 0 -1px rgba(132,185,255,.26),-120px 198px 0 -1px rgba(132,185,255,.3);opacity:0;animation:starsIn .7s ease .12s forwards}
-.splashContent{position:relative;z-index:1;display:grid;place-items:center;gap:16px;transform:translateY(-5px)}
-.splashLogo{width:min(69vw,286px);height:auto;overflow:visible;filter:drop-shadow(0 10px 24px rgba(58,130,255,.18))}
-.splashOrbitPath{stroke-dasharray:1;stroke-dashoffset:1;animation:orbitDraw 1.55s cubic-bezier(.28,.84,.35,1) .75s forwards}
-.splashAccentPath{stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:accentDraw .46s ease 2.05s forwards}
-.splashStartParticle{opacity:0;transform-box:fill-box;transform-origin:center;animation:startParticle .65s ease .3s forwards}
-.splashOrbGlow,.splashOrbCore,.splashOrbHighlight{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.45);animation:orbAppear .55s cubic-bezier(.18,.85,.2,1.2) 2.25s forwards}
-.splashLogo{animation:logoBreathe 2.5s ease-in-out 2.72s infinite}
-.splashVersion{font-size:.94rem;line-height:1;letter-spacing:.22em;font-weight:700;color:#eef7ff;text-shadow:0 0 18px rgba(117,188,255,.55);opacity:0;transform:translateY(7px);animation:versionIn .52s cubic-bezier(.2,.8,.2,1) 3.08s forwards}
-.splashLoader{position:relative;width:96px;height:3px;border-radius:99px;background:rgba(145,188,255,.16);overflow:hidden;opacity:0;animation:loaderIn .38s ease 3.78s forwards;box-shadow:0 0 10px rgba(46,129,255,.14)}
-.splashLoader span{position:absolute;left:-35%;top:0;width:35%;height:100%;border-radius:inherit;background:linear-gradient(90deg,transparent,#9fe2ff 45%,#fff 60%,#59a6ff);box-shadow:0 0 12px #53a6ff;animation:loaderSweep 1.5s ease-in-out 4.35s 2 forwards}
-@keyframes starsIn{to{opacity:.9}}@keyframes splashAtmosphere{50%{transform:scale(1.08);opacity:.7}}@keyframes orbitDraw{to{stroke-dashoffset:0}}@keyframes accentDraw{0%{opacity:0;stroke-dashoffset:1}100%{opacity:1;stroke-dashoffset:0}}@keyframes startParticle{0%{opacity:0;transform:scale(.2)}45%{opacity:1;transform:scale(1.8)}100%{opacity:0;transform:scale(4)}}@keyframes orbAppear{to{opacity:1;transform:scale(1)}}@keyframes logoBreathe{0%,100%{filter:drop-shadow(0 10px 24px rgba(58,130,255,.18))}50%{filter:drop-shadow(0 8px 32px rgba(111,195,255,.52))}}@keyframes versionIn{to{opacity:1;transform:translateY(0)}}@keyframes loaderIn{to{opacity:1}}@keyframes loaderSweep{0%{left:-38%}70%{left:105%}100%{left:105%}}
-
-.appbar{position:sticky;top:0;z-index:20;background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:14px 16px;transition:background .25s ease,border-color .25s ease}
-.head{display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto}.logo{width:46px;height:46px;display:grid;place-items:center;flex:none}.logo svg{width:46px;height:46px}.title{flex:1;min-width:0}.title h1{font-size:1.35rem;letter-spacing:.02em;line-height:1.1;font-weight:800}.ver{font-size:.72rem;background:var(--soft);color:var(--blue);border:1px solid var(--line);border-radius:8px;padding:3px 7px;margin-left:5px;vertical-align:middle;font-weight:800}.headActions{display:flex;align-items:center;gap:7px}.themeToggle{position:relative;width:56px;height:36px;border-radius:18px;border:1px solid var(--line);background:var(--toggle-track);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 8px rgba(0,0,0,.08);transition:background .25s ease}.themeToggle .themeIcon{position:absolute;top:50%;transform:translateY(-50%);width:22px;height:22px;display:grid;place-items:center;font-size:15px;z-index:1;transition:opacity .2s ease}.themeToggle .moon{left:5px;color:#d7e6ff}.themeToggle .sun{right:5px;color:#ffcd63;opacity:.45}.themeToggle .themeKnob{position:absolute;left:3px;top:3px;width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#2a62ca,#7cc7ff);box-shadow:0 0 0 3px var(--switch-ring),0 4px 8px rgba(0,0,0,.26);transition:transform .26s cubic-bezier(.2,.8,.2,1),background .25s}.themeToggle[data-theme="light"] .themeKnob{transform:translateX(20px);background:linear-gradient(145deg,#fff2bd,#ffbb45)}.themeToggle[data-theme="light"] .moon{opacity:.4}.themeToggle[data-theme="light"] .sun{opacity:1}.menu{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;color:var(--ink);border:1px solid transparent}.menu:focus-visible,.themeToggle:focus-visible,.primary:focus-visible,.pill:focus-visible,.seg button:focus-visible{outline:3px solid rgba(84,158,255,.45);outline-offset:2px}.menu span,.menu:before,.menu:after{content:"";display:block;width:22px;height:2px;background:currentColor;border-radius:5px}.menu{gap:4px}
-
-.wrap{padding:16px;display:grid;gap:14px;max-width:760px;margin:0 auto}.card{background:linear-gradient(145deg,var(--card-elev),var(--card));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}.field{padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}.field+.field{border-top:1px solid var(--line)}.label{font-weight:700;color:var(--ink);font-size:.95rem;margin-bottom:10px}.bigval{font-size:2rem;font-weight:800;letter-spacing:.01em}.unit{font-size:1rem;font-weight:700;margin-left:4px;color:var(--muted)}.edit{color:var(--blue);font-size:1.45rem}.toggle{padding:18px 20px;color:var(--blue);font-weight:800;text-align:center;display:flex;justify-content:center;gap:12px;align-items:center}.panel{display:none;padding:18px 20px;border-top:1px solid var(--line)}.panel.open{display:block}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.inputBox{border:1.5px solid var(--line);border-radius:13px;background:var(--input);display:flex;align-items:center;overflow:hidden;min-height:50px}.inputBox input,.inputBox select{border:0;outline:0;width:100%;font-size:1.1rem;padding:13px 14px;color:var(--ink);background:transparent;min-width:0}.inputBox select{padding-right:7px}.fixedUnit{padding-right:14px;font-weight:800;color:var(--muted);white-space:nowrap}.pill{border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--input);font-weight:800;color:var(--muted);min-height:46px;transition:.18s ease}.pill.on{background:linear-gradient(135deg,#155bd7,#4c9fff);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(26,111,245,.28)}.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border:1px solid var(--line);border-radius:15px;padding:4px;gap:4px}.seg button{padding:13px 10px;border-radius:11px;font-weight:800;color:var(--muted);transition:.18s ease}.seg button.on{background:var(--card);color:var(--blue);box-shadow:0 5px 14px rgba(0,0,0,.12)}.methodHint{padding:12px 14px;border:1px solid color-mix(in srgb,var(--blue) 25%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--soft) 72%,transparent);color:var(--muted);font-size:.82rem;line-height:1.6}.small{font-size:.82rem;color:var(--muted);line-height:1.6;margin-top:8px}.result{padding:22px 22px 18px}.result h2{font-size:1.08rem;margin-bottom:14px}.rrow{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--line);gap:12px}.rrow:first-of-type{border-top:0}.ico{width:42px;height:42px;border-radius:50%;background:var(--soft);border:1px solid var(--line);color:var(--blue);display:inline-grid;place-items:center;margin-right:12px;font-weight:900}.rleft{display:flex;align-items:center;font-weight:700;min-width:0}.rval{font-size:1.45rem;color:var(--blue);font-weight:800;text-align:right;white-space:nowrap}.primary{width:100%;padding:19px;border-radius:14px;background:linear-gradient(135deg,#155bd7,#3b92ff);color:#fff;font-size:1.12rem;font-weight:800;box-shadow:0 10px 24px rgba(19,103,236,.28)}.note{padding:16px 18px;line-height:1.8;color:var(--muted);font-size:.9rem;background:color-mix(in srgb,var(--card) 93%,var(--soft))}.errorBox{display:none;margin-top:12px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--danger) 55%,transparent);border-radius:12px;background:color-mix(in srgb,var(--danger) 10%,transparent);color:var(--danger);font-weight:800;line-height:1.5}.errorBox.open{display:block}.tableWrap{display:none;overflow:auto;border-top:1px solid var(--line)}.tableWrap.open{display:block}table{width:100%;border-collapse:collapse;min-width:650px;font-size:.86rem}th{background:var(--table-head);color:var(--muted);padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:center}.actions{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50}.sheet{position:absolute;right:12px;left:12px;bottom:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.36)}.sheet button{width:100%;text-align:left;padding:17px;border-bottom:1px solid var(--line);font-weight:800;color:var(--ink)}.sheet button:last-child{border-bottom:0}.nav{position:fixed;left:0;right:0;bottom:0;background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px);z-index:25}.nav button{display:grid;gap:4px;place-items:center;color:var(--muted);font-size:.75rem;font-weight:700}.nav button.on{color:var(--blue)}
-@media(min-width:720px){.wrap{padding:24px}.field{padding:22px 26px}.appbar{padding-left:24px;padding-right:24px}}@media(max-width:430px){.title h1{font-size:1.2rem}.logo,.logo svg{width:42px;height:42px}.bigval{font-size:1.75rem}.rval{font-size:1.22rem}.grid2{grid-template-columns:1fr}.pill{padding:10px 12px}.head{gap:8px}.themeToggle{width:52px}.themeToggle[data-theme="light"] .themeKnob{transform:translateX(16px)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.splash{background:#06142d}.splashOrbitPath,.splashAccentPath{stroke-dashoffset:0}.splashOrbGlow,.splashOrbCore,.splashOrbHighlight,.splashVersion,.splashLoader{opacity:1;transform:none}}
-@media print{.splash,.appbar,.nav,.menu,.themeToggle,.toggle,.primary,.actions{display:none!important}:root,:root[data-theme="light"]{color-scheme:light;--bg:#fff;--card:#fff;--card-elev:#fff;--ink:#071a3d;--muted:#41516a;--line:#dfe7f1;--input:#fff}body{background:#fff;padding:0}.wrap{max-width:none}.panel,.tableWrap{display:block!important}.card{box-shadow:none;break-inside:avoid}}
-</style>
-
-
-
-<style id="v235-video-splash-style">
-/* Ver2.35: full-screen MP4 splash. Animation and final logo share one fixed video frame. */
-.logo.logo--proposal{width:48px;height:46px;display:grid;place-items:center;overflow:visible;flex:none}
-.logo.logo--proposal img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 7px rgba(33,112,232,.15))}
-.videoSplash{position:fixed;inset:0;z-index:10000;overflow:hidden;background:#030815;opacity:1;visibility:visible;transition:opacity .46s ease,visibility .46s ease}
-.videoSplash.is-exiting{opacity:0;visibility:hidden}
-.videoSplash video{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;background:#030815}
-@media(max-width:430px){.logo.logo--proposal{width:42px;height:42px}}
-@media(prefers-reduced-motion:reduce){.videoSplash{transition-duration:.12s}.videoSplash video{display:none}}
+*{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:radial-gradient(780px 520px at 50% -220px,rgba(59,129,255,.18),transparent 66%),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;transition:background .25s ease,color .25s ease;padding-bottom:86px}
+button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent} button:disabled{opacity:.5;cursor:not-allowed} [hidden]{display:none!important}
+#ambientDust{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:.9}
+.app{position:relative;z-index:1}
+.appbar{position:sticky;top:0;z-index:20;background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:13px 16px}
+.head{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:10px}.brandmark{width:54px;height:40px;display:grid;place-items:center;flex:none}.brandmark img{width:54px;height:auto;display:block;filter:drop-shadow(0 4px 10px rgba(55,130,255,.14))}.headTitle{flex:1;min-width:0}.headTitle h1{font-size:1.28rem;line-height:1.1;letter-spacing:.02em;margin:0;font-weight:800}.headTitle p{margin:5px 0 0;font-size:.72rem;color:var(--muted);letter-spacing:.08em}.headActions{display:flex;align-items:center;gap:7px}
+.themeToggle{position:relative;width:56px;height:36px;border:1px solid var(--line);border-radius:19px;background:var(--soft);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 8px rgba(0,0,0,.1)}.themeToggle .knob{position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#2a62ca,#7cc7ff);box-shadow:0 0 0 3px rgba(130,180,255,.18),0 4px 8px rgba(0,0,0,.24);transition:transform .26s cubic-bezier(.2,.8,.2,1),background .25s}.themeToggle[data-theme="light"] .knob{transform:translateX(20px);background:linear-gradient(145deg,#fff2bd,#ffbb45)}.themeToggle .ico{position:absolute;top:8px;font-size:15px}.themeToggle .moon{left:7px;color:#d9e8ff}.themeToggle .sun{right:7px;color:#ffcb62;opacity:.45}.themeToggle[data-theme="light"] .moon{opacity:.4}.themeToggle[data-theme="light"] .sun{opacity:1}
+.iconBtn{width:42px;height:42px;border-radius:13px;border:1px solid transparent;display:grid;place-items:center}.iconBtn:hover{background:var(--soft);border-color:var(--line)}.hamburger,.hamburger:before,.hamburger:after{content:"";display:block;width:21px;height:2px;border-radius:9px;background:currentColor}.hamburger:before{transform:translateY(-6px)}.hamburger:after{transform:translateY(4px)}
+.wrap{max-width:780px;margin:0 auto;padding:16px;display:grid;gap:14px}.card{background:linear-gradient(145deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}
+.hero{padding:20px}.heroTop{display:flex;justify-content:space-between;gap:12px;align-items:start}.eyebrow{font-size:.78rem;letter-spacing:.1em;color:var(--muted);font-weight:700}.hero h2{margin:7px 0 0;font-size:1.38rem;line-height:1.35}.hero p{margin:8px 0 0;color:var(--muted);font-size:.91rem;line-height:1.65}.outlineBtn,.ghostBtn,.primaryBtn,.secondaryBtn{border-radius:13px;padding:13px 15px;font-weight:800;transition:transform .16s ease,background .16s ease,box-shadow .16s ease}.outlineBtn{border:1px solid var(--line);background:var(--input);color:var(--blue)}.outlineBtn:hover,.ghostBtn:hover{transform:translateY(-1px);background:var(--soft)}.ghostBtn{border:1px solid var(--line);background:transparent;color:var(--muted)}.primaryBtn{background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 10px 20px rgba(28,112,245,.25)}.primaryBtn:hover{transform:translateY(-1px);box-shadow:0 13px 24px rgba(28,112,245,.34)}.secondaryBtn{background:var(--soft);border:1px solid var(--line);color:var(--blue)}
+.summaryCard{padding:19px}.summaryHead{display:flex;align-items:center;justify-content:space-between;gap:10px}.summaryHead h2{margin:0;font-size:1.05rem}.conditionLine{margin-top:12px;border:1px solid var(--line);border-radius:13px;background:color-mix(in srgb,var(--soft) 68%,transparent);padding:12px 13px;color:var(--muted);font-size:.88rem;line-height:1.55}.conditionLine strong{color:var(--ink)}.summaryActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.summaryActions button{flex:1;min-width:126px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 92%,transparent);border-radius:15px}.metric .mLabel{font-size:.78rem;color:var(--muted);font-weight:700}.metric .mValue{margin-top:8px;font-size:1.3rem;font-weight:900;color:var(--blue);letter-spacing:.01em}.metric .mSub{font-size:.75rem;color:var(--muted);margin-top:5px}.infoRow{display:flex;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}.infoRow b{color:var(--ink);margin-left:auto}
+.scheduleCard{overflow:hidden}.scheduleHead{padding:18px 18px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}.scheduleHead h2{font-size:1.02rem;margin:0}.tableScroll{overflow:auto;border-top:1px solid var(--line)}table{border-collapse:collapse;width:100%;min-width:660px;font-size:.84rem}th,td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th{background:var(--soft);color:var(--muted);font-weight:800}th:first-child,td:first-child{text-align:center}.bonusDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-right:4px;box-shadow:0 0 7px var(--cyan)}
+.emptyState{padding:28px 18px;text-align:center;color:var(--muted);line-height:1.7}.emptyState .spark{font-size:2rem;display:block;color:var(--blue);margin-bottom:9px}
+.compareTop{padding:17px}.compareTop .compareHeading{display:flex;justify-content:space-between;gap:12px;align-items:start}.compareTop h2{font-size:1.15rem;margin:0}.compareGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.compareMini{padding:11px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 92%,transparent);min-width:0}.compareMini .tag{font-size:.69rem;letter-spacing:.09em;font-weight:900;color:var(--blue)}.compareMini .scenario{margin:5px 0;color:var(--ink);font-size:.79rem;line-height:1.45;min-height:34px}.compareMini .major{font-size:1.05rem;font-weight:900;color:var(--blue);white-space:nowrap}.compareMini .minor{font-size:.71rem;color:var(--muted);margin-top:4px}.difference{margin-top:11px;border-radius:11px;padding:10px 12px;background:var(--soft);color:var(--muted);font-size:.82rem}.difference b{color:var(--ink)}.compareSchedules{display:grid;gap:14px}
+.note{padding:15px 17px;color:var(--muted);font-size:.84rem;line-height:1.7}.note b{color:var(--ink)}
+.bottomNav{position:fixed;z-index:19;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px)}.bottomNavInner{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}.bottomNav button{display:grid;place-items:center;gap:3px;color:var(--muted);font-size:.72rem;font-weight:700;padding:2px 8px}.bottomNav button.active{color:var(--blue)}
+/* Wizard */
+.modalLayer{position:fixed;inset:0;z-index:100;display:grid;place-items:end center;background:rgba(0,6,18,.56);backdrop-filter:blur(8px);padding:12px;opacity:0;visibility:hidden;transition:.22s ease}.modalLayer.open{opacity:1;visibility:visible}.wizard{width:min(100%,560px);max-height:calc(100vh - 24px);overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 70px rgba(0,0,0,.38);transform:translateY(20px);transition:transform .28s cubic-bezier(.2,.8,.2,1)}.modalLayer.open .wizard{transform:translateY(0)}.wizardHead{padding:19px 19px 13px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}.wizardHead h2{font-size:1.15rem;margin:0}.wizardHead p{margin:5px 0 0;color:var(--muted);font-size:.82rem;line-height:1.5}.closeWizard{margin-left:auto;width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;color:var(--muted)}.stepDots{display:flex;gap:6px;margin-top:10px}.stepDots i{height:4px;width:20px;border-radius:10px;background:var(--line)}.stepDots i.active{background:var(--blue)}.wizardBody{padding:20px}.wizardStep{display:none}.wizardStep.active{display:block;animation:stepIn .24s ease}.wizardStep h3{font-size:1.24rem;line-height:1.4;margin:0}.wizardStep .lead{margin:8px 0 18px;color:var(--muted);font-size:.88rem;line-height:1.6}.bigInput{width:100%;border:1.5px solid var(--line);background:var(--input);color:var(--ink);border-radius:15px;padding:16px 16px;font-size:1.65rem;font-weight:800;outline:none}.bigInput:focus{border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 18%,transparent)}.inputUnit{display:flex;align-items:center;gap:8px}.inputUnit span{font-weight:800;color:var(--muted);margin-left:-52px;pointer-events:none}.choiceGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choiceBtn{min-height:96px;border:1px solid var(--line);border-radius:16px;background:var(--input);padding:13px;text-align:left}.choiceBtn strong{display:block;font-size:1rem}.choiceBtn small{display:block;color:var(--muted);line-height:1.45;margin-top:7px}.choiceBtn.selected{border-color:var(--blue);background:color-mix(in srgb,var(--soft) 85%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 14%,transparent)}.pillGrid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.pillBtn{border:1px solid var(--line);background:var(--input);border-radius:12px;padding:10px 12px;color:var(--muted);font-weight:800}.pillBtn.selected{border-color:transparent;background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff}.fieldLabel{font-size:.82rem;font-weight:800;color:var(--muted);margin:15px 0 7px}.inlineFields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.smallInput{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:13px;color:var(--ink);background:var(--input);outline:none}.smallInput:focus{border-color:var(--blue)}.switchLine{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--input)}.switchLine label{font-weight:800}.switchLine small{display:block;color:var(--muted);margin-top:4px}.segMini{display:flex;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--soft);gap:3px}.segMini button{padding:8px 10px;border-radius:8px;color:var(--muted);font-weight:800}.segMini button.selected{background:var(--card);color:var(--blue);box-shadow:0 2px 7px rgba(0,0,0,.14)}.wizardFoot{display:flex;gap:9px;padding:13px 19px 19px;border-top:1px solid var(--line)}.wizardFoot button{flex:1}.wizardError{margin:12px 0 0;color:var(--danger);font-weight:700;font-size:.84rem;display:none}.wizardError.show{display:block}@keyframes stepIn{from{opacity:0;transform:translateX(9px)}to{opacity:1;transform:translateX(0)}}
+/* Menu */
+.sheetLayer{position:fixed;inset:0;z-index:80;background:rgba(0,6,18,.44);opacity:0;visibility:hidden;transition:.2s ease}.sheetLayer.open{opacity:1;visibility:visible}.sheet{position:absolute;left:12px;right:12px;bottom:12px;max-width:756px;margin:0 auto;max-height:70vh;overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:21px;box-shadow:0 26px 64px rgba(0,0,0,.34);padding:8px}.sheetTitle{padding:12px 12px 8px;color:var(--muted);font-size:.76rem;font-weight:900;letter-spacing:.08em}.sheet button{width:100%;text-align:left;border-radius:13px;padding:15px 13px;font-weight:800}.sheet button:hover{background:var(--soft)}.sheet button+button{border-top:1px solid var(--line)}.historyItem{display:flex!important;align-items:center;gap:10px}.historyItem .hDate{font-size:.72rem;color:var(--muted);font-weight:600}.historyItem .hText{font-size:.86rem;line-height:1.45;flex:1}.sheetClose{color:var(--muted)!important;text-align:center!important}
+/* Splash */
+#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(58% 45% at 52% 48%,#102d68 0%,#061630 42%,#020713 100%);transition:opacity .45s ease,visibility .45s ease}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%}.splashVersion{position:absolute;left:0;right:0;bottom:12.5%;text-align:center;color:rgba(214,237,255,.78);letter-spacing:.22em;font-size:.79rem;font-weight:800;text-shadow:0 0 16px rgba(97,190,255,.5)}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:115px;height:26px;transform:translateX(-50%);border-bottom:1px solid rgba(144,205,255,.36);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.34))}
+@media (max-width:420px){.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
+@page{size:A4 portrait;margin:11mm}
+@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.tableScroll{overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
 </style>
 </head>
 <body>
-<div class="videoSplash" id="videoSplash" aria-label="起動画面">
-  <video id="splashVideo" muted playsinline autoplay preload="auto" aria-hidden="true">
-    <source src="./splash_v235_orbit.mp4" type="video/mp4">
-  </video>
-</div>
-
-
-
-
+<canvas id="ambientDust" aria-hidden="true"></canvas>
+<div class="app">
 <header class="appbar">
   <div class="head">
-    <div class="logo logo--proposal"><img src="./proposal_logo_light_transparent.png" alt="返済試算ロゴ"></div>
-    <div class="title"><h1>返済試算 <span class="ver">v2.35</span></h1></div>
+    <div class="brandmark"><img src="./proposal_logo_light_transparent.png" alt=""></div>
+    <div class="headTitle"><h1>返済試算</h1><p>REPAYMENT SIMULATOR</p></div>
     <div class="headActions">
-      <button class="themeToggle" id="themeToggle" type="button" aria-label="ライトモードに切り替え" title="ライトモードに切り替え" data-theme="dark">
-        <span class="themeIcon moon" aria-hidden="true">☾</span><span class="themeIcon sun" aria-hidden="true">☀</span><span class="themeKnob" aria-hidden="true"></span>
-      </button>
-      <button class="menu" id="menuBtn" aria-label="メニュー" type="button"><span></span></button>
+      <button id="themeToggle" class="themeToggle" type="button" aria-label="ライトモードに切り替え" data-theme="dark"><span class="ico moon">☾</span><span class="ico sun">☀</span><span class="knob"></span></button>
+      <button id="menuBtn" class="iconBtn" type="button" aria-label="メニュー"><span class="hamburger"></span></button>
     </div>
   </div>
 </header>
-
-<main class="wrap">
-  <section class="card">
-    <div class="field">
-      <div><div class="label">借入金額</div><div class="bigval" id="vAmount">100<span class="unit">万円</span></div></div>
-      <button class="edit" data-open="details" aria-label="借入金額を編集">✎</button>
-    </div>
-    <div class="field">
-      <div><div class="label">年利率</div><div class="bigval" id="vRate">9.00<span class="unit">%</span></div></div>
-      <button class="edit" data-open="details" aria-label="年利率を編集">✎</button>
-    </div>
-    <div class="field">
-      <div><div class="label" id="termSummaryLabel">返済期間</div><div class="bigval" id="vTerm">6<span class="unit">年</span></div></div>
-      <button class="edit" data-open="details" aria-label="返済条件を編集">✎</button>
-    </div>
-    <button class="toggle" id="detailToggle">詳細条件を見る <span>⌄</span></button>
-
-    <div class="panel" id="details">
-      <div class="grid2">
-        <div>
-          <div class="label">借入金額</div>
-          <div class="inputBox"><input id="principal" type="number" inputmode="decimal" value="100" min="0"><button class="pill on" id="unitMan" type="button">万円</button><button class="pill" id="unitYen" type="button">円</button></div>
-          <div class="pills" id="amountPills"></div>
-        </div>
-        <div>
-          <div class="label">年利率</div>
-          <div class="inputBox"><input id="rate" type="number" inputmode="decimal" value="9.00" min="0" step="0.01"><span class="fixedUnit">%</span></div>
-          <div class="pills" id="ratePills"></div>
-        </div>
-        <div>
-          <div class="label">返済方式</div>
-          <div class="seg"><button id="ep" class="on" type="button">元利均等</button><button id="eg" type="button">元金均等</button></div>
-        </div>
-        <div>
-          <div class="label">貸付方式</div>
-          <div class="seg"><button id="shosho" class="on" type="button">証書貸付</button><button id="tegata" type="button">手形貸付</button></div>
-        </div>
-
-        <div id="yearsField">
-          <div class="label">返済期間</div>
-          <div class="inputBox"><input id="years" type="number" inputmode="numeric" value="6" min="1" max="50"><span class="fixedUnit">年</span></div>
-          <div class="pills" id="yearPills"></div>
-        </div>
-
-        <div id="egCountField" hidden>
-          <div class="label">返済回数</div>
-          <div class="inputBox"><input id="egCount" type="number" inputmode="numeric" value="72" min="1" max="600"><span class="fixedUnit">回</span></div>
-          <div class="small">毎月元金とセットで指定します。</div>
-        </div>
-
-        <div id="egPrincipalField" hidden>
-          <div class="label">毎月元金</div>
-          <div class="inputBox"><input id="monthlyPrincipal" type="number" inputmode="decimal" value="1.38" min="0" step="0.01"><span class="fixedUnit" id="monthlyPrincipalUnit">万円</span></div>
-          <div class="small">最終回は残った元金を自動返済します。</div>
-        </div>
-
-        <div id="bonusToggleField">
-          <div class="label">ボーナス払い</div>
-          <div class="seg"><button id="bonusNo" class="on" type="button">なし</button><button id="bonusYes" type="button">あり</button></div>
-        </div>
-
-        <div id="bonusSettings" hidden>
-          <div class="label">ボーナス月（年2回）</div>
-          <div class="inputBox"><select id="bonusMonth1" aria-label="1回目のボーナス月"></select><span class="fixedUnit">・</span><select id="bonusMonth2" aria-label="2回目のボーナス月"></select></div>
-          <div class="small">実際の返済日がこの月のときに加算します。</div>
-        </div>
-
-        <div id="bonusAmountField" hidden>
-          <div class="label">ボーナス加算額（1回あたり）</div>
-          <div class="inputBox"><input id="bonusAmount" type="number" inputmode="decimal" value="0" min="0" step="0.01"><span class="fixedUnit" id="bonusAmountUnit">万円</span></div>
-          <div class="small">通常月の返済額は、指定期間で完済するよう自動計算します。</div>
-        </div>
-
-        <div>
-          <div class="label">返済日</div>
-          <div class="inputBox"><input id="repayDay" type="number" inputmode="numeric" value="17" min="1" max="31"><span class="fixedUnit">日</span></div>
-          <div class="pills" id="dayPills"></div>
-        </div>
-        <div>
-          <div class="label">融資実行日</div>
-          <div class="inputBox"><input id="execDate" type="date"></div>
-          <div class="small" id="dateInfo">実行日を入れると初回日割りを計算します。</div>
-        </div>
-        <div>
-          <div class="label">表示形式</div>
-          <div class="seg"><button id="wareki" class="on" type="button">和暦</button><button id="seireki" type="button">西暦</button></div>
-        </div>
-        <div class="methodHint" id="methodHint">元利均等：返済期間を指定して毎月返済額を計算します。</div>
-      </div>
-    </div>
+<main id="main" class="wrap">
+  <section id="introCard" class="card hero">
+    <div class="heroTop"><div><div class="eyebrow">REPAYMENT SIMULATION</div><h2>条件を順に入れて、<br>返済の見通しをつくる。</h2><p>金額・金利・期間をステップ形式で入力します。比較が必要なときだけ、あとから2条件目を追加できます。</p></div></div>
+    <div class="summaryActions"><button id="startBtn" class="primaryBtn" type="button">新しく試算する</button><button id="historyBtn" class="outlineBtn" type="button">直近の履歴</button></div>
   </section>
-
-  <section class="card result">
-    <h2>▥ 試算結果（概要）</h2>
-    <div class="rrow"><div class="rleft"><span class="ico">▣</span><span id="monthlyLabel">毎月の返済額</span></div><div class="rval" id="monthly">-</div></div>
-    <div class="rrow"><div class="rleft"><span class="ico">￥</span>利息総額</div><div class="rval" id="totalInterest">-</div></div>
-    <div class="rrow"><div class="rleft"><span class="ico">≡</span>支払総額</div><div class="rval" id="totalPay">-</div></div>
-    <div class="rrow"><div class="rleft"><span class="ico">□</span>返済回数</div><div class="rval" id="count">-</div></div>
-    <div id="calcError" class="errorBox" role="alert"></div>
-  </section>
-
-  <button class="primary" id="scheduleBtn" type="button">返済予定表を表示</button>
-  <section class="card tableWrap" id="tableWrap">
-    <table>
-      <thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </section>
-
-  <section class="card note">
-    ⓘ 上記の試算結果は概算です。元利均等のボーナス払いでは、ボーナス加算額を差し引いた通常月返済額を自動計算します。実際の返済額とは異なる場合があります。
-  </section>
+  <section id="singleView" hidden></section>
+  <section id="compareView" hidden></section>
 </main>
+</div>
+<nav class="bottomNav"><div class="bottomNavInner"><button id="navHome" class="active" type="button">⌂<span>ホーム</span></button><button id="navNew" type="button">＋<span>新規試算</span></button><button id="navHistory" type="button">◷<span>履歴</span></button></div></nav>
 
-<div class="actions" id="actions">
-  <div class="sheet">
-    <button id="saveBtn" type="button">この条件を保存</button>
-    <button id="loadBtn" type="button">保存した条件を呼び出す</button>
-    <button id="pdfBtn" type="button">PDF出力 / 印刷</button>
-    <button id="resetBtn" type="button">入力リセット</button>
-    <button id="closeMenu" type="button">閉じる</button>
-  </div>
+<div id="wizardLayer" class="modalLayer" aria-hidden="true">
+  <section class="wizard" role="dialog" aria-modal="true" aria-labelledby="wizardTitle">
+    <div class="wizardHead"><div><h2 id="wizardTitle">試算条件を入力</h2><p id="wizardSub">必要な項目を順に決めます。</p><div id="stepDots" class="stepDots"></div></div><button id="closeWizard" class="closeWizard" type="button" aria-label="閉じる">×</button></div>
+    <div class="wizardBody">
+      <div class="wizardStep" data-step="0">
+        <h3>借入金額を入力</h3><p class="lead">単位を選んで金額を入力してください。</p>
+        <div class="segMini" id="unitSeg"><button class="selected" data-unit="万円" type="button">万円</button><button data-unit="円" type="button">円</button></div>
+        <div class="fieldLabel">借入金額</div><div class="inputUnit"><input id="wPrincipal" class="bigInput" type="number" inputmode="decimal" min="0" placeholder="例：100"><span id="wPrincipalUnit">万円</span></div>
+        <div id="amountPills" class="pillGrid"></div>
+      </div>
+      <div class="wizardStep" data-step="1">
+        <h3>年利率を入力</h3><p class="lead">年利率を入力してください。</p>
+        <div class="inputUnit"><input id="wRate" class="bigInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：9.00"><span>%</span></div>
+        <div id="ratePills" class="pillGrid"></div>
+      </div>
+      <div class="wizardStep" data-step="2">
+        <h3>返済方式を選択</h3><p class="lead">返済額を一定にするか、元金を一定にするかを選びます。</p>
+        <div class="choiceGrid"><button id="wEP" class="choiceBtn selected" type="button"><strong>元利均等</strong><small>毎月の返済額をおおむね一定にします。</small></button><button id="wEG" class="choiceBtn" type="button"><strong>元金均等</strong><small>毎月の元金を指定し、最終回で残額を調整します。</small></button></div>
+      </div>
+      <div class="wizardStep" data-step="3">
+        <h3 id="termTitle">返済期間を入力</h3><p id="termLead" class="lead">返済年数を入力してください。</p>
+        <div id="epTermFields"><div class="inputUnit"><input id="wYears" class="bigInput" type="number" inputmode="numeric" min="1" max="50" value="10"><span>年</span></div><div id="yearPills" class="pillGrid"></div></div>
+        <div id="egTermFields" hidden><div class="fieldLabel">返済回数</div><div class="inputUnit"><input id="wCount" class="smallInput" type="number" inputmode="numeric" min="1" max="600" value="120"><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input id="wMonthlyPrincipal" class="smallInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：1"><span id="wMonthlyPrincipalUnit">万円</span></div><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
+      </div>
+      <div class="wizardStep" data-step="4">
+        <h3>詳細条件を確認</h3><p class="lead">返済日と実行日を設定します。ボーナス払いは必要な場合だけ使えます。</p>
+        <div class="inlineFields"><div><div class="fieldLabel">返済日</div><input id="wRepayDay" class="smallInput" type="number" inputmode="numeric" min="1" max="31" value="17"></div><div><div class="fieldLabel">融資実行日</div><input id="wExecDate" class="smallInput" type="date"></div></div>
+        <div id="bonusBlock"><div class="fieldLabel">ボーナス払い</div><div class="switchLine"><div><label>ボーナス加算</label><small>元利均等返済のときだけ設定できます。</small></div><div class="segMini"><button id="wBonusNo" class="selected" type="button">なし</button><button id="wBonusYes" type="button">あり</button></div></div><div id="bonusFields" hidden><div class="inlineFields"><div><div class="fieldLabel">ボーナス月①</div><select id="wBonusMonth1" class="smallInput"></select></div><div><div class="fieldLabel">ボーナス月②</div><select id="wBonusMonth2" class="smallInput"></select></div></div><div class="fieldLabel">加算額（1回あたり）</div><div class="inputUnit"><input id="wBonusAmount" class="smallInput" type="number" inputmode="decimal" min="0" step="0.01" placeholder="例：10"><span id="wBonusUnit">万円</span></div></div></div>
+      </div>
+      <div id="wizardError" class="wizardError"></div>
+    </div>
+    <div class="wizardFoot"><button id="wizardBack" class="ghostBtn" type="button">戻る</button><button id="wizardNext" class="primaryBtn" type="button">次へ</button></div>
+  </section>
 </div>
 
-<nav class="nav">
-  <button class="on" type="button">⌂<span>ホーム</span></button>
-  <button id="navHistory" type="button">◷<span>履歴</span></button>
-  <button id="navSave" type="button">▱<span>保存した条件</span></button>
-  <button id="navSetting" type="button">⚙<span>設定</span></button>
-</nav>
+<div id="sheetLayer" class="sheetLayer" aria-hidden="true"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><button id="sheetClose" class="sheetClose" type="button">閉じる</button></div></div>
+
+<div id="splash" aria-label="起動画面"><canvas id="splashCanvas" class="splashCanvas"></canvas><div class="splashVersion">v2.36</div><div class="splashCurve"></div></div>
+
 <script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const STORAGE = {theme:'hensai_v236_theme', current:'hensai_v236_current', history:'hensai_v236_history', saved:'hensai_v236_saved'};
+const legacyCurrent = ['hensai_v235_current','hensai_v230_current','hensai_v224_current','hensai_v223_current','hensai_v222_current','hensai_v220_current'];
+const AMOUNTS = [10,30,50,100,200,300,500,1000];
+const RATES_EP = [3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5];
+const RATES_EG = [1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2,2.1,2.2];
+const YEARS = [1,2,3,4,5,6,7,8,9,10];
+let currentScenario = null, currentResult = null, comparison = null, scheduleOpen = false, compareSchedulesOpen = false;
+let wizard = {mode:'new', step:0, data:null};
 
-(function(){
-  "use strict";
-  const $ = id => document.getElementById(id);
-  const STORAGE_CURRENT = "hensai_v235_current";
-  const STORAGE_SAVED = "hensai_v235_saved";
-  const yen = n => new Intl.NumberFormat("ja-JP",{style:"currency",currency:"JPY",maximumFractionDigits:0}).format(Math.round(n || 0));
-  const num = n => new Intl.NumberFormat("ja-JP",{maximumFractionDigits:2}).format(Number(n || 0));
-  const state = {unit:"万円",method:"ep",loan:"shosho",wareki:true,bonus:false,showTable:false};
+function defaultData(){
+  const today = new Date();
+  return {principal:'',unit:'万円',rate:'',method:'ep',years:'10',count:'120',monthlyPrincipal:'',repayDay:'17',execDate:toISO(today),bonus:false,bonusMonth1:'6',bonusMonth2:'12',bonusAmount:'',wareki:true};
+}
+function toISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function clone(v){return JSON.parse(JSON.stringify(v));}
+function nfmt(v){return new Intl.NumberFormat('ja-JP').format(Math.round(Number(v)||0));}
+function yen(v){return new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',maximumFractionDigits:0}).format(Math.round(Number(v)||0));}
+function moneyFactor(unit){return unit==='万円'?10000:1;}
+function toMoney(value,unit){return (parseFloat(value)||0)*moneyFactor(unit);}
+function fromMoney(y,unit){return y/moneyFactor(unit);}
+function inputNumber(v){return Number.isInteger(v)?String(v):String(Math.round(v*100)/100);}
+function jpDate(d, wareki=true){if(!d)return '-';if(!wareki)return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;const y=d.getFullYear();const era=y>=2019?'令和':'平成';const ey=y>=2019?y-2018:y-1988;return `${era}${ey===1?'元':ey}年${d.getMonth()+1}月${d.getDate()}日`;}
+function formatScenario(d){const term=d.method==='eg'?`${d.count}回`:`${d.years}年（${Number(d.years||0)*12}回）`;return `${nfmt(d.principal)}${d.unit}・年${Number(d.rate||0).toFixed(2)}%・${term}`;}
+function resultMonthlyLabel(d){return d.method==='eg'?'初回返済額':'毎月の返済額';}
 
-  const THEME_KEY = "hensai_theme";
-  function applyTheme(theme, persist = true){
-    const next = theme === "light" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if(metaTheme) metaTheme.setAttribute("content", next === "dark" ? "#06142d" : "#f5f8fd");
-    const button = $("themeToggle");
-    if(button){
-      button.dataset.theme = next;
-      button.setAttribute("aria-label", next === "dark" ? "ライトモードに切り替え" : "ダークモードに切り替え");
-      button.setAttribute("title", next === "dark" ? "ライトモードに切り替え" : "ダークモードに切り替え");
-    }
-    if(persist) localStorage.setItem(THEME_KEY, next);
-  }
-  const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-  applyTheme(savedTheme, false);
-  const AMOUNTS=[10,30,50,100,200,300,500,1000];
-  const RATES_EP=[3,3.15,5,5.15,7,8.15,9,10.5,11,12,13,14.5];
-  const RATES_EG=[1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2];
-  const YEARS=[1,2,3,4,5,6,7,8,9,10];
-  const DAYS=[7,17,27,31];
-
-  function moneyFactor(){ return state.unit === "万円" ? 10000 : 1; }
-  function toMoney(value){ return (parseFloat(value) || 0) * moneyFactor(); }
-  function fromMoney(value){ return value / moneyFactor(); }
-  function formatInput(value){
-    const rounded = Math.round((Number(value) + Number.EPSILON) * 100) / 100;
-    return String(rounded);
-  }
-  function setPillGroup(parent, arr, suffix, callback){
-    $(parent).innerHTML = "";
-    arr.forEach(value => {
-      const button = document.createElement("button");
-      button.className = "pill";
-      button.type = "button";
-      button.textContent = String(value) + suffix;
-      button.addEventListener("click", () => callback(value));
-      $(parent).appendChild(button);
-    });
-  }
-  function populateMonthSelect(id, value){
-    const select = $(id);
-    select.innerHTML = "";
-    for(let month = 1; month <= 12; month++){
-      const option = document.createElement("option");
-      option.value = String(month);
-      option.textContent = month + "月";
-      if(month === value) option.selected = true;
-      select.appendChild(option);
-    }
-  }
-  function renderRatePills(){
-    const rates = state.method === "eg" ? RATES_EG : RATES_EP;
-    setPillGroup("ratePills", rates, "%", value => {
-      $("rate").value = Number(value).toFixed(2);
-      sync();
-    });
-  }
-  function updateMethodUI(){
-    const isEG = state.method === "eg";
-    $("yearsField").hidden = isEG;
-    $("egCountField").hidden = !isEG;
-    $("egPrincipalField").hidden = !isEG;
-    $("bonusToggleField").hidden = isEG;
-    $("bonusSettings").hidden = isEG || !state.bonus;
-    $("bonusAmountField").hidden = isEG || !state.bonus;
-    $("monthlyPrincipalUnit").textContent = state.unit;
-    $("bonusAmountUnit").textContent = state.unit;
-    $("methodHint").textContent = isEG
-      ? "元金均等：返済回数と毎月元金を指定し、最終回の元金は残額で自動調整します。"
-      : (state.bonus
-        ? "元利均等：ボーナス月の加算額を反映し、通常月返済額を自動計算します。"
-        : "元利均等：返済期間を指定して毎月返済額を計算します。");
-  }
-  function convertUnit(nextUnit){
-    if(nextUnit === state.unit) return;
-    const oldFactor = moneyFactor();
-    ["principal","monthlyPrincipal","bonusAmount"].forEach(id => {
-      const input = $(id);
-      const yenValue = (parseFloat(input.value) || 0) * oldFactor;
-      input.value = formatInput(yenValue / (nextUnit === "万円" ? 10000 : 1));
-    });
-    state.unit = nextUnit;
-    sync();
-  }
-  function dateKey(date){
-    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
-  }
-  function nthWeekday(year, monthIndex, weekday, occurrence){
-    const first = new Date(year, monthIndex, 1);
-    const offset = (weekday - first.getDay() + 7) % 7;
-    return new Date(year, monthIndex, 1 + offset + (occurrence - 1) * 7);
-  }
-  function vernalEquinoxDay(year){
-    return Math.floor(20.8431 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4));
-  }
-  function autumnEquinoxDay(year){
-    return Math.floor(23.2488 + 0.242194 * (year - 1980) - Math.floor((year - 1980) / 4));
-  }
-  function japaneseHolidaySet(year){
-    const dates = new Set();
-    const add = (monthIndex, day) => dates.add(dateKey(new Date(year, monthIndex, day)));
-    const addDate = date => dates.add(dateKey(date));
-    // Current Japanese national holiday rules (1980–2099 approximation for equinox days).
-    add(0,1);
-    addDate(nthWeekday(year,0,1,2));
-    add(1,11);
-    if(year >= 2020) add(1,23);
-    add(2,vernalEquinoxDay(year));
-    add(3,29);
-    add(4,3); add(4,4); add(4,5);
-    if(year >= 2016) add(7,11);
-    add(10,3); add(10,23);
-    if(year >= 2000){
-      addDate(nthWeekday(year,6,1,3));
-      addDate(nthWeekday(year,8,1,3));
-      addDate(nthWeekday(year,9,1,2));
-    } else {
-      add(6,20); add(8,15); add(9,10);
-    }
-    // Tokyo Olympic special dates.
-    if(year === 2020){
-      dates.delete(dateKey(nthWeekday(year,6,1,3))); add(6,23);
-      dates.delete(dateKey(nthWeekday(year,9,1,2))); add(6,24);
-      dates.delete(dateKey(new Date(year,7,11))); add(7,10);
-    }
-    if(year === 2021){
-      dates.delete(dateKey(nthWeekday(year,6,1,3))); add(6,22);
-      dates.delete(dateKey(nthWeekday(year,9,1,2))); add(6,23);
-      dates.delete(dateKey(new Date(year,7,11))); add(7,8);
-    }
-    if(year === 2019){
-      add(4,1); add(9,22); // Enthronement Day and ceremony holiday.
-    }
-    // Citizen's holidays and substitute holidays can affect one another; settle them iteratively.
-    for(let round = 0; round < 4; round++){
-      for(let month = 0; month < 12; month++){
-        const last = new Date(year, month + 1, 0).getDate();
-        for(let day = 2; day < last; day++){
-          const current = new Date(year, month, day);
-          const prev = new Date(year, month, day - 1);
-          const next = new Date(year, month, day + 1);
-          if(!dates.has(dateKey(current)) && dates.has(dateKey(prev)) && dates.has(dateKey(next))){
-            dates.add(dateKey(current));
-          }
+// Holidays and business day adjustment
+function dateKey(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;}
+function nthWeekday(year, monthIndex, weekday, occurrence){const first=new Date(year,monthIndex,1);const offset=(weekday-first.getDay()+7)%7;return new Date(year,monthIndex,1+offset+(occurrence-1)*7);}
+function vernalEquinoxDay(year){return Math.floor(20.8431+0.242194*(year-1980)-Math.floor((year-1980)/4));}
+function autumnEquinoxDay(year){return Math.floor(23.2488+0.242194*(year-1980)-Math.floor((year-1980)/4));}
+function japaneseHolidaySet(year){
+  const dates=new Set(), add=(m,d)=>dates.add(dateKey(new Date(year,m,d))), addDate=d=>dates.add(dateKey(d));
+  add(0,1); addDate(nthWeekday(year,0,1,2)); add(1,11); if(year>=2020)add(1,23); add(2,vernalEquinoxDay(year)); add(3,29); add(4,3);add(4,4);add(4,5); if(year>=2016)add(7,11); add(10,3);add(10,23);
+  if(year>=2000){addDate(nthWeekday(year,6,1,3));addDate(nthWeekday(year,8,1,3));addDate(nthWeekday(year,9,1,2));}else{add(6,20);add(8,15);add(9,10);}
+  if(year===2020){dates.delete(dateKey(nthWeekday(year,6,1,3)));add(6,23);dates.delete(dateKey(nthWeekday(year,9,1,2)));add(6,24);dates.delete(dateKey(new Date(year,7,11)));add(7,10);}
+  if(year===2021){dates.delete(dateKey(nthWeekday(year,6,1,3)));add(6,22);dates.delete(dateKey(nthWeekday(year,9,1,2)));add(6,23);dates.delete(dateKey(new Date(year,7,11)));add(7,8);}
+  if(year===2019){add(4,1);add(9,22);}
+  for(let round=0; round<4; round++){
+    for(let month=0; month<12; month++){
+      const last=new Date(year,month+1,0).getDate();
+      for(let day=2; day<last; day++){
+        const cur=new Date(year,month,day);
+        const prev=new Date(year,month,day-1);
+        const nxt=new Date(year,month,day+1);
+        if(!dates.has(dateKey(cur)) && dates.has(dateKey(prev)) && dates.has(dateKey(nxt))){
+          dates.add(dateKey(cur));
         }
       }
-      const originals = Array.from(dates);
-      for(const key of originals){
-        const holiday = new Date(key + "T00:00:00");
-        if(holiday.getDay() !== 0) continue;
-        const substitute = new Date(holiday);
-        do { substitute.setDate(substitute.getDate() + 1); } while(dates.has(dateKey(substitute)));
-        dates.add(dateKey(substitute));
-      }
     }
-    return dates;
-  }
-  const holidayCache = new Map();
-  function isHoliday(date){
-    const day = date.getDay();
-    if(day === 0 || day === 6) return true;
-    const year = date.getFullYear();
-    if(!holidayCache.has(year)) holidayCache.set(year, japaneseHolidaySet(year));
-    return holidayCache.get(year).has(dateKey(date));
-  }
-  function nextBiz(date){
-    const result = new Date(date);
-    while(isHoliday(result)) result.setDate(result.getDate() + 1);
-    return result;
-  }
-  function daysInMonth(year, monthIndex){ return new Date(year, monthIndex + 1, 0).getDate(); }
-  function dueDateInMonth(year, monthIndex, day){ return new Date(year, monthIndex, Math.min(day, daysInMonth(year, monthIndex))); }
-  function firstScheduledRaw(exec, day){
-    if(!exec) return null;
-    const execution = new Date(exec + "T00:00:00");
-    const sameMonthDue = dueDateInMonth(execution.getFullYear(), execution.getMonth(), day);
-    if(execution < sameMonthDue) return sameMonthDue;
-    return dueDateInMonth(execution.getFullYear(), execution.getMonth() + 1, day);
-  }
-  function firstDate(exec, day){
-    const raw = firstScheduledRaw(exec, day);
-    return raw ? nextBiz(raw) : null;
-  }
-  function nthDate(exec, day, index){
-    const rawFirst = firstScheduledRaw(exec, day);
-    if(!rawFirst) return null;
-    return nextBiz(dueDateInMonth(rawFirst.getFullYear(), rawFirst.getMonth() + index - 1, day));
-  }
-  function daysIncl(a,b){ return Math.round((b - a) / 86400000) + 1; }
-  function jpDate(date){
-    if(!date) return "";
-    if(!state.wareki) return `${date.getFullYear()}/${String(date.getMonth()+1).padStart(2,"0")}/${String(date.getDate()).padStart(2,"0")}`;
-    const year = date.getFullYear();
-    let era = "令和", eraYear = year - 2018;
-    if(year < 2019){ era = "平成"; eraYear = year - 1988; }
-    return `${era}${eraYear === 1 ? "元" : eraYear}年${date.getMonth()+1}月${date.getDate()}日`;
-  }
-  function annuityPayment(principal, monthlyRate, count){
-    if(monthlyRate === 0) return principal / count;
-    const factor = Math.pow(1 + monthlyRate, count);
-    return principal * monthlyRate * factor / (factor - 1);
-  }
-  function calc(){
-    const P = toMoney($("principal").value);
-    const rate = (parseFloat($("rate").value) || 0) / 100;
-    const years = parseInt($("years").value, 10) || 0;
-    const n = state.method === "eg" ? (parseInt($("egCount").value, 10) || 0) : years * 12;
-    const day = Math.min(31, Math.max(1, parseInt($("repayDay").value, 10) || 17));
-    if(P <= 0) return {error:"借入金額を入力してください。"};
-    if(rate < 0) return {error:"年利率を確認してください。"};
-    if(n <= 0) return {error: state.method === "eg" ? "返済回数を入力してください。" : "返済期間を入力してください。"};
-
-    const r = rate / 12;
-    const exec = $("execDate").value;
-    const first = firstDate(exec, day);
-    const firstDays = exec && first ? daysIncl(new Date(exec + "T00:00:00"), first) : 0;
-    const firstInterest = exec && first ? Math.floor(P * rate / 365 * firstDays) : 0;
-    const scheduleDates = Array.from({length:n}, (_, i) => nthDate(exec, day, i + 1));
-    const rows = [];
-    let balance = P;
-    let totalInterest = 0;
-    let totalPay = 0;
-    let regularPayment = 0;
-    let bonusAmount = 0;
-    let bonusMonths = [];
-
-    if(state.method === "eg"){
-      const monthlyPrincipal = Math.floor(toMoney($("monthlyPrincipal").value));
-      if(monthlyPrincipal <= 0) return {error:"毎月元金を入力してください。"};
-      if(monthlyPrincipal * Math.max(0, n - 1) >= P){
-        return {error:"毎月元金 ×（返済回数−1）が借入金額を超えています。毎月元金または返済回数を見直してください。"};
-      }
-      for(let i = 1; i <= n; i++){
-        const isLast = i === n;
-        const interest = (i === 1 && exec) ? firstInterest : Math.floor(balance * r);
-        const principal = isLast ? balance : Math.min(monthlyPrincipal, balance);
-        const pay = principal + interest;
-        balance = Math.max(0, balance - principal);
-        totalInterest += interest;
-        totalPay += pay;
-        rows.push({i,date:scheduleDates[i-1],pay,principal,interest,bal:balance,bonus:false});
-      }
-      regularPayment = rows[0] ? rows[0].pay : 0;
-    } else {
-      if(state.bonus){
-        if(!exec) return {error:"ボーナス払いを計算するには、融資実行日を入力してください。"};
-        bonusAmount = Math.floor(toMoney($("bonusAmount").value));
-        if(bonusAmount <= 0) return {error:"ボーナス加算額を入力してください。"};
-        const b1 = parseInt($("bonusMonth1").value, 10);
-        const b2 = parseInt($("bonusMonth2").value, 10);
-        if(!b1 || !b2 || b1 === b2) return {error:"ボーナス月は異なる2か月を指定してください。"};
-        bonusMonths = [b1,b2];
-      }
-      const bonusIndexes = state.bonus
-        ? scheduleDates.map((date, index) => date && bonusMonths.includes(date.getMonth() + 1) ? index + 1 : 0).filter(Boolean)
-        : [];
-      const pvBonus = bonusIndexes.reduce((sum, index) => sum + bonusAmount / Math.pow(1 + r, index), 0);
-      if(pvBonus >= P) return {error:"ボーナス加算額が大きすぎます。加算額または返済期間を見直してください。"};
-      regularPayment = Math.floor(annuityPayment(P - pvBonus, r, n));
-      if(regularPayment <= 0) return {error:"返済条件を確認してください。"};
-
-      for(let i = 1; i <= n; i++){
-        const isLast = i === n;
-        const isBonus = state.bonus && bonusIndexes.includes(i);
-        const scheduledPayment = regularPayment + (isBonus ? bonusAmount : 0);
-        let interest, principal, pay;
-        if(isLast){
-          interest = (i === 1 && exec) ? firstInterest : Math.floor(balance * r);
-          principal = balance;
-          pay = principal + interest;
-        } else if(i === 1 && exec){
-          interest = firstInterest;
-          principal = scheduledPayment - Math.floor(P * r);
-          if(principal <= 0) return {error:"初回利息に対して返済額が不足しています。返済期間または金利を見直してください。"};
-          principal = Math.min(principal, balance);
-          pay = principal + interest;
-        } else {
-          interest = Math.floor(balance * r);
-          principal = Math.min(scheduledPayment - interest, balance);
-          if(principal <= 0) return {error:"返済額が利息を下回っています。返済期間またはボーナス加算額を見直してください。"};
-          pay = principal + interest;
-        }
-        balance = Math.max(0, balance - principal);
-        totalInterest += interest;
-        totalPay += pay;
-        rows.push({i,date:scheduleDates[i-1],pay,principal,interest,bal:balance,bonus:isBonus});
-      }
+    for(const key of [...dates]){
+      const h=new Date(key+'T00:00:00');
+      if(h.getDay()!==0) continue;
+      const sub=new Date(h);
+      do { sub.setDate(sub.getDate()+1); } while(dates.has(dateKey(sub)));
+      dates.add(dateKey(sub));
     }
+  }
+  return dates;
+}
+const holidayCache=new Map();
+function isHoliday(date){if(date.getDay()===0||date.getDay()===6)return true;const y=date.getFullYear();if(!holidayCache.has(y))holidayCache.set(y,japaneseHolidaySet(y));return holidayCache.get(y).has(dateKey(date));}
+function nextBiz(date){const d=new Date(date);while(isHoliday(d))d.setDate(d.getDate()+1);return d;}
+function daysInMonth(y,m){return new Date(y,m+1,0).getDate()}
+function dueDateInMonth(y,m,day){return new Date(y,m,Math.min(day,daysInMonth(y,m)))}
+function firstRaw(exec,day){if(!exec)return null;const e=new Date(exec+'T00:00:00');const same=dueDateInMonth(e.getFullYear(),e.getMonth(),day);return e<same?same:dueDateInMonth(e.getFullYear(),e.getMonth()+1,day)}
+function nthDue(exec,day,index){const raw=firstRaw(exec,day);if(!raw)return null;return nextBiz(dueDateInMonth(raw.getFullYear(),raw.getMonth()+index-1,day));}
+function daysIncl(a,b){return Math.round((b-a)/86400000)+1}
+function annuityPayment(principal,r,n){if(r===0)return principal/n;const f=Math.pow(1+r,n);return principal*r*f/(f-1)}
 
-    return {P,rate,years,n,rows,totalInterest,totalPay,regularPayment,firstDays,first,bonusAmount,bonusMonths};
-  }
-  function setResultsEmpty(message){
-    $("monthly").textContent = "-";
-    $("totalInterest").textContent = "-";
-    $("totalPay").textContent = "-";
-    $("count").textContent = "-";
-    $("tbody").innerHTML = "";
-    $("calcError").textContent = message || "";
-    $("calcError").classList.toggle("open", Boolean(message));
-    $("scheduleBtn").disabled = true;
-    $("scheduleBtn").textContent = "返済予定表を表示";
-    $("tableWrap").classList.remove("open");
-    state.showTable = false;
-  }
-  function getData(){
-    return {
-      principal:$("principal").value, rate:$("rate").value, years:$("years").value,
-      egCount:$("egCount").value, monthlyPrincipal:$("monthlyPrincipal").value,
-      bonusAmount:$("bonusAmount").value, bonusMonth1:$("bonusMonth1").value, bonusMonth2:$("bonusMonth2").value,
-      repayDay:$("repayDay").value, execDate:$("execDate").value,
-      unit:state.unit, method:state.method, loan:state.loan, wareki:state.wareki, bonus:state.bonus
-    };
-  }
-  function setData(data){
-    state.unit = data.unit || "万円";
-    state.method = data.method === "eg" ? "eg" : "ep";
-    state.loan = data.loan === "tegata" ? "tegata" : "shosho";
-    state.wareki = data.wareki !== false;
-    state.bonus = data.bonus === true;
-    ["principal","rate","years","egCount","monthlyPrincipal","bonusAmount","bonusMonth1","bonusMonth2","repayDay","execDate"].forEach(key => {
-      if(data[key] !== undefined && data[key] !== null) $(key).value = data[key];
-    });
-    renderRatePills();
-    sync();
-  }
-  function getStoredCurrent(){
-    const keys = [STORAGE_CURRENT,"hensai_v224_current","hensai_v223_current","hensai_v222_current","hensai_v220_current"];
-    for(const key of keys){
-      const raw = localStorage.getItem(key);
-      if(!raw) continue;
-      try{return JSON.parse(raw);}catch(_e){}
+function calc(data){
+  const P=toMoney(data.principal,data.unit), rate=(parseFloat(data.rate)||0)/100, n=data.method==='eg'?(parseInt(data.count,10)||0):(parseInt(data.years,10)||0)*12, day=Math.max(1,Math.min(31,parseInt(data.repayDay,10)||17));
+  if(P<=0)return {error:'借入金額を入力してください。'};if(rate<0)return {error:'年利率を確認してください。'};if(n<=0)return {error:data.method==='eg'?'返済回数を入力してください。':'返済期間を入力してください。'};
+  const r=rate/12, exec=data.execDate, first=exec?nextBiz(firstRaw(exec,day)):null, firstDays=exec&&first?daysIncl(new Date(exec+'T00:00:00'),first):0, firstInterest=exec&&first?Math.floor(P*rate/365*firstDays):0;
+  const dates=Array.from({length:n},(_,i)=>nthDue(exec,day,i+1));let bal=P,totalInterest=0,totalPay=0,regularPayment=0;const rows=[];
+  if(data.method==='eg'){
+    const monthlyPrincipal=Math.floor(toMoney(data.monthlyPrincipal,data.unit));
+    if(monthlyPrincipal<=0)return {error:'毎月元金を入力してください。'};
+    if(monthlyPrincipal*Math.max(0,n-1)>=P)return {error:'毎月元金 ×（返済回数−1）が借入金額を超えています。毎月元金または返済回数を見直してください。'};
+    for(let i=1;i<=n;i++){const interest=(i===1&&exec)?firstInterest:Math.floor(bal*r),principal=i===n?bal:Math.min(monthlyPrincipal,bal),pay=principal+interest;bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal,bonus:false});}
+    regularPayment=rows[0]?.pay||0;
+  } else {
+    let bonusAmount=0,bonusIndexes=[];
+    if(data.bonus){
+      bonusAmount=Math.floor(toMoney(data.bonusAmount,data.unit));
+      if(!exec)return {error:'ボーナス払いを計算するには融資実行日を入力してください。'};
+      if(bonusAmount<=0)return {error:'ボーナス加算額を入力してください。'};
+      const b1=parseInt(data.bonusMonth1,10),b2=parseInt(data.bonusMonth2,10);if(!b1||!b2||b1===b2)return {error:'ボーナス月は異なる2か月を指定してください。'};
+      bonusIndexes=dates.map((d,i)=>d&&[b1,b2].includes(d.getMonth()+1)?i+1:0).filter(Boolean);
     }
-    return null;
-  }
-  function getSavedList(){
-    const keys = [STORAGE_SAVED,"hensai_v224_saved","hensai_v223_saved","hensai_v222_saved","hensai_v220_saved"];
-    for(const key of keys){
-      const raw = localStorage.getItem(key);
-      if(!raw) continue;
-      try{
-        const list = JSON.parse(raw);
-        if(Array.isArray(list) && list.length) return list;
-      }catch(_e){}
+    const pvBonus=bonusIndexes.reduce((s,index)=>s+bonusAmount/Math.pow(1+r,index),0);if(pvBonus>=P)return {error:'ボーナス加算額が大きすぎます。'};
+    regularPayment=Math.floor(annuityPayment(P-pvBonus,r,n));if(regularPayment<=0)return {error:'返済条件を確認してください。'};
+    for(let i=1;i<=n;i++){
+      const bonus=bonusIndexes.includes(i),scheduled=regularPayment+(bonus?bonusAmount:0);let interest,principal,pay;
+      if(i===n){interest=(i===1&&exec)?firstInterest:Math.floor(bal*r);principal=bal;pay=principal+interest;}
+      else if(i===1&&exec){interest=firstInterest;principal=Math.min(scheduled-Math.floor(P*r),bal);if(principal<=0)return {error:'初回利息に対して返済額が不足しています。'};pay=principal+interest;}
+      else{interest=Math.floor(bal*r);principal=Math.min(scheduled-interest,bal);if(principal<=0)return {error:'返済額が利息を下回っています。'};pay=principal+interest;}
+      bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal,bonus});
     }
-    return [];
   }
-  function sync(){
-    updateMethodUI();
-    $("unitMan").classList.toggle("on",state.unit === "万円");
-    $("unitYen").classList.toggle("on",state.unit === "円");
-    $("ep").classList.toggle("on",state.method === "ep");
-    $("eg").classList.toggle("on",state.method === "eg");
-    $("shosho").classList.toggle("on",state.loan === "shosho");
-    $("tegata").classList.toggle("on",state.loan === "tegata");
-    $("wareki").classList.toggle("on",state.wareki);
-    $("seireki").classList.toggle("on",!state.wareki);
-    $("bonusNo").classList.toggle("on",!state.bonus);
-    $("bonusYes").classList.toggle("on",state.bonus);
+  return {P,rate,n,years:parseInt(data.years,10)||0,rows,totalInterest,totalPay,regularPayment,first,firstDays};
+}
 
-    $("vAmount").innerHTML = `${num($("principal").value)}<span class="unit">${state.unit}</span>`;
-    $("vRate").innerHTML = `${Number($("rate").value || 0).toFixed(2)}<span class="unit">%</span>`;
-    if(state.method === "eg"){
-      $("termSummaryLabel").textContent = "返済回数";
-      $("vTerm").innerHTML = `${num($("egCount").value)}<span class="unit">回</span>`;
-      $("monthlyLabel").textContent = "初回返済額";
-    } else {
-      $("termSummaryLabel").textContent = "返済期間";
-      $("vTerm").innerHTML = `${num($("years").value)}<span class="unit">年</span>`;
-      $("monthlyLabel").textContent = state.bonus ? "通常月の返済額" : "毎月の返済額";
+function applyTheme(theme,persist=true){const next=theme==='light'?'light':'dark';document.documentElement.dataset.theme=next;$('themeToggle').dataset.theme=next;$('themeToggle').setAttribute('aria-label',next==='dark'?'ライトモードに切り替え':'ダークモードに切り替え');document.querySelector('meta[name="theme-color"]').setAttribute('content',next==='dark'?'#06142d':'#f5f8fd');if(persist)localStorage.setItem(STORAGE.theme,next);}
+function saveCurrent(data){localStorage.setItem(STORAGE.current,JSON.stringify(data));}
+function loadCurrent(){for(const k of [STORAGE.current,...legacyCurrent]){try{const raw=localStorage.getItem(k);if(raw)return normalizeData(JSON.parse(raw));}catch(_){}}return null;}
+function normalizeData(d){const base=defaultData();return {...base,...d,method:d?.method==='eg'?'eg':'ep',unit:d?.unit==='円'?'円':'万円',bonus:d?.bonus===true};}
+function history(){try{const x=JSON.parse(localStorage.getItem(STORAGE.history)||'[]');return Array.isArray(x)?x:[]}catch(_){return[]}}
+function pushHistory(data,result){const item={id:Date.now(),createdAt:new Date().toISOString(),data:clone(data),monthly:result.regularPayment,total:result.totalPay};const next=[item,...history()].slice(0,5);localStorage.setItem(STORAGE.history,JSON.stringify(next));}
+function saved(){try{const x=JSON.parse(localStorage.getItem(STORAGE.saved)||'[]');return Array.isArray(x)?x:[]}catch(_){return[]}}
+
+function renderSingle(){
+  if(!currentScenario||!currentResult||currentResult.error){$('singleView').hidden=true;return;}
+  $('singleView').hidden=false;$('compareView').hidden=true;
+  const r=currentResult,d=currentScenario; const rows=r.rows;
+  $('singleView').innerHTML=`
+  <section class="card summaryCard"><div class="summaryHead"><h2>試算結果</h2><span class="eyebrow">SINGLE</span></div><div class="conditionLine"><strong>${formatScenario(d)}</strong><br>返済日：毎月${d.repayDay}日　実行日：${d.execDate||'未設定'}${d.bonus?'　／　ボーナス払いあり':''}</div><div class="summaryActions"><button id="editCurrent" class="secondaryBtn" type="button">条件を編集</button><button id="startCompare" class="outlineBtn" type="button">この条件と比較</button></div></section>
+  <section class="metrics"><div class="metric"><div class="mLabel">${resultMonthlyLabel(d)}</div><div class="mValue">${yen(r.regularPayment)}</div><div class="mSub">${d.method==='eg'?'毎月元金：'+nfmt(toMoney(d.monthlyPrincipal,d.unit))+'円':'通常月の返済額'}</div></div><div class="metric"><div class="mLabel">利息総額</div><div class="mValue">${yen(r.totalInterest)}</div><div class="mSub">初回日割り：${r.firstDays||0}日</div></div><div class="metric"><div class="mLabel">支払総額</div><div class="mValue">${yen(r.totalPay)}</div><div class="mSub">元金＋利息</div></div><div class="metric"><div class="mLabel">返済回数</div><div class="mValue">${r.n}回</div><div class="mSub">初回返済日：${jpDate(r.first,d.wareki)}</div></div></section>
+  <section class="card scheduleCard"><div class="scheduleHead"><h2>返済予定表</h2><button id="toggleSchedule" class="outlineBtn scheduleToggle" type="button">${scheduleOpen?'閉じる':'表示する'}</button></div>${scheduleOpen?tableHTML(rows,d):'<div class="emptyState"><span class="spark">✧</span>表示すると、返済日ごとの元金・利息・残高を確認できます。</div>'}</section>
+  <section class="card note">ⓘ 試算結果は概算です。休日・振替休日・国民の休日は次営業日へ補正して表示します。実際の取扱いは契約条件をご確認ください。</section>`;
+  $('editCurrent').onclick=()=>openWizard('edit',clone(currentScenario));$('startCompare').onclick=()=>openWizard('compare',clone(currentScenario));if($('toggleSchedule'))$('toggleSchedule').onclick=()=>{scheduleOpen=!scheduleOpen;renderSingle()};
+}
+function tableHTML(rows,data){return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x.i}</td><td>${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td>${yen(x.pay)}</td><td>${yen(x.principal)}</td><td>${yen(x.interest)}</td><td>${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div>`}
+function renderCompare(){
+  if(!comparison){$('compareView').hidden=true;return;} const {a,b,ra,rb}=comparison;$('singleView').hidden=true;$('compareView').hidden=false;const diff=rb.totalPay-ra.totalPay,mdiff=rb.regularPayment-ra.regularPayment;
+  $('compareView').innerHTML=`<section class="card compareTop"><div class="compareHeading"><div><div class="eyebrow">COMPARE MODE</div><h2>比較結果</h2></div><button id="closeCompare" class="outlineBtn" type="button">比較を閉じる</button></div><div class="compareGrid">${compareMini('A',a,ra)}${compareMini('B',b,rb)}</div><div class="difference"><b>差額：</b> BはAより、月々 ${mdiff>=0?'+':''}${yen(mdiff)} ／ 総支払 ${diff>=0?'+':''}${yen(diff)}</div><div class="summaryActions"><button id="editA" class="secondaryBtn" type="button">Aを編集</button><button id="editB" class="outlineBtn" type="button">Bを編集</button><button id="toggleCompareSchedules" class="primaryBtn" type="button">${compareSchedulesOpen?'予定表を閉じる':'予定表を表示'}</button></div></section>${compareSchedulesOpen?`<div class="compareSchedules"><section class="card scheduleCard"><div class="scheduleHead"><h2>パターンA 返済予定表</h2></div>${tableHTML(ra.rows,a)}</section><section class="card scheduleCard"><div class="scheduleHead"><h2>パターンB 返済予定表</h2></div>${tableHTML(rb.rows,b)}</section></div>`:''}<section class="card note">ⓘ 上部は比較に必要な条件と結果だけを1画面にまとめています。詳細は予定表を表示して確認できます。</section>`;
+  $('closeCompare').onclick=()=>{comparison=null;compareSchedulesOpen=false;renderSingle()};$('editA').onclick=()=>openWizard('editA',clone(a));$('editB').onclick=()=>openWizard('editB',clone(b));$('toggleCompareSchedules').onclick=()=>{compareSchedulesOpen=!compareSchedulesOpen;renderCompare()};
+}
+function compareMini(tag,d,r){return `<div class="compareMini"><div class="tag">PATTERN ${tag}</div><div class="scenario">${formatScenario(d)}</div><div class="major">${yen(r.regularPayment)}</div><div class="minor">月々の返済額<br>総額 ${yen(r.totalPay)}</div></div>`}
+function showIntro(){comparison=null;currentScenario=null;currentResult=null;$('singleView').hidden=true;$('compareView').hidden=true;$('introCard').hidden=false;}
+function showCurrent(data, result){$('introCard').hidden=true;comparison=null;currentScenario=clone(data);currentResult=result;scheduleOpen=false;saveCurrent(data);renderSingle();}
+
+function openWizard(mode='new', seed=null){
+  wizard={mode,step:0,data:normalizeData(seed||defaultData())};$('wizardLayer').classList.add('open');$('wizardLayer').setAttribute('aria-hidden','false');$('closeWizard').hidden=mode==='new';$('wizardTitle').textContent=mode==='compare'?'比較する条件を入力':mode==='editA'?'パターンAを編集':mode==='editB'?'パターンBを編集':'試算条件を入力';$('wizardSub').textContent=mode==='compare'?'現在の条件をパターンAとして、パターンBを入力します。':'必要な項目を順に決めます。';renderWizard();setTimeout(()=>focusStep(),220)}
+function closeWizard(){ $('wizardLayer').classList.remove('open');$('wizardLayer').setAttribute('aria-hidden','true'); }
+function renderWizard(){
+  const d=wizard.data;const steps=[...document.querySelectorAll('.wizardStep')];steps.forEach((s,i)=>s.classList.toggle('active',i===wizard.step));$('stepDots').innerHTML=steps.map((_,i)=>`<i class="${i<=wizard.step?'active':''}"></i>`).join('');$('wizardBack').hidden=wizard.step===0;$('wizardNext').textContent=wizard.step===4?'試算する':'次へ';$('wizardError').classList.remove('show');
+  $('wPrincipal').value=d.principal;$('wPrincipalUnit').textContent=d.unit;$('wMonthlyPrincipalUnit').textContent=d.unit;$('wBonusUnit').textContent=d.unit;$('wRate').value=d.rate;$('wYears').value=d.years||10;$('wCount').value=d.count||120;$('wMonthlyPrincipal').value=d.monthlyPrincipal||'';$('wRepayDay').value=d.repayDay||17;$('wExecDate').value=d.execDate||toISO(new Date());$('wBonusAmount').value=d.bonusAmount||'';$('wBonusMonth1').value=d.bonusMonth1||'6';$('wBonusMonth2').value=d.bonusMonth2||'12';
+  document.querySelectorAll('#unitSeg button').forEach(b=>b.classList.toggle('selected',b.dataset.unit===d.unit));$('wEP').classList.toggle('selected',d.method==='ep');$('wEG').classList.toggle('selected',d.method==='eg');$('epTermFields').hidden=d.method!=='ep';$('egTermFields').hidden=d.method!=='eg';$('bonusBlock').hidden=d.method==='eg';$('bonusFields').hidden=!d.bonus;$('wBonusNo').classList.toggle('selected',!d.bonus);$('wBonusYes').classList.toggle('selected',d.bonus);$('termTitle').textContent=d.method==='ep'?'返済期間を入力':'返済回数と毎月元金を入力';$('termLead').textContent=d.method==='ep'?'返済年数を入力してください。':'返済回数と、毎月返済する元金を指定します。';
+  renderWizardPills();
+}
+function renderWizardPills(){
+  const d=wizard.data;function pills(id,arr,label,on){$(id).innerHTML=arr.map(v=>`<button class="pillBtn ${String(v)===String(on)?'selected':''}" type="button" data-v="${v}">${v}${label}</button>`).join('');$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=b.dataset.v;if(id==='amountPills'){d.principal=v;renderWizard();setTimeout(()=>nextWizard(true),180)}else if(id==='ratePills'){d.rate=Number(v).toFixed(2);renderWizard();setTimeout(()=>nextWizard(true),180)}else{d.years=v;renderWizard()}})}
+  pills('amountPills',AMOUNTS,'万',d.unit==='万円'?d.principal:'');pills('ratePills',d.method==='eg'?RATES_EG:RATES_EP,'%',Number(d.rate));pills('yearPills',YEARS,'年',d.years);
+}
+function focusStep(){const map=['wPrincipal','wRate',null,'wYears','wRepayDay'];const id=map[wizard.step];if(id)$(id).focus();}
+function wizardError(text){const e=$('wizardError');e.textContent=text;e.classList.add('show')}
+function commitStep(){const d=wizard.data; if(wizard.step===0){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===1){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(toMoney(d.monthlyPrincipal,d.unit)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
+function nextWizard(auto=false){const err=commitStep();if(err){if(!auto)wizardError(err);return}if(wizard.step<4){wizard.step++;renderWizard();setTimeout(focusStep,80);return}const result=calc(wizard.data);if(result.error){wizardError(result.error);return}pushHistory(wizard.data,result);const mode=wizard.mode;const data=clone(wizard.data);closeWizard();if(mode==='compare'){const a=clone(currentScenario),ra=currentResult;comparison={a,b:data,ra,rb:result};$('introCard').hidden=true;compareSchedulesOpen=false;renderCompare()}else if(mode==='editA'&&comparison){comparison.a=data;comparison.ra=result;renderCompare()}else if(mode==='editB'&&comparison){comparison.b=data;comparison.rb=result;renderCompare()}else{showCurrent(data,result)}}
+function prevWizard(){if(wizard.step>0){wizard.step--;renderWizard();setTimeout(focusStep,80)}}
+function bindWizard(){
+  $('wizardNext').onclick=()=>nextWizard(false);$('wizardBack').onclick=prevWizard;$('closeWizard').onclick=closeWizard;
+  $('unitSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;const next=b.dataset.unit;if(next!==wizard.data.unit){const from=wizard.data.unit;['principal','monthlyPrincipal','bonusAmount'].forEach(k=>{const y=toMoney(wizard.data[k],from);wizard.data[k]=y?inputNumber(fromMoney(y,next)):''});wizard.data.unit=next;renderWizard();}};
+  $('wEP').onclick=()=>{wizard.data.method='ep';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};$('wEG').onclick=()=>{wizard.data.method='eg';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};
+  $('wBonusNo').onclick=()=>{wizard.data.bonus=false;renderWizard()};$('wBonusYes').onclick=()=>{wizard.data.bonus=true;renderWizard()};
+  ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();nextWizard(false)}}));
+  ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount','wBonusMonth1','wBonusMonth2'].forEach(id=>$(id).addEventListener('input',()=>{$('wizardError').classList.remove('show')}));
+}
+
+function openSheet(){renderHistoryList();$('sheetLayer').classList.add('open');$('sheetLayer').setAttribute('aria-hidden','false')}
+function closeSheet(){$('sheetLayer').classList.remove('open');$('sheetLayer').setAttribute('aria-hidden','true')}
+function renderHistoryList(){const list=history();$('historyList').innerHTML=list.length?list.map(x=>`<button class="historyItem" type="button" data-id="${x.id}"><span class="hText">${formatScenario(x.data)}<br><span class="hDate">${new Date(x.createdAt).toLocaleString('ja-JP')}　月々 ${yen(x.monthly)}</span></span><span>›</span></button>`).join(''):'<div class="emptyState">履歴はまだありません。</div>';$('historyList').querySelectorAll('.historyItem').forEach(btn=>btn.onclick=()=>{const x=history().find(v=>String(v.id)===btn.dataset.id);if(!x)return;const result=calc(x.data);if(result.error){alert(result.error);return}closeSheet();showCurrent(x.data,result)})}
+function saveNamed(){if(!currentScenario)return;const name=prompt('保存名を入力してください','返済試算 '+new Date().toLocaleDateString('ja-JP'));if(!name)return;const list=[{name,createdAt:new Date().toISOString(),data:clone(currentScenario)},...saved()].slice(0,20);localStorage.setItem(STORAGE.saved,JSON.stringify(list));alert('保存しました。')}
+function bindSheet(){
+  $('menuBtn').onclick=openSheet;$('sheetClose').onclick=closeSheet;$('sheetLayer').addEventListener('click',e=>{if(e.target===$('sheetLayer'))closeSheet()});
+  $('sheetNew').onclick=()=>{closeSheet();openWizard('new')};$('sheetEdit').onclick=()=>{closeSheet();openWizard('edit',currentScenario||defaultData())};$('sheetCompare').onclick=()=>{if(!currentScenario){closeSheet();openWizard('new');return}closeSheet();openWizard('compare',clone(currentScenario))};$('sheetSave').onclick=saveNamed;$('sheetPrint').onclick=()=>{closeSheet();window.print()};
+}
+
+function initAmbientDust(){
+  const c=$('ambientDust'),ctx=c.getContext('2d');let w=0,h=0,dpr=1,parts=[],last=0;const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function reset(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);parts=[];for(let i=0;i<18;i++)parts.push({x:Math.random()*w,y:h*.15+Math.random()*h*.85,r:.55+Math.random()*1.0,s:.06+Math.random()*.12,offset:Math.random()*10})}
+  function tick(now){if(reduced)return;requestAnimationFrame(tick);if(now-last<70)return;last=now;ctx.clearRect(0,0,w,h);const light=document.documentElement.dataset.theme==='light';for(const p of parts){p.x+=p.s*1.5;p.y-=p.s*.36+Math.sin(now*.0005+p.offset)*.04;if(p.x>w+18||p.y<-18){p.x=-12;p.y=h*.34+Math.random()*h*.60}const a=light?.11:.22;ctx.beginPath();ctx.fillStyle=`rgba(${light?'54,111,190':'92,176,255'},${a})`;ctx.arc(p.x,p.y,p.r*4.5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,93,174':'215,245,255'},${light?.33:.54})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}}
+  addEventListener('resize',reset,{passive:true});reset();requestAnimationFrame(tick);
+}
+function initSplash(){
+  const splash=$('splash'),canvas=$('splashCanvas'),ctx=canvas.getContext('2d');const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduced){setTimeout(()=>splash.remove(),150);return;}let w=0,h=0,dpr=1;function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}resize();addEventListener('resize',resize,{passive:true});const particles=[];const start=performance.now();
+  for(let i=0;i<56;i++){particles.push({seed:Math.random(),y:.30+Math.random()*.34,r:.7+Math.random()*1.8,delay:Math.random()*0.55})}
+  function glow(x,y,r,color,a){ctx.beginPath();ctx.fillStyle=`rgba(${color},${a})`;ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
+  function frame(now){const t=(now-start)/1000;ctx.clearRect(0,0,w,h);const cx=w*.5,cy=h*.47,rad=Math.min(w,h)*.125;const phaseIn=Math.max(0,Math.min(1,t/1));const phaseRing=Math.max(0,Math.min(1,(t-1)/2));const phaseOut=Math.max(0,Math.min(1,(t-3)/1));
+    // soft distant atmospheric dust
+    for(let i=0;i<18;i++){const x=(i*91%w),y=h*(.18+((i*53)%100)/180),a=.05+.03*Math.sin(t*1.2+i);glow(x,y,2.5,'70,145,255',a)}
+    if(t<1.45){particles.forEach((p,i)=>{const q=Math.max(0,Math.min(1,(t-p.delay)/.9));const x=-20+(cx+rad*.35+20)*q;const y=h*p.y+Math.sin(t*3+p.seed*12)*11*(1-q);const a=(.12+.68*q)*(1-Math.max(0,t-1.15)/.3);glow(x,y,p.r*5,'74,178,255',a*.18);glow(x,y,p.r*1.5,'223,249,255',a);});}
+    if(t>=.72&&t<3.35){const turns=2.65;const progress=Math.max(0,Math.min(1,(t-.72)/2.3));const head=progress*Math.PI*2*turns-Math.PI*.7;for(let k=0;k<92;k++){const tail=k/92*Math.PI*2*1.12;const a=head-tail;const fade=(1-k/92);const x=cx+Math.cos(a)*rad;const y=cy+Math.sin(a)*rad;const alpha=Math.pow(fade,1.8)*(0.10+0.75*phaseRing);const rr=.65+fade*1.95;glow(x,y,rr*6,'47,150,255',alpha*.14);glow(x,y,rr,'220,248,255',alpha);}
+      const hx=cx+Math.cos(head)*rad,hy=cy+Math.sin(head)*rad;glow(hx,hy,17,'77,185,255',.23);glow(hx,hy,6.2,'255,255,255',.95);
     }
-
-    const calculation = calc();
-    if(calculation.error){
-      setResultsEmpty(calculation.error);
-      localStorage.setItem(STORAGE_CURRENT,JSON.stringify(getData()));
-      return;
-    }
-    $("calcError").textContent = "";
-    $("calcError").classList.remove("open");
-    $("monthly").textContent = yen(calculation.regularPayment);
-    $("totalInterest").textContent = yen(calculation.totalInterest);
-    $("totalPay").textContent = yen(calculation.totalPay);
-    $("count").textContent = calculation.n + "回";
-    $("scheduleBtn").disabled = false;
-    $("scheduleBtn").textContent = state.showTable ? "返済予定表を閉じる" : `返済予定表を表示（${calculation.n}回）`;
-    $("dateInfo").textContent = calculation.first
-      ? `初回返済日：${jpDate(calculation.first)} / ${calculation.firstDays}日分の日割り利息`
-      : (state.bonus ? "ボーナス払いでは融資実行日の入力が必要です。" : "実行日を入れると初回日割りを計算します。");
-    $("tbody").innerHTML = calculation.rows.map(row => `
-      <tr${row.bonus ? ' title="ボーナス加算月"' : ""}>
-        <td>${row.i}${row.bonus ? " ★" : ""}</td>
-        <td>${row.date ? jpDate(row.date) : "-"}</td>
-        <td>${yen(row.pay)}</td>
-        <td>${yen(row.principal)}</td>
-        <td>${yen(row.interest)}</td>
-        <td>${yen(row.bal)}</td>
-      </tr>`).join("");
-    localStorage.setItem(STORAGE_CURRENT,JSON.stringify(getData()));
-  }
-
-  setPillGroup("amountPills", AMOUNTS, "万", value => {
-    state.unit = "万円";
-    $("principal").value = value;
-    sync();
-  });
-  setPillGroup("yearPills", YEARS, "年", value => { $("years").value = value; sync(); });
-  setPillGroup("dayPills", DAYS, "日", value => { $("repayDay").value = value; sync(); });
-  populateMonthSelect("bonusMonth1", 6);
-  populateMonthSelect("bonusMonth2", 12);
-  renderRatePills();
-
-  ["principal","rate","years","egCount","monthlyPrincipal","bonusAmount","bonusMonth1","bonusMonth2","repayDay","execDate"].forEach(id => {
-    $(id).addEventListener("input", sync);
-    $(id).addEventListener("change", sync);
-  });
-  $("unitMan").addEventListener("click", () => convertUnit("万円"));
-  $("unitYen").addEventListener("click", () => convertUnit("円"));
-  $("ep").addEventListener("click", () => { state.method = "ep"; renderRatePills(); sync(); });
-  $("eg").addEventListener("click", () => { state.method = "eg"; renderRatePills(); sync(); });
-  $("bonusNo").addEventListener("click", () => { state.bonus = false; sync(); });
-  $("bonusYes").addEventListener("click", () => { state.bonus = true; sync(); });
-  $("shosho").addEventListener("click", () => { state.loan = "shosho"; sync(); });
-  $("tegata").addEventListener("click", () => {
-    state.loan = "tegata";
-    alert("Ver2.35では手形貸付UIは簡易表示です。証書貸付の試算ロジックは維持しています。");
-    sync();
-  });
-  $("wareki").addEventListener("click", () => { state.wareki = true; sync(); });
-  $("seireki").addEventListener("click", () => { state.wareki = false; sync(); });
-  $("detailToggle").addEventListener("click", () => {
-    $("details").classList.toggle("open");
-    $("detailToggle").innerHTML = $("details").classList.contains("open") ? "詳細条件を閉じる <span>⌃</span>" : "詳細条件を見る <span>⌄</span>";
-  });
-  document.querySelectorAll("[data-open]").forEach(button => button.addEventListener("click", () => {
-    $("details").classList.add("open");
-    $("detailToggle").innerHTML = "詳細条件を閉じる <span>⌃</span>";
-  }));
-  $("scheduleBtn").addEventListener("click", () => {
-    if($("scheduleBtn").disabled) return;
-    state.showTable = !state.showTable;
-    $("tableWrap").classList.toggle("open",state.showTable);
-    sync();
-  });
-  $("menuBtn").addEventListener("click", () => { $("actions").style.display = "block"; });
-  $("closeMenu").addEventListener("click", () => { $("actions").style.display = "none"; });
-  $("pdfBtn").addEventListener("click", () => window.print());
-  $("resetBtn").addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_CURRENT);
-    location.reload();
-  });
-  $("saveBtn").addEventListener("click", () => {
-    const name = prompt("保存名を入力してください", "返済試算 " + new Date().toLocaleDateString("ja-JP"));
-    if(!name) return;
-    const list = getSavedList();
-    list.unshift({name,date:new Date().toISOString(),data:getData()});
-    localStorage.setItem(STORAGE_SAVED,JSON.stringify(list.slice(0,20)));
-    alert("保存しました");
-  });
-  function openSaved(){
-    const list = getSavedList();
-    if(!list.length){ alert("保存データがありません"); return; }
-    const message = list.map((item,index) => `${index+1}: ${item.name}`).join("\n");
-    const selected = parseInt(prompt("呼び出す番号を入力\n" + message), 10);
-    if(!selected || !list[selected-1]) return;
-    setData(list[selected-1].data);
-    $("actions").style.display = "none";
-  }
-  $("loadBtn").addEventListener("click", openSaved);
-  $("navSave").addEventListener("click", openSaved);
-  $("themeToggle").addEventListener("click", () => {
-    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
-  });
-
-  const stored = getStoredCurrent();
-  if(stored) setData(stored); else sync();
-})();
-
-</script>
-
-
-
-<script id="v235-video-splash-script">
-(function(){
-  "use strict";
-  const overlay=document.getElementById("videoSplash");
-  const video=document.getElementById("splashVideo");
-  if(!overlay||!video)return;
-  let closed=false;
-  function closeSplash(){if(closed)return;closed=true;overlay.classList.add("is-exiting");window.setTimeout(()=>overlay.remove(),520);}
-  const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(reduced){window.setTimeout(closeSplash,180);return;}
-  function startVideo(){const p=video.play();if(p&&typeof p.catch==="function"){p.catch(()=>window.setTimeout(closeSplash,500));}}
-  video.addEventListener("canplay",startVideo,{once:true});
-  video.addEventListener("ended",closeSplash,{once:true});
-  video.addEventListener("error",()=>window.setTimeout(closeSplash,500),{once:true});
-  startVideo();
-  window.setTimeout(closeSplash,9000);
+    if(t>=3){for(let i=0;i<70;i++){const a=(i/70)*Math.PI*2;const dist=(t-3)*140+(i%5)*7;const x=cx+Math.cos(a)*rad+dist*(1.1+Math.random()*.02);const y=cy+Math.sin(a)*rad+Math.sin(a)*dist*.18;const alpha=Math.max(0,.62-phaseOut*.68)*(1-i/140);const rr=.65+(i%4)*.45;glow(x,y,rr*5,'73,175,255',alpha*.13);glow(x,y,rr,'225,248,255',alpha);}}
+    if(t<4.05)requestAnimationFrame(frame);else{ splash.classList.add('splashExit');setTimeout(()=>{splash.remove();openWizard('new')},480); }
+  }requestAnimationFrame(frame);
+}
+function bindTop(){
+  $('themeToggle').onclick=()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');$('startBtn').onclick=()=>openWizard('new');$('historyBtn').onclick=openSheet;$('navNew').onclick=()=>openWizard('new');$('navHistory').onclick=openSheet;$('navHome').onclick=()=>{if(currentScenario)renderSingle();else showIntro()};
+}
+function initSelects(){['wBonusMonth1','wBonusMonth2'].forEach(id=>{$(id).innerHTML=Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}月</option>`).join('')})}
+function init(){
+  applyTheme(localStorage.getItem(STORAGE.theme)||'dark',false);
+  initSelects(); bindWizard(); bindSheet(); bindTop(); initAmbientDust(); showIntro(); initSplash();
+  if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
+}
+init();
 })();
 </script>
 </body>

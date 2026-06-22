@@ -1,7 +1,7 @@
 {
   "name": "返済試算",
   "short_name": "返済試算",
-  "description": "証書貸付・手形貸付の返済試算アプリ",
+  "description": "返済条件の試算・比較・返済予定表を確認できるアプリ",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -10,29 +10,9 @@
   "theme_color": "#06142d",
   "lang": "ja",
   "icons": [
-    {
-      "src": "./icon-192-v235.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon-192-maskable-v235.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "./icon-512-v235.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon-512-maskable-v235.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    {"src":"./icon-192-v236.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./icon-192-maskable-v236.png","sizes":"192x192","type":"image/png","purpose":"maskable"},
+    {"src":"./icon-512-v236.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"./icon-512-maskable-v236.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
   ]
 }
