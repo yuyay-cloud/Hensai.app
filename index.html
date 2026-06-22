@@ -27,17 +27,36 @@
 html{background:var(--bg);-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;background:radial-gradient(780px 520px at 50% -220px,rgba(59,129,255,.18),transparent 66%),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;transition:background .25s ease,color .25s ease;padding-bottom:86px}
 button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent} button:disabled{opacity:.5;cursor:not-allowed} [hidden]{display:none!important}
-#ambientDust{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:.9}
+#ambientDust{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:1}
 .app{position:relative;z-index:1}
 .appbar{position:sticky;top:0;z-index:20;background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:13px 16px}
-.head{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:10px}.brandmark{width:54px;height:40px;display:grid;place-items:center;flex:none}.brandmark img{width:54px;height:auto;display:block;filter:drop-shadow(0 4px 10px rgba(55,130,255,.14))}.headTitle{flex:1;min-width:0}.headTitle h1{font-size:1.28rem;line-height:1.1;letter-spacing:.02em;margin:0;font-weight:800}.headTitle p{margin:5px 0 0;font-size:.72rem;color:var(--muted);letter-spacing:.08em}.headActions{display:flex;align-items:center;gap:7px}
+.head{max-width:780px;margin:0 auto;display:flex;align-items:center;gap:10px}.headTitle{flex:1;min-width:0}.headTitle h1{font-size:1.28rem;line-height:1.1;letter-spacing:.02em;margin:0;font-weight:800}.headTitle p{margin:5px 0 0;font-size:.72rem;color:var(--muted);letter-spacing:.08em}.headActions{display:flex;align-items:center;gap:7px}
 .themeToggle{position:relative;width:56px;height:36px;border:1px solid var(--line);border-radius:19px;background:var(--soft);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 8px rgba(0,0,0,.1)}.themeToggle .knob{position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#2a62ca,#7cc7ff);box-shadow:0 0 0 3px rgba(130,180,255,.18),0 4px 8px rgba(0,0,0,.24);transition:transform .26s cubic-bezier(.2,.8,.2,1),background .25s}.themeToggle[data-theme="light"] .knob{transform:translateX(20px);background:linear-gradient(145deg,#fff2bd,#ffbb45)}.themeToggle .ico{position:absolute;top:8px;font-size:15px}.themeToggle .moon{left:7px;color:#d9e8ff}.themeToggle .sun{right:7px;color:#ffcb62;opacity:.45}.themeToggle[data-theme="light"] .moon{opacity:.4}.themeToggle[data-theme="light"] .sun{opacity:1}
 .iconBtn{width:42px;height:42px;border-radius:13px;border:1px solid transparent;display:grid;place-items:center}.iconBtn:hover{background:var(--soft);border-color:var(--line)}.hamburger,.hamburger:before,.hamburger:after{content:"";display:block;width:21px;height:2px;border-radius:9px;background:currentColor}.hamburger:before{transform:translateY(-6px)}.hamburger:after{transform:translateY(4px)}
 .wrap{max-width:780px;margin:0 auto;padding:16px;display:grid;gap:14px}.card{background:linear-gradient(145deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}
-.hero{padding:20px}.heroTop{display:flex;justify-content:space-between;gap:12px;align-items:start}.eyebrow{font-size:.78rem;letter-spacing:.1em;color:var(--muted);font-weight:700}.hero h2{margin:7px 0 0;font-size:1.38rem;line-height:1.35}.hero p{margin:8px 0 0;color:var(--muted);font-size:.91rem;line-height:1.65}.outlineBtn,.ghostBtn,.primaryBtn,.secondaryBtn{border-radius:13px;padding:13px 15px;font-weight:800;transition:transform .16s ease,background .16s ease,box-shadow .16s ease}.outlineBtn{border:1px solid var(--line);background:var(--input);color:var(--blue)}.outlineBtn:hover,.ghostBtn:hover{transform:translateY(-1px);background:var(--soft)}.ghostBtn{border:1px solid var(--line);background:transparent;color:var(--muted)}.primaryBtn{background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 10px 20px rgba(28,112,245,.25)}.primaryBtn:hover{transform:translateY(-1px);box-shadow:0 13px 24px rgba(28,112,245,.34)}.secondaryBtn{background:var(--soft);border:1px solid var(--line);color:var(--blue)}
+.hero{padding:20px;position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(16,37,68,.90),rgba(8,22,45,.84));backdrop-filter:blur(5px)}
+:root[data-theme="light"] .hero{background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(238,246,255,.86))}
+.heroTop{display:flex;justify-content:space-between;gap:12px;align-items:center}.heroTop>div:first-child{min-width:0;flex:1}.homeIdentity{width:84px;height:84px;flex:none;display:grid;place-items:center;border-radius:23px;border:1px solid rgba(122,190,255,.22);background:radial-gradient(circle at 42% 35%,rgba(116,194,255,.28),rgba(26,79,166,.12) 52%,rgba(6,18,38,.03) 72%);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 12px 26px rgba(0,0,0,.16);pointer-events:none}.homeIdentity img{display:block;width:72px;height:auto;filter:drop-shadow(0 7px 12px rgba(54,146,255,.22))}
+:root[data-theme="light"] .homeIdentity{border-color:rgba(48,119,210,.18);background:radial-gradient(circle at 42% 35%,rgba(113,189,255,.24),rgba(220,238,255,.52) 56%,rgba(255,255,255,.32) 74%);box-shadow:inset 0 1px 0 rgba(255,255,255,.78),0 10px 22px rgba(35,93,180,.10)}
+.eyebrow{font-size:.78rem;letter-spacing:.1em;color:var(--muted);font-weight:700}.hero h2{margin:7px 0 0;font-size:1.38rem;line-height:1.35}.hero p{margin:8px 0 0;color:var(--muted);font-size:.91rem;line-height:1.65}.outlineBtn,.ghostBtn,.primaryBtn,.secondaryBtn{border-radius:13px;padding:13px 15px;font-weight:800;transition:transform .16s ease,background .16s ease,box-shadow .16s ease}.outlineBtn{border:1px solid var(--line);background:var(--input);color:var(--blue)}.outlineBtn:hover,.ghostBtn:hover{transform:translateY(-1px);background:var(--soft)}.ghostBtn{border:1px solid var(--line);background:transparent;color:var(--muted)}.primaryBtn{background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 10px 20px rgba(28,112,245,.25)}.primaryBtn:hover{transform:translateY(-1px);box-shadow:0 13px 24px rgba(28,112,245,.34)}.secondaryBtn{background:var(--soft);border:1px solid var(--line);color:var(--blue)}
 .summaryCard{padding:19px}.summaryHead{display:flex;align-items:center;justify-content:space-between;gap:10px}.summaryHead h2{margin:0;font-size:1.05rem}.conditionLine{margin-top:12px;border:1px solid var(--line);border-radius:13px;background:color-mix(in srgb,var(--soft) 68%,transparent);padding:12px 13px;color:var(--muted);font-size:.88rem;line-height:1.55}.conditionLine strong{color:var(--ink)}.summaryActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.summaryActions button{flex:1;min-width:126px}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 92%,transparent);border-radius:15px}.metric .mLabel{font-size:.78rem;color:var(--muted);font-weight:700}.metric .mValue{margin-top:8px;font-size:1.3rem;font-weight:900;color:var(--blue);letter-spacing:.01em}.metric .mSub{font-size:.75rem;color:var(--muted);margin-top:5px}.infoRow{display:flex;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}.infoRow b{color:var(--ink);margin-left:auto}
 .scheduleCard{overflow:hidden}.scheduleHead{padding:18px 18px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}.scheduleHead h2{font-size:1.02rem;margin:0}.tableScroll{overflow:auto;border-top:1px solid var(--line)}table{border-collapse:collapse;width:100%;min-width:660px;font-size:.84rem}th,td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th{background:var(--soft);color:var(--muted);font-weight:800}th:first-child,td:first-child{text-align:center}.bonusDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-right:4px;box-shadow:0 0 7px var(--cyan)}
+@media (max-width:600px){
+  .scheduleCard{overflow:visible}
+  .tableScroll{overflow:visible;border-top:0;padding:0 12px 14px}
+  .tableScroll table{display:block;min-width:0;width:100%;font-size:.86rem}
+  .tableScroll thead{display:none}
+  .tableScroll tbody{display:block}
+  .tableScroll tr{display:block;margin:10px 0 0;padding:5px 12px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--input) 88%,transparent);box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  .tableScroll td{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:10px 0;text-align:right;white-space:normal;border-bottom:1px solid var(--line)}
+  .tableScroll td:last-child{border-bottom:0}
+  .tableScroll td::before{content:attr(data-label);flex:0 0 auto;text-align:left;color:var(--muted);font-size:.76rem;font-weight:800;letter-spacing:.03em}
+  .tableScroll td:first-child{justify-content:space-between;text-align:right}
+  .tableScroll td:first-child::before{color:var(--blue)}
+  .tableScroll .bonusDot{margin-right:5px;vertical-align:middle}
+}
+
 .emptyState{padding:28px 18px;text-align:center;color:var(--muted);line-height:1.7}.emptyState .spark{font-size:2rem;display:block;color:var(--blue);margin-bottom:9px}
 .compareTop{padding:17px}.compareTop .compareHeading{display:flex;justify-content:space-between;gap:12px;align-items:start}.compareTop h2{font-size:1.15rem;margin:0}.compareGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.compareMini{padding:11px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 92%,transparent);min-width:0}.compareMini .tag{font-size:.69rem;letter-spacing:.09em;font-weight:900;color:var(--blue)}.compareMini .scenario{margin:5px 0;color:var(--ink);font-size:.79rem;line-height:1.45;min-height:34px}.compareMini .major{font-size:1.05rem;font-weight:900;color:var(--blue);white-space:nowrap}.compareMini .minor{font-size:.71rem;color:var(--muted);margin-top:4px}.difference{margin-top:11px;border-radius:11px;padding:10px 12px;background:var(--soft);color:var(--muted);font-size:.82rem}.difference b{color:var(--ink)}.compareSchedules{display:grid;gap:14px}
 .note{padding:15px 17px;color:var(--muted);font-size:.84rem;line-height:1.7}.note b{color:var(--ink)}
@@ -47,8 +66,8 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 /* Menu */
 .sheetLayer{position:fixed;inset:0;z-index:80;background:rgba(0,6,18,.44);opacity:0;visibility:hidden;transition:.2s ease}.sheetLayer.open{opacity:1;visibility:visible}.sheet{position:absolute;left:12px;right:12px;bottom:12px;max-width:756px;margin:0 auto;max-height:70vh;overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:21px;box-shadow:0 26px 64px rgba(0,0,0,.34);padding:8px}.sheetTitle{padding:12px 12px 8px;color:var(--muted);font-size:.76rem;font-weight:900;letter-spacing:.08em}.sheet button{width:100%;text-align:left;border-radius:13px;padding:15px 13px;font-weight:800}.sheet button:hover{background:var(--soft)}.sheet button+button{border-top:1px solid var(--line)}.historyItem{display:flex!important;align-items:center;gap:10px}.historyItem .hDate{font-size:.72rem;color:var(--muted);font-weight:600}.historyItem .hText{font-size:.86rem;line-height:1.45;flex:1}.sheetClose{color:var(--muted)!important;text-align:center!important}
 /* Splash */
-#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:50%;right:auto;bottom:12.4%;width:max-content;transform:translateX(-50%);text-align:center;color:rgba(220,240,255,.72);letter-spacing:.16em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .82s 1.95s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .82s 2.12s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}.splashCurve.beatSync{animation:none!important;opacity:var(--beat-opacity,.60);transform:translateX(-50%) scaleX(var(--beat-scale,1));border-bottom-color:rgba(172,226,255,var(--beat-line-alpha,.34));filter:drop-shadow(0 0 var(--beat-blur,8px) rgba(98,198,255,var(--beat-glow-alpha,.38)))}.splashVersion.beatSync{animation:none!important;opacity:var(--ver-opacity,.72);text-shadow:0 0 var(--ver-blur,14px) rgba(83,186,255,var(--ver-glow-alpha,.45))}
-@media (max-width:420px){.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
+#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:50%;right:auto;bottom:12.4%;width:max-content;transform:translateX(-50%);text-align:center;color:rgba(220,240,255,.72);letter-spacing:.16em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .82s 1.95s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .82s 2.12s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}.splashCurve.beatSync{animation:none!important;opacity:var(--beat-opacity,.46);transform:translateX(-50%);border-bottom-color:rgba(165,220,255,var(--beat-line-alpha,.24));filter:drop-shadow(0 0 var(--beat-blur,6px) rgba(98,198,255,var(--beat-glow-alpha,.20)))}.splashVersion.beatSync{animation:none!important;opacity:var(--ver-opacity,.68);text-shadow:0 0 var(--ver-blur,11px) rgba(83,186,255,var(--ver-glow-alpha,.28))}
+@media (max-width:420px){.homeIdentity{width:70px;height:70px;border-radius:20px}.homeIdentity img{width:60px}.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
 @media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36.1";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.tableScroll{overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
@@ -59,7 +78,6 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 <div class="app">
 <header class="appbar">
 <div class="head">
-<div class="brandmark"><img alt="" src="./proposal_logo_light_transparent.png"/></div>
 <div class="headTitle"><h1>返済試算</h1><p>REPAYMENT SIMULATOR</p></div>
 <div class="headActions">
 <button aria-label="ライトモードに切り替え" class="themeToggle" data-theme="dark" id="themeToggle" type="button"><span class="ico moon">☾</span><span class="ico sun">☀</span><span class="knob"></span></button>
@@ -69,7 +87,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 </header>
 <main class="wrap" id="main">
 <section class="card hero" id="introCard">
-<div class="heroTop"><div><div class="eyebrow">REPAYMENT SIMULATION</div><h2>条件を順に入れて、<br/>返済の見通しをつくる。</h2><p>金額・金利・期間をステップ形式で入力します。比較が必要なときだけ、あとから2条件目を追加できます。</p></div></div>
+<div class="heroTop"><div><div class="eyebrow">REPAYMENT SIMULATION</div><h2>条件を順に入れて、<br/>返済の見通しをつくる。</h2><p>金額・金利・期間をステップ形式で入力します。比較が必要なときだけ、あとから2条件目を追加できます。</p></div><div aria-hidden="true" class="homeIdentity"><img alt="" src="./proposal_logo_light_transparent.png"/></div></div>
 <div class="summaryActions"><button class="primaryBtn" id="startBtn" type="button">新しく試算する</button><button class="outlineBtn" id="historyBtn" type="button">直近の履歴</button></div>
 </section>
 <section hidden="" id="singleView"></section>
@@ -238,7 +256,7 @@ function renderSingle(){
   <section class="card note">ⓘ 試算結果は概算です。休日・振替休日・国民の休日は次営業日へ補正して表示します。実際の取扱いは契約条件をご確認ください。</section>`;
   $('editCurrent').onclick=()=>openWizard('edit',clone(currentScenario));$('startCompare').onclick=()=>openWizard('compare',clone(currentScenario));if($('toggleSchedule'))$('toggleSchedule').onclick=()=>{scheduleOpen=!scheduleOpen;renderSingle()};
 }
-function tableHTML(rows,data){return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x.i}</td><td>${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td>${yen(x.pay)}</td><td>${yen(x.principal)}</td><td>${yen(x.interest)}</td><td>${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div>`}
+function tableHTML(rows,data){return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td data-label="回数">${x.i}回目</td><td data-label="返済日">${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td data-label="返済額">${yen(x.pay)}</td><td data-label="元金">${yen(x.principal)}</td><td data-label="利息">${yen(x.interest)}</td><td data-label="残高">${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div>`}
 function renderCompare(){
   if(!comparison){$('compareView').hidden=true;return;} const {a,b,ra,rb}=comparison;$('singleView').hidden=true;$('compareView').hidden=false;const diff=rb.totalPay-ra.totalPay,mdiff=rb.regularPayment-ra.regularPayment;
   $('compareView').innerHTML=`<section class="card compareTop"><div class="compareHeading"><div><div class="eyebrow">COMPARE MODE</div><h2>比較結果</h2></div><button id="closeCompare" class="outlineBtn" type="button">比較を閉じる</button></div><div class="compareGrid">${compareMini('A',a,ra)}${compareMini('B',b,rb)}</div><div class="difference"><b>差額：</b> BはAより、月々 ${mdiff>=0?'+':''}${yen(mdiff)} ／ 総支払 ${diff>=0?'+':''}${yen(diff)}</div><div class="summaryActions"><button id="editA" class="secondaryBtn" type="button">Aを編集</button><button id="editB" class="outlineBtn" type="button">Bを編集</button><button id="toggleCompareSchedules" class="primaryBtn" type="button">${compareSchedulesOpen?'予定表を閉じる':'予定表を表示'}</button></div></section>${compareSchedulesOpen?`<div class="compareSchedules"><section class="card scheduleCard"><div class="scheduleHead"><h2>パターンA 返済予定表</h2></div>${tableHTML(ra.rows,a)}</section><section class="card scheduleCard"><div class="scheduleHead"><h2>パターンB 返済予定表</h2></div>${tableHTML(rb.rows,b)}</section></div>`:''}<section class="card note">ⓘ 上部は比較に必要な条件と結果だけを1画面にまとめています。詳細は予定表を表示して確認できます。</section>`;
@@ -292,16 +310,16 @@ function initAmbientDust(){
   function reset(){
     dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
     c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
-    // ダークホームには、起動画面から残った「粉の流れ」を少し濃いめに残す。
-    // 粒自体は小さく、18fps相当で描画して負荷を抑える。
-    parts=Array.from({length:236},(_,i)=>{
+    // ダークホームには、起動画面から残った「粉の流れ」をはっきり残す。
+    // 520粒だが粒自体は小さく、18fps相当で描画して負荷を抑える。
+    parts=Array.from({length:520},(_,i)=>{
       const seed=rand(i+1), lane=rand(i+181), band=i%7;
       return {
         seed,lane,band,
         x:-30+rand(i+79)*(w+60),
         yBase:h*(.15+lane*.74),
-        r:.13+rand(i+241)*.42,
-        s:.032+rand(i+359)*.086,
+        r:.16+rand(i+241)*.54,
+        s:.040+rand(i+359)*.112,
         phase:rand(i+487)*Math.PI*2,
         glow:.38+rand(i+601)*.62
       };
@@ -321,10 +339,11 @@ function initAmbientDust(){
       const x=p.x;
       const y=p.yBase-wave+sway-(p.band-3)*2.2;
       const pulse=.70+.30*Math.sin(now*.00072+p.phase);
-      const a=(light?.065:.175)*p.glow*pulse;
+      const a=(light?.105:.285)*p.glow*pulse;
       if(a<.010)continue;
-      ctx.beginPath();ctx.fillStyle=`rgba(${light?'66,124,206':'72,166,255'},${a*.25})`;ctx.arc(x,y,p.r*3.4,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.fillStyle=`rgba(${light?'44,92,175':'205,241,255'},${a*(light?.82:1.15)})`;ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'66,124,206':'72,166,255'},${a*.34})`;ctx.arc(x,y,p.r*5.2,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'73,126,202':'126,205,255'},${a*.38})`;ctx.arc(x,y,p.r*2.25,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'35,88,174':'224,247,255'},${a*(light?.92:1.28)})`;ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
     }
   }
   addEventListener('resize',reset,{passive:true});reset();requestAnimationFrame(tick);
@@ -496,14 +515,14 @@ function initSplash(){
     }
     if(metaBeatReady){
       const b=clamp(beatNorm,0,1.22);
-      splashCurve.style.setProperty('--beat-opacity',(0.53+b*.43).toFixed(3));
-      splashCurve.style.setProperty('--beat-scale',(1+b*.085).toFixed(3));
-      splashCurve.style.setProperty('--beat-line-alpha',(0.30+b*.50).toFixed(3));
-      splashCurve.style.setProperty('--beat-blur',`${7+b*15}px`);
-      splashCurve.style.setProperty('--beat-glow-alpha',(0.28+b*.58).toFixed(3));
-      splashVersion.style.setProperty('--ver-opacity',(0.62+b*.23).toFixed(3));
-      splashVersion.style.setProperty('--ver-blur',`${12+b*13}px`);
-      splashVersion.style.setProperty('--ver-glow-alpha',(0.35+b*.48).toFixed(3));
+      // 下のカーブは常に淡く保ち、鼓動時もごく薄く発光するだけにする。
+      splashCurve.style.setProperty('--beat-opacity',(0.43+b*.10).toFixed(3));
+      splashCurve.style.setProperty('--beat-line-alpha',(0.22+b*.11).toFixed(3));
+      splashCurve.style.setProperty('--beat-blur',`${5+b*3}px`);
+      splashCurve.style.setProperty('--beat-glow-alpha',(0.16+b*.14).toFixed(3));
+      splashVersion.style.setProperty('--ver-opacity',(0.64+b*.10).toFixed(3));
+      splashVersion.style.setProperty('--ver-blur',`${10+b*4}px`);
+      splashVersion.style.setProperty('--ver-glow-alpha',(0.24+b*.16).toFixed(3));
     }
 
     ctx.restore();
