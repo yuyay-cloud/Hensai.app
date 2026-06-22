@@ -25,7 +25,8 @@
 }
 *{box-sizing:border-box}
 html{background:var(--bg);-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;background:radial-gradient(780px 520px at 50% -220px,rgba(59,129,255,.18),transparent 66%),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;transition:background .25s ease,color .25s ease;padding-bottom:86px}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:radial-gradient(780px 520px at 50% -220px,rgba(59,129,255,.18),transparent 66%),var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;transition:background .25s ease,color .25s ease;padding-bottom:86px}
+:root[data-theme="light"] body{background:radial-gradient(760px 520px at 8% -120px,rgba(102,174,255,.30),transparent 65%),radial-gradient(680px 470px at 96% 35%,rgba(151,206,255,.23),transparent 67%),linear-gradient(160deg,#f8fbff 0%,#edf5ff 44%,#f7fbff 100%)}
 button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent} button:disabled{opacity:.5;cursor:not-allowed} [hidden]{display:none!important}
 #ambientDust{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:1}
 .app{position:relative;z-index:1}
@@ -41,20 +42,14 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 .eyebrow{font-size:.78rem;letter-spacing:.1em;color:var(--muted);font-weight:700}.hero h2{margin:7px 0 0;font-size:1.38rem;line-height:1.35}.hero p{margin:8px 0 0;color:var(--muted);font-size:.91rem;line-height:1.65}.outlineBtn,.ghostBtn,.primaryBtn,.secondaryBtn{border-radius:13px;padding:13px 15px;font-weight:800;transition:transform .16s ease,background .16s ease,box-shadow .16s ease}.outlineBtn{border:1px solid var(--line);background:var(--input);color:var(--blue)}.outlineBtn:hover,.ghostBtn:hover{transform:translateY(-1px);background:var(--soft)}.ghostBtn{border:1px solid var(--line);background:transparent;color:var(--muted)}.primaryBtn{background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 10px 20px rgba(28,112,245,.25)}.primaryBtn:hover{transform:translateY(-1px);box-shadow:0 13px 24px rgba(28,112,245,.34)}.secondaryBtn{background:var(--soft);border:1px solid var(--line);color:var(--blue)}
 .summaryCard{padding:19px}.summaryHead{display:flex;align-items:center;justify-content:space-between;gap:10px}.summaryHead h2{margin:0;font-size:1.05rem}.conditionLine{margin-top:12px;border:1px solid var(--line);border-radius:13px;background:color-mix(in srgb,var(--soft) 68%,transparent);padding:12px 13px;color:var(--muted);font-size:.88rem;line-height:1.55}.conditionLine strong{color:var(--ink)}.summaryActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.summaryActions button{flex:1;min-width:126px}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{padding:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 92%,transparent);border-radius:15px}.metric .mLabel{font-size:.78rem;color:var(--muted);font-weight:700}.metric .mValue{margin-top:8px;font-size:1.3rem;font-weight:900;color:var(--blue);letter-spacing:.01em}.metric .mSub{font-size:.75rem;color:var(--muted);margin-top:5px}.infoRow{display:flex;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}.infoRow b{color:var(--ink);margin-left:auto}
-.scheduleCard{overflow:hidden}.scheduleHead{padding:18px 18px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px}.scheduleHead h2{font-size:1.02rem;margin:0}.tableScroll{overflow:auto;border-top:1px solid var(--line)}table{border-collapse:collapse;width:100%;min-width:660px;font-size:.84rem}th,td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th{background:var(--soft);color:var(--muted);font-weight:800}th:first-child,td:first-child{text-align:center}.bonusDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-right:4px;box-shadow:0 0 7px var(--cyan)}
+.scheduleCard{overflow:hidden}.scheduleHead{padding:18px 18px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.scheduleHead>div{min-width:0}.scheduleHead h2{font-size:1.05rem;margin:0}.scheduleHead p{margin:5px 0 0;color:var(--muted);font-size:.77rem;line-height:1.45}.tableScroll{overflow:auto;border-top:1px solid var(--line)}table{border-collapse:collapse;width:100%;min-width:660px;font-size:.84rem}th,td{padding:12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th{background:var(--soft);color:var(--muted);font-weight:800}th:first-child,td:first-child{text-align:center}.bonusDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cyan);margin-right:4px;box-shadow:0 0 7px var(--cyan)}.scheduleMobileList{display:none}
 @media (max-width:600px){
-  .scheduleCard{overflow:visible}
-  .tableScroll{overflow:visible;border-top:0;padding:0 12px 14px}
-  .tableScroll table{display:block;min-width:0;width:100%;font-size:.86rem}
-  .tableScroll thead{display:none}
-  .tableScroll tbody{display:block}
-  .tableScroll tr{display:block;margin:10px 0 0;padding:5px 12px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--input) 88%,transparent);box-shadow:0 6px 18px rgba(0,0,0,.06)}
-  .tableScroll td{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:10px 0;text-align:right;white-space:normal;border-bottom:1px solid var(--line)}
-  .tableScroll td:last-child{border-bottom:0}
-  .tableScroll td::before{content:attr(data-label);flex:0 0 auto;text-align:left;color:var(--muted);font-size:.76rem;font-weight:800;letter-spacing:.03em}
-  .tableScroll td:first-child{justify-content:space-between;text-align:right}
-  .tableScroll td:first-child::before{color:var(--blue)}
-  .tableScroll .bonusDot{margin-right:5px;vertical-align:middle}
+  .scheduleCard{overflow:visible}.scheduleHead{padding:18px 16px 12px}.scheduleToggle{padding:11px 13px;white-space:nowrap}
+  .tableScroll{display:none}.scheduleMobileList{display:grid;gap:10px;padding:0 12px 14px}
+  .scheduleMobileItem{border:1px solid var(--line);border-radius:17px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--input) 94%,transparent),color-mix(in srgb,var(--soft) 34%,transparent));box-shadow:0 7px 18px rgba(7,28,68,.06)}
+  .scheduleMobileTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px 10px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--soft) 50%,transparent)}
+  .scheduleNo{display:inline-flex;align-items:center;justify-content:center;min-width:52px;padding:5px 8px;border-radius:999px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue);font-size:.74rem;font-weight:900}.scheduleDate{margin-left:auto;color:var(--muted);font-size:.78rem;font-weight:800;text-align:right}.scheduleBonus{margin-left:6px;color:var(--cyan);font-size:.7rem;font-weight:900;white-space:nowrap}
+  .schedulePay{padding:13px 13px 11px}.schedulePay span{display:block;color:var(--muted);font-size:.76rem;font-weight:800}.schedulePay strong{display:block;margin-top:4px;color:var(--blue);font-size:1.38rem;letter-spacing:.01em}.scheduleStats{display:grid;grid-template-columns:1fr 1fr 1.15fr;border-top:1px solid var(--line)}.scheduleStat{padding:10px 8px 11px;border-right:1px solid var(--line);min-width:0}.scheduleStat:last-child{border-right:0}.scheduleStat span{display:block;color:var(--muted);font-size:.70rem;font-weight:800}.scheduleStat b{display:block;margin-top:4px;color:var(--ink);font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.scheduleStat.balance b{color:var(--blue)}
 }
 
 .emptyState{padding:28px 18px;text-align:center;color:var(--muted);line-height:1.7}.emptyState .spark{font-size:2rem;display:block;color:var(--blue);margin-bottom:9px}
@@ -70,7 +65,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 @media (max-width:420px){.homeIdentity{width:70px;height:70px;border-radius:20px}.homeIdentity img{width:60px}.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
-@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36.1";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.tableScroll{overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
+@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36.1";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.scheduleMobileList{display:none!important}.tableScroll{display:block!important;overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
 </style>
 </head>
 <body>
@@ -252,14 +247,14 @@ function renderSingle(){
   $('singleView').innerHTML=`
   <section class="card summaryCard"><div class="summaryHead"><h2>試算結果</h2><span class="eyebrow">SINGLE</span></div><div class="conditionLine"><strong>${formatScenario(d)}</strong><br>返済日：毎月${d.repayDay}日　実行日：${d.execDate||'未設定'}${d.bonus?'　／　ボーナス払いあり':''}</div><div class="summaryActions"><button id="editCurrent" class="secondaryBtn" type="button">条件を編集</button><button id="startCompare" class="outlineBtn" type="button">この条件と比較</button></div></section>
   <section class="metrics"><div class="metric"><div class="mLabel">${resultMonthlyLabel(d)}</div><div class="mValue">${yen(r.regularPayment)}</div><div class="mSub">${d.method==='eg'?'毎月元金：'+nfmt(toMoney(d.monthlyPrincipal,d.unit))+'円':'通常月の返済額'}</div></div><div class="metric"><div class="mLabel">利息総額</div><div class="mValue">${yen(r.totalInterest)}</div><div class="mSub">初回日割り：${r.firstDays||0}日</div></div><div class="metric"><div class="mLabel">支払総額</div><div class="mValue">${yen(r.totalPay)}</div><div class="mSub">元金＋利息</div></div><div class="metric"><div class="mLabel">返済回数</div><div class="mValue">${r.n}回</div><div class="mSub">初回返済日：${jpDate(r.first,d.wareki)}</div></div></section>
-  <section class="card scheduleCard"><div class="scheduleHead"><h2>返済予定表</h2><button id="toggleSchedule" class="outlineBtn scheduleToggle" type="button">${scheduleOpen?'閉じる':'表示する'}</button></div>${scheduleOpen?tableHTML(rows,d):'<div class="emptyState"><span class="spark">✧</span>表示すると、返済日ごとの元金・利息・残高を確認できます。</div>'}</section>
+  <section class="card scheduleCard"><div class="scheduleHead"><div><h2>返済予定表</h2><p>各回の返済額・内訳・返済後残高</p></div><button id="toggleSchedule" class="outlineBtn scheduleToggle" type="button">${scheduleOpen?'閉じる':'表示する'}</button></div>${scheduleOpen?tableHTML(rows,d):'<div class="emptyState"><span class="spark">✧</span>表示すると、返済日ごとの元金・利息・残高を確認できます。</div>'}</section>
   <section class="card note">ⓘ 試算結果は概算です。休日・振替休日・国民の休日は次営業日へ補正して表示します。実際の取扱いは契約条件をご確認ください。</section>`;
   $('editCurrent').onclick=()=>openWizard('edit',clone(currentScenario));$('startCompare').onclick=()=>openWizard('compare',clone(currentScenario));if($('toggleSchedule'))$('toggleSchedule').onclick=()=>{scheduleOpen=!scheduleOpen;renderSingle()};
 }
-function tableHTML(rows,data){return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td data-label="回数">${x.i}回目</td><td data-label="返済日">${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td data-label="返済額">${yen(x.pay)}</td><td data-label="元金">${yen(x.principal)}</td><td data-label="利息">${yen(x.interest)}</td><td data-label="残高">${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div>`}
+function tableHTML(rows,data){const mobile=rows.map(x=>`<article class="scheduleMobileItem"><div class="scheduleMobileTop"><span class="scheduleNo">第${x.i}回</span><span class="scheduleDate">${jpDate(x.date,data.wareki)}${x.bonus?'<span class="scheduleBonus">● ボーナス</span>':''}</span></div><div class="schedulePay"><span>今回の返済額</span><strong>${yen(x.pay)}</strong></div><div class="scheduleStats"><div class="scheduleStat"><span>元金</span><b>${yen(x.principal)}</b></div><div class="scheduleStat"><span>利息</span><b>${yen(x.interest)}</b></div><div class="scheduleStat balance"><span>返済後残高</span><b>${yen(x.bal)}</b></div></div></article>`).join('');return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td data-label="回数">${x.i}回目</td><td data-label="返済日">${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td data-label="返済額">${yen(x.pay)}</td><td data-label="元金">${yen(x.principal)}</td><td data-label="利息">${yen(x.interest)}</td><td data-label="残高">${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div><div class="scheduleMobileList">${mobile}</div>`}
 function renderCompare(){
   if(!comparison){$('compareView').hidden=true;return;} const {a,b,ra,rb}=comparison;$('singleView').hidden=true;$('compareView').hidden=false;const diff=rb.totalPay-ra.totalPay,mdiff=rb.regularPayment-ra.regularPayment;
-  $('compareView').innerHTML=`<section class="card compareTop"><div class="compareHeading"><div><div class="eyebrow">COMPARE MODE</div><h2>比較結果</h2></div><button id="closeCompare" class="outlineBtn" type="button">比較を閉じる</button></div><div class="compareGrid">${compareMini('A',a,ra)}${compareMini('B',b,rb)}</div><div class="difference"><b>差額：</b> BはAより、月々 ${mdiff>=0?'+':''}${yen(mdiff)} ／ 総支払 ${diff>=0?'+':''}${yen(diff)}</div><div class="summaryActions"><button id="editA" class="secondaryBtn" type="button">Aを編集</button><button id="editB" class="outlineBtn" type="button">Bを編集</button><button id="toggleCompareSchedules" class="primaryBtn" type="button">${compareSchedulesOpen?'予定表を閉じる':'予定表を表示'}</button></div></section>${compareSchedulesOpen?`<div class="compareSchedules"><section class="card scheduleCard"><div class="scheduleHead"><h2>パターンA 返済予定表</h2></div>${tableHTML(ra.rows,a)}</section><section class="card scheduleCard"><div class="scheduleHead"><h2>パターンB 返済予定表</h2></div>${tableHTML(rb.rows,b)}</section></div>`:''}<section class="card note">ⓘ 上部は比較に必要な条件と結果だけを1画面にまとめています。詳細は予定表を表示して確認できます。</section>`;
+  $('compareView').innerHTML=`<section class="card compareTop"><div class="compareHeading"><div><div class="eyebrow">COMPARE MODE</div><h2>比較結果</h2></div><button id="closeCompare" class="outlineBtn" type="button">比較を閉じる</button></div><div class="compareGrid">${compareMini('A',a,ra)}${compareMini('B',b,rb)}</div><div class="difference"><b>差額：</b> BはAより、月々 ${mdiff>=0?'+':''}${yen(mdiff)} ／ 総支払 ${diff>=0?'+':''}${yen(diff)}</div><div class="summaryActions"><button id="editA" class="secondaryBtn" type="button">Aを編集</button><button id="editB" class="outlineBtn" type="button">Bを編集</button><button id="toggleCompareSchedules" class="primaryBtn" type="button">${compareSchedulesOpen?'予定表を閉じる':'予定表を表示'}</button></div></section>${compareSchedulesOpen?`<div class="compareSchedules"><section class="card scheduleCard"><div class="scheduleHead"><div><h2>パターンA 返済予定表</h2><p>各回の返済額・内訳・返済後残高</p></div></div>${tableHTML(ra.rows,a)}</section><section class="card scheduleCard"><div class="scheduleHead"><div><h2>パターンB 返済予定表</h2><p>各回の返済額・内訳・返済後残高</p></div></div>${tableHTML(rb.rows,b)}</section></div>`:''}<section class="card note">ⓘ 上部は比較に必要な条件と結果だけを1画面にまとめています。詳細は予定表を表示して確認できます。</section>`;
   $('closeCompare').onclick=()=>{comparison=null;compareSchedulesOpen=false;renderSingle()};$('editA').onclick=()=>openWizard('editA',clone(a));$('editB').onclick=()=>openWizard('editB',clone(b));$('toggleCompareSchedules').onclick=()=>{compareSchedulesOpen=!compareSchedulesOpen;renderCompare()};
 }
 function compareMini(tag,d,r){return `<div class="compareMini"><div class="tag">PATTERN ${tag}</div><div class="scenario">${formatScenario(d)}</div><div class="major">${yen(r.regularPayment)}</div><div class="minor">月々の返済額<br>総額 ${yen(r.totalPay)}</div></div>`}
@@ -311,14 +306,14 @@ function initAmbientDust(){
     dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;
     c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
     // ダークホームには、起動画面から残った「粉の流れ」をはっきり残す。
-    // 520粒だが粒自体は小さく、18fps相当で描画して負荷を抑える。
-    parts=Array.from({length:520},(_,i)=>{
+    // ライトモードでも見える密度を確保しつつ、18fps相当で負荷を抑える。
+    parts=Array.from({length:760},(_,i)=>{
       const seed=rand(i+1), lane=rand(i+181), band=i%7;
       return {
         seed,lane,band,
         x:-30+rand(i+79)*(w+60),
         yBase:h*(.15+lane*.74),
-        r:.16+rand(i+241)*.54,
+        r:.18+rand(i+241)*.60,
         s:.040+rand(i+359)*.112,
         phase:rand(i+487)*Math.PI*2,
         glow:.38+rand(i+601)*.62
@@ -331,6 +326,16 @@ function initAmbientDust(){
     if(now-last<55)return;
     last=now;ctx.clearRect(0,0,w,h);
     const light=document.documentElement.dataset.theme==='light';
+    // 白背景では粒が埋もれやすいため、粉が流れた余韻の細い筋を淡く重ねる。
+    if(light){
+      ctx.save();ctx.lineCap='round';
+      for(let i=0;i<4;i++){
+        const y0=h*(.19+i*.18)+Math.sin(now*.00022+i)*h*.025;
+        ctx.beginPath();ctx.moveTo(-30,y0);ctx.bezierCurveTo(w*.20,y0-h*.055,w*.58,y0+h*.060,w+32,y0-h*.025);
+        ctx.strokeStyle=`rgba(46,118,213,${.085+i*.014})`;ctx.lineWidth=1.1+i*.12;ctx.stroke();
+      }
+      ctx.restore();
+    }
     for(const p of parts){
       p.x+=p.s*1.50;
       if(p.x>w+26){p.x=-18-rand(p.seed*999+now*.001)*46;p.yBase=h*(.15+rand(p.seed*311+now*.002)*.74)}
@@ -339,11 +344,11 @@ function initAmbientDust(){
       const x=p.x;
       const y=p.yBase-wave+sway-(p.band-3)*2.2;
       const pulse=.70+.30*Math.sin(now*.00072+p.phase);
-      const a=(light?.105:.285)*p.glow*pulse;
+      const a=(light?.185:.285)*p.glow*pulse;
       if(a<.010)continue;
-      ctx.beginPath();ctx.fillStyle=`rgba(${light?'66,124,206':'72,166,255'},${a*.34})`;ctx.arc(x,y,p.r*5.2,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.fillStyle=`rgba(${light?'73,126,202':'126,205,255'},${a*.38})`;ctx.arc(x,y,p.r*2.25,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.fillStyle=`rgba(${light?'35,88,174':'224,247,255'},${a*(light?.92:1.28)})`;ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'48,123,225':'72,166,255'},${a*.42})`;ctx.arc(x,y,p.r*5.2,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'60,128,220':'126,205,255'},${a*.50})`;ctx.arc(x,y,p.r*2.25,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=`rgba(${light?'18,83,180':'224,247,255'},${a*(light?1.16:1.28)})`;ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();
     }
   }
   addEventListener('resize',reset,{passive:true});reset();requestAnimationFrame(tick);

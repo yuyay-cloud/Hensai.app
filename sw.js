@@ -1,4 +1,4 @@
-const CACHE = 'hensai-v2361-home-ambient-r4';
+const CACHE = 'hensai-v2361-schedule-light-r5';
 const ASSETS = [
   './', './index.html', './manifest.json',
   './icon-192-v2361.png', './icon-512-v2361.png',
