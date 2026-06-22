@@ -47,7 +47,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 /* Menu */
 .sheetLayer{position:fixed;inset:0;z-index:80;background:rgba(0,6,18,.44);opacity:0;visibility:hidden;transition:.2s ease}.sheetLayer.open{opacity:1;visibility:visible}.sheet{position:absolute;left:12px;right:12px;bottom:12px;max-width:756px;margin:0 auto;max-height:70vh;overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:21px;box-shadow:0 26px 64px rgba(0,0,0,.34);padding:8px}.sheetTitle{padding:12px 12px 8px;color:var(--muted);font-size:.76rem;font-weight:900;letter-spacing:.08em}.sheet button{width:100%;text-align:left;border-radius:13px;padding:15px 13px;font-weight:800}.sheet button:hover{background:var(--soft)}.sheet button+button{border-top:1px solid var(--line)}.historyItem{display:flex!important;align-items:center;gap:10px}.historyItem .hDate{font-size:.72rem;color:var(--muted);font-weight:600}.historyItem .hText{font-size:.86rem;line-height:1.45;flex:1}.sheetClose{color:var(--muted)!important;text-align:center!important}
 /* Splash */
-#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:50%;right:auto;bottom:12.4%;width:max-content;transform:translateX(-50%);text-align:center;color:rgba(220,240,255,.72);letter-spacing:.16em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .82s 1.95s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .82s 2.12s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}
+#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:50%;right:auto;bottom:12.4%;width:max-content;transform:translateX(-50%);text-align:center;color:rgba(220,240,255,.72);letter-spacing:.16em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .82s 1.95s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .82s 2.12s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}.splashCurve.beatSync{animation:none!important;opacity:var(--beat-opacity,.60);transform:translateX(-50%) scaleX(var(--beat-scale,1));border-bottom-color:rgba(172,226,255,var(--beat-line-alpha,.34));filter:drop-shadow(0 0 var(--beat-blur,8px) rgba(98,198,255,var(--beat-glow-alpha,.38)))}.splashVersion.beatSync{animation:none!important;opacity:var(--ver-opacity,.72);text-shadow:0 0 var(--ver-blur,14px) rgba(83,186,255,var(--ver-glow-alpha,.45))}
 @media (max-width:420px){.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
@@ -331,6 +331,9 @@ function initAmbientDust(){
 }
 function initSplash(){
   const splash=$('splash'),canvas=$('splashCanvas'),ctx=canvas.getContext('2d');
+  const splashVersion=document.querySelector('.splashVersion');
+  const splashCurve=document.querySelector('.splashCurve');
+  let metaBeatReady=false;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced){setTimeout(()=>{splash.remove();openWizard('new')},120);return;}
 
@@ -350,11 +353,11 @@ function initSplash(){
   const mix=(a,b,n)=>a+(b-a)*n;
   const bezier=(a,b,c,d,t)=>{const u=1-t;return u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d};
 
-  const PARTICLE_COUNT=1080;
+  const PARTICLE_COUNT=1560;
   const particles=Array.from({length:PARTICLE_COUNT},(_,i)=>({
     seed:hash(i+1),drop:hash(i+2711),phase:hash(i+101)*TAU,lane:hash(i+211),
     delay:hash(i+307)*.94,speed:.78+hash(i+401)*.62,
-    size:.13+hash(i+503)*.45,twinkle:hash(i+607)*TAU
+    size:.11+hash(i+503)*.40,twinkle:hash(i+607)*TAU
   }));
   const atmosphere=Array.from({length:92},(_,i)=>({
     x:hash(i+701),y:.10+hash(i+809)*.76,r:.12+hash(i+919)*.26,
@@ -380,31 +383,42 @@ function initSplash(){
     let x=bezier(sx,c1x,c2x,cx,heroQ),y=bezier(sy,c1y,c2y,cy,heroQ);
     if(heroQ>=1){x=cx;y=cy;}
 
-    // 中心に到着後、心拍のような「トクン、トクン」を数回だけ入れる。
-    const beats=[3.85,4.05,5.35,5.55,6.55,6.75];
-    let pulse=.48;
-    let beatGlow=0;
-    for(let i=0;i<beats.length;i++){
-      const b=beats[i];
-      const spread=(i%2===0)?.11:.14;
-      const amp=(i%2===0)?1.02:.74;
-      const g=Math.exp(-Math.pow((t-b)/spread,2));
-      pulse+=amp*g;
-      beatGlow+=g;
+    // ECGを思わせる「ドッ、ドッ」。鋭い主拍の直後に少し柔らかい副拍を置く。
+    const beats=[
+      [3.92,1.55,.075],[4.17,1.10,.115],
+      [5.34,1.55,.075],[5.59,1.10,.115],
+      [6.72,1.45,.080],[6.97,1.02,.120]
+    ];
+    let heartbeat=0;
+    for(const [at,amp,width] of beats){
+      heartbeat+=amp*Math.exp(-Math.pow((t-at)/width,2));
     }
-    const alpha=.88*clamp((t-.12)/.70)*fade;
-    const rr=1.50+1.30*beatGlow;
+    const beatNorm=clamp(heartbeat/1.55,0,1.36);
+    const pulse=.40+1.62*beatNorm;
+    const alpha=.90*clamp((t-.12)/.70)*fade;
+    const rr=1.48+2.15*beatNorm;
 
-    // 上昇中のごく短い粉の尾。
+    // 上昇中の短い尾。中心到着後も周囲の粉と馴染むよう小さく残す。
     if(heroQ<1){
-      for(let i=1;i<=8;i++){
-        const q=Math.max(0,heroQ-i*.030);if(q<=0)continue;
+      for(let i=1;i<=9;i++){
+        const q=Math.max(0,heroQ-i*.028);if(q<=0)continue;
         const tx=bezier(sx,c1x,c2x,cx,q),ty=bezier(sy,c1y,c2y,cy,q);
-        dot(tx,ty,.46,alpha*(.075+(8-i)*.010));
+        dot(tx,ty,.42,alpha*(.065+(9-i)*.010));
       }
     }
+
+    // 主拍のときだけ、ごく薄い波紋が広がる。ローディングUIではなく光の鼓動に見せる。
+    if(beatNorm>.05){
+      const halo=5+beatNorm*15;
+      ctx.beginPath();
+      ctx.strokeStyle=`rgba(100,202,255,${alpha*beatNorm*.17})`;
+      ctx.lineWidth=.7+beatNorm*.45;
+      ctx.arc(x,y,halo,0,TAU);
+      ctx.stroke();
+    }
     dot(x,y,rr,alpha*pulse,true);
-    dot(x,y,Math.max(.65,rr*.48),alpha,true);
+    dot(x,y,Math.max(.68,rr*.48),alpha,true);
+    return beatNorm;
   }
 
   function paint(now){
@@ -444,7 +458,7 @@ function initSplash(){
       const gatherY=h*(.64-.12*(1-p.lane));
 
       const angle=p.phase+Math.max(0,t-2.55)*p.speed*.96;
-      const radiusVar=radius+Math.sin(p.phase*2.7+t*1.8)*4.6+(p.lane-.5)*17;
+      const radiusVar=radius+Math.sin(p.phase*2.7+t*1.8)*3.8+(p.lane-.5)*13;
       const orbitX=cx+Math.cos(angle)*radiusVar;
       const orbitY=cy+Math.sin(angle)*radiusVar*.96;
 
@@ -466,15 +480,31 @@ function initSplash(){
       y+=Math.sin(p.phase*1.5+t*1.2)*residual*.55;
 
       const riseAlpha=(.10+.70*(1-p.lane))*Math.pow(Math.sin(Math.PI*Math.min(flowT,1)),.72);
-      const orbitAlpha=(.08+.71*(1-p.lane))*(.72+.28*Math.sin(t*3.1+p.twinkle));
+      const orbitAlpha=(.10+.73*(1-p.lane))*(.76+.24*Math.sin(t*3.1+p.twinkle));
       let alpha=mix(riseAlpha,orbitAlpha,blend);
       if(t>=fadeStart)alpha*=1-.42*clamp((t-fadeStart)/(fadeEnd-fadeStart));
       dot(x,y,p.size,alpha);
     }
 
-    // 中心の1粒は、円の中心で短く瞬く。円の先端マーカーは置かない。
+    // 中心の1粒は、心電図のような「ドッ、ドッ」で瞬く。下のカーブも同期させる。
     const heroFade=1-clamp((t-7.28)/1.18);
-    drawHero(cx,cy,t,heroFade);
+    const beatNorm=drawHero(cx,cy,t,heroFade);
+    if(t>3.45&&!metaBeatReady){
+      splashCurve.classList.add('beatSync');
+      splashVersion.classList.add('beatSync');
+      metaBeatReady=true;
+    }
+    if(metaBeatReady){
+      const b=clamp(beatNorm,0,1.22);
+      splashCurve.style.setProperty('--beat-opacity',(0.53+b*.43).toFixed(3));
+      splashCurve.style.setProperty('--beat-scale',(1+b*.085).toFixed(3));
+      splashCurve.style.setProperty('--beat-line-alpha',(0.30+b*.50).toFixed(3));
+      splashCurve.style.setProperty('--beat-blur',`${7+b*15}px`);
+      splashCurve.style.setProperty('--beat-glow-alpha',(0.28+b*.58).toFixed(3));
+      splashVersion.style.setProperty('--ver-opacity',(0.62+b*.23).toFixed(3));
+      splashVersion.style.setProperty('--ver-blur',`${12+b*13}px`);
+      splashVersion.style.setProperty('--ver-glow-alpha',(0.35+b*.48).toFixed(3));
+    }
 
     ctx.restore();
     if(t<8.52){requestAnimationFrame(paint);}
