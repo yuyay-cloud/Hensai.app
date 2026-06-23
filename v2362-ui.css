@@ -1,0 +1,83 @@
+/* Ver2.36.2 — comparison, schedule density, date switch, orbit motif, ambient enhancement */
+:root{--v2362-cyan:#a8e7ff;--v2362-blue:#5a9cff;--v2362-grid:rgba(155,200,255,.16)}
+
+/* The PDF-style orbital motif, kept behind the result text. */
+.resultHero{isolation:isolate}
+.resultOrbitDecor{position:absolute;z-index:0;right:-44px;top:-52px;width:270px;height:270px;pointer-events:none;opacity:.86}
+.resultOrbitDecor .ring{position:absolute;border:1px solid rgba(180,227,255,.19);border-radius:50%;filter:drop-shadow(0 0 8px rgba(96,183,255,.14))}
+.resultOrbitDecor .ring.one{width:224px;height:224px;right:9px;top:13px}
+.resultOrbitDecor .ring.two{width:168px;height:168px;right:38px;top:41px;border-color:rgba(134,209,255,.18)}
+.resultOrbitDecor .ring.three{width:286px;height:118px;right:-24px;top:70px;border-color:rgba(163,220,255,.16);transform:rotate(-26deg)}
+.resultOrbitDecor .orb{position:absolute;right:69px;top:31px;width:9px;height:9px;border-radius:50%;background:#dff7ff;box-shadow:0 0 0 5px rgba(119,207,255,.12),0 0 19px 7px rgba(76,168,255,.30)}
+.resultOrbitDecor .trail{position:absolute;right:16px;top:103px;width:98px;height:1px;transform:rotate(-25deg);background:linear-gradient(90deg,transparent,rgba(176,233,255,.54),transparent);filter:blur(.15px)}
+.resultHeroTop,.resultPayment,.resultPaymentFoot,.resultConditionCompact{z-index:1!important}
+:root[data-theme="light"] .resultOrbitDecor{opacity:.72}.resultOrbitDecor .ring{border-color:rgba(40,121,210,.17)}.resultOrbitDecor .ring.two{border-color:rgba(60,142,222,.15)}.resultOrbitDecor .ring.three{border-color:rgba(54,135,220,.15)}.resultOrbitDecor .orb{background:#fff;box-shadow:0 0 0 5px rgba(66,155,238,.10),0 0 19px 7px rgba(77,159,235,.22)}
+
+/* Date mode controls shared by normal and comparison schedules. */
+.dateModeSwitch{display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--soft) 80%,transparent);white-space:nowrap}
+.dateModeSwitch button{padding:6px 8px;border-radius:8px;color:var(--muted);font-size:.70rem;font-weight:900;line-height:1}
+.dateModeSwitch button.active{background:var(--card);color:var(--blue);box-shadow:0 2px 7px rgba(0,0,0,.13)}
+.scheduleHead{flex-wrap:wrap}.scheduleHead .dateModeSwitch{margin-left:auto}.scheduleHead .scheduleToggle{margin-left:0}
+.scheduleDensityNote{padding:0 16px 10px;color:var(--muted);font-size:.71rem;font-weight:700;line-height:1.45}
+
+/* Replace the mobile giant cards with a compact, scrollable schedule table. */
+@media (max-width:600px){
+  .scheduleCard{overflow:hidden!important}
+  .scheduleHead{padding:15px 14px 10px!important;gap:8px!important}
+  .scheduleHead>div:first-child{flex:1 1 100%}
+  .scheduleHead .dateModeSwitch{margin-left:0}
+  .tableScroll{display:block!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;border-top:1px solid var(--line)!important}
+  .tableScroll table{display:table!important;min-width:548px!important;width:100%!important;font-size:.72rem!important}
+  .tableScroll th,.tableScroll td{padding:8px 7px!important;line-height:1.2!important}
+  .tableScroll th{position:sticky;top:0;z-index:1}
+  .scheduleMobileList{display:none!important}
+  .scheduleDensityNote{padding:0 14px 9px}
+}
+
+/* Summary comparison: rows are aligned by metric instead of separate cards. */
+.compareTop{position:relative;overflow:hidden}
+.compareMatrix{display:grid;grid-template-columns:minmax(76px,.9fr) minmax(0,1.05fr) minmax(0,1.05fr);margin-top:13px;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:color-mix(in srgb,var(--card) 92%,transparent)}
+.compareMatrix > div{min-width:0;padding:10px 9px;border-bottom:1px solid var(--line)}
+.compareMatrix > div:nth-last-child(-n+3){border-bottom:0}
+.compareMatrix .cmHead{background:var(--soft);color:var(--muted);font-size:.69rem;font-weight:900;letter-spacing:.07em;text-align:center}
+.compareMatrix .cmLabel{background:color-mix(in srgb,var(--soft) 44%,transparent);color:var(--muted);font-size:.71rem;font-weight:900;display:flex;align-items:center}
+.compareMatrix .cmValue{color:var(--ink);font-size:.79rem;font-weight:800;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.compareMatrix .cmValue.condition{white-space:normal;line-height:1.4;font-size:.72rem;color:var(--muted)}
+.compareMatrix .cmValue.emphasis{color:var(--blue);font-size:.91rem;font-weight:950}
+.compareDelta{margin-top:10px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--blue) 24%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--soft) 74%,transparent);color:var(--muted);font-size:.79rem;line-height:1.55}
+.compareDelta b{color:var(--ink)}
+.compareDelta strong{color:var(--blue)}
+.compareTop .compareGrid,.compareTop .difference{display:none!important}
+.compareTop .summaryActions{margin-top:12px}.compareTop .summaryActions button{min-width:0}
+
+/* One dense combined schedule for compare mode. */
+.compareDenseCard{overflow:hidden}
+.compareDenseHead{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;padding:17px 17px 10px;flex-wrap:wrap}
+.compareDenseHead h2{margin:0;font-size:1.04rem}.compareDenseHead p{margin:5px 0 0;color:var(--muted);font-size:.76rem;line-height:1.45}
+.compareMetricTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 12px 11px}
+.compareMetricTabs button{padding:9px 6px;border:1px solid var(--line);border-radius:10px;background:var(--input);color:var(--muted);font-size:.71rem;font-weight:900}
+.compareMetricTabs button.active{border-color:transparent;background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 5px 12px rgba(28,112,245,.20)}
+.compareDenseWrap{overflow:auto;border-top:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.compareDenseTable{border-collapse:collapse;width:100%;min-width:560px;font-size:.77rem}
+.compareDenseTable th,.compareDenseTable td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.compareDenseTable th{background:var(--soft);color:var(--muted);font-size:.70rem;font-weight:900}
+.compareDenseTable th:first-child,.compareDenseTable td:first-child{text-align:center}.compareDenseTable td:nth-child(2){text-align:left;color:var(--muted);font-size:.70rem;white-space:normal;line-height:1.34;min-width:120px}.compareDenseTable .deltaPlus{color:var(--danger);font-weight:900}.compareDenseTable .deltaMinus{color:var(--success);font-weight:900}.compareDenseTable .same{color:var(--muted)}
+.compareSchedules{display:none!important}
+
+/* Extra particle layer: small bright grains, directional residual paths, and no interaction cost. */
+#ambientEcho{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:.98}
+:root[data-theme="light"] #ambientEcho{mix-blend-mode:multiply;opacity:.76}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(1.5px 1.5px at 14% 20%,rgba(151,215,255,.42),transparent 75%),
+  radial-gradient(1px 1px at 75% 37%,rgba(117,205,255,.38),transparent 78%),
+  radial-gradient(1px 1px at 42% 72%,rgba(143,218,255,.30),transparent 78%),
+  radial-gradient(1.2px 1.2px at 88% 79%,rgba(114,189,255,.28),transparent 78%);
+  opacity:.84}
+:root[data-theme="light"] body::before{background:
+  radial-gradient(1.4px 1.4px at 14% 20%,rgba(20,105,210,.36),transparent 75%),
+  radial-gradient(1px 1px at 75% 37%,rgba(37,125,225,.31),transparent 78%),
+  radial-gradient(1px 1px at 42% 72%,rgba(22,106,210,.25),transparent 78%),
+  radial-gradient(1.1px 1.1px at 88% 79%,rgba(30,116,210,.22),transparent 78%);opacity:.62}
+
+@media(max-width:380px){.compareMatrix > div{padding:9px 6px}.compareMatrix .cmLabel{font-size:.67rem}.compareMatrix .cmValue{font-size:.73rem}.compareMatrix .cmValue.emphasis{font-size:.82rem}.compareMetricTabs{gap:4px;padding-left:10px;padding-right:10px}.compareMetricTabs button{font-size:.66rem;padding:8px 3px}}
+@media print{.dateModeSwitch,.scheduleDensityNote,.resultOrbitDecor,.compareMetricTabs{display:none!important}.compareDenseCard{display:block!important;page-break-before:always}.compareDenseWrap{overflow:visible!important}.compareDenseTable{min-width:0!important;font-size:8pt!important}.compareDenseTable th,.compareDenseTable td{padding:2.5mm 2mm!important}.compareSchedules{display:none!important}#ambientEcho{display:none!important}}
