@@ -1,7 +1,7 @@
 {
   "name": "返済試算",
   "short_name": "返済試算",
-  "description": "返済条件の試算・比較・返済予定表を確認できるアプリ（Ver2.36.2）",
+  "description": "返済条件の試算・比較・返済予定表を確認できるアプリ（Ver2.36.1）",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
