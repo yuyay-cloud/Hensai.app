@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#06142d" name="theme-color"/>
 <link href="./manifest.json" rel="manifest"/>
-<link href="./icon-192-v2361.png" rel="apple-touch-icon"/>
+<link href="./icon-180-v2361.png" rel="apple-touch-icon"/>
 <title>返済試算 Ver2.36.1</title>
 <style>
 :root{
@@ -77,10 +77,11 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 .bottomNav{position:fixed;z-index:19;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px)}.bottomNavInner{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}.bottomNav button{display:grid;place-items:center;gap:3px;color:var(--muted);font-size:.72rem;font-weight:700;padding:2px 8px}.bottomNav button.active{color:var(--blue)}
 /* Wizard */
 .modalLayer{position:fixed;inset:0;z-index:100;display:grid;place-items:end center;background:rgba(0,6,18,.56);backdrop-filter:blur(8px);padding:12px;opacity:0;visibility:hidden;transition:.22s ease}.modalLayer.open{opacity:1;visibility:visible}.wizard{width:min(100%,560px);max-height:calc(100vh - 24px);overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 70px rgba(0,0,0,.38);transform:translateY(20px);transition:transform .28s cubic-bezier(.2,.8,.2,1)}.modalLayer.open .wizard{transform:translateY(0)}.wizardHead{padding:19px 19px 13px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}.wizardHead h2{font-size:1.15rem;margin:0}.wizardHead p{margin:5px 0 0;color:var(--muted);font-size:.82rem;line-height:1.5}.closeWizard{margin-left:auto;width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;color:var(--muted)}.stepDots{display:flex;gap:6px;margin-top:10px}.stepDots i{height:4px;width:20px;border-radius:10px;background:var(--line)}.stepDots i.active{background:var(--blue)}.wizardBody{padding:20px}.wizardStep{display:none}.wizardStep.active{display:block;animation:stepIn .24s ease}.wizardStep h3{font-size:1.24rem;line-height:1.4;margin:0}.wizardStep .lead{margin:8px 0 18px;color:var(--muted);font-size:.88rem;line-height:1.6}.bigInput{width:100%;border:1.5px solid var(--line);background:var(--input);color:var(--ink);border-radius:15px;padding:16px 16px;font-size:1.65rem;font-weight:800;outline:none}.bigInput:focus{border-color:var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 18%,transparent)}.inputUnit{display:flex;align-items:center;gap:8px}.inputUnit span{font-weight:800;color:var(--muted);margin-left:-52px;pointer-events:none}.choiceGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choiceBtn{min-height:96px;border:1px solid var(--line);border-radius:16px;background:var(--input);padding:13px;text-align:left}.choiceBtn strong{display:block;font-size:1rem}.choiceBtn small{display:block;color:var(--muted);line-height:1.45;margin-top:7px}.choiceBtn.selected{border-color:var(--blue);background:color-mix(in srgb,var(--soft) 85%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 14%,transparent)}.pillGrid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.pillBtn{border:1px solid var(--line);background:var(--input);border-radius:12px;padding:10px 12px;color:var(--muted);font-weight:800}.pillBtn.selected{border-color:transparent;background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff}.fieldLabel{font-size:.82rem;font-weight:800;color:var(--muted);margin:15px 0 7px}.inlineFields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.smallInput{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:13px;color:var(--ink);background:var(--input);outline:none}.smallInput:focus{border-color:var(--blue)}.switchLine{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--input)}.switchLine label{font-weight:800}.switchLine small{display:block;color:var(--muted);margin-top:4px}.segMini{display:flex;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--soft);gap:3px}.segMini button{padding:8px 10px;border-radius:8px;color:var(--muted);font-weight:800}.segMini button.selected{background:var(--card);color:var(--blue);box-shadow:0 2px 7px rgba(0,0,0,.14)}.wizardFoot{display:flex;gap:9px;padding:13px 19px 19px;border-top:1px solid var(--line)}.wizardFoot button{flex:1}.wizardError{margin:12px 0 0;color:var(--danger);font-weight:700;font-size:.84rem;display:none}.wizardError.show{display:block}@keyframes stepIn{from{opacity:0;transform:translateX(9px)}to{opacity:1;transform:translateX(0)}}
+.fieldHint{margin:8px 0 0;color:var(--muted);font-size:.78rem;line-height:1.55}.fieldHint.subtleHint{opacity:.72}
 /* Menu */
 .sheetLayer{position:fixed;inset:0;z-index:80;background:rgba(0,6,18,.44);opacity:0;visibility:hidden;transition:.2s ease}.sheetLayer.open{opacity:1;visibility:visible}.sheet{position:absolute;left:12px;right:12px;bottom:12px;max-width:756px;margin:0 auto;max-height:70vh;overflow:auto;background:linear-gradient(155deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:21px;box-shadow:0 26px 64px rgba(0,0,0,.34);padding:8px}.sheetTitle{padding:12px 12px 8px;color:var(--muted);font-size:.76rem;font-weight:900;letter-spacing:.08em}.sheet button{width:100%;text-align:left;border-radius:13px;padding:15px 13px;font-weight:800}.sheet button:hover{background:var(--soft)}.sheet button+button{border-top:1px solid var(--line)}.historyItem{display:flex!important;align-items:center;gap:10px}.historyItem .hDate{font-size:.72rem;color:var(--muted);font-weight:600}.historyItem .hText{font-size:.86rem;line-height:1.45;flex:1}.sheetClose{color:var(--muted)!important;text-align:center!important}
 /* Splash */
-#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#123978 0%,#071b3b 40%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:50%;right:auto;bottom:12.4%;width:max-content;transform:translateX(-50%);text-align:center;color:rgba(220,240,255,.72);letter-spacing:.16em;font-size:.75rem;font-weight:800;text-shadow:0 0 14px rgba(83,186,255,.45);opacity:0;animation:splashMetaIn .82s 1.95s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(147,210,255,.30);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 7px rgba(99,193,255,.28));opacity:0;animation:splashMetaIn .82s 2.12s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}.splashCurve.beatSync{animation:none!important;opacity:var(--beat-opacity,.46);transform:translateX(-50%);border-bottom-color:rgba(165,220,255,var(--beat-line-alpha,.24));filter:drop-shadow(0 0 var(--beat-blur,6px) rgba(98,198,255,var(--beat-glow-alpha,.20)))}.splashVersion.beatSync{animation:none!important;opacity:var(--ver-opacity,.68);text-shadow:0 0 var(--ver-blur,11px) rgba(83,186,255,var(--ver-glow-alpha,.28))}
+#splash{position:fixed;inset:0;z-index:200;overflow:hidden;background:radial-gradient(62% 52% at 50% 48%,#174b92 0%,#092354 42%,#020713 100%);transition:opacity .52s cubic-bezier(.33,1,.68,1),visibility .52s linear}.splashExit{opacity:0;visibility:hidden}.splashCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}.splashVersion{position:absolute;left:50%;right:auto;bottom:12.4%;width:max-content;transform:translateX(-50%);text-align:center;color:rgba(236,249,255,.86);letter-spacing:.16em;font-size:.75rem;font-weight:800;text-shadow:0 0 18px rgba(109,206,255,.68),0 0 28px rgba(255,210,117,.26);opacity:0;animation:splashMetaIn .82s 1.95s cubic-bezier(.16,1,.3,1) forwards}.splashCurve{position:absolute;left:50%;bottom:9.5%;width:126px;height:28px;transform:translateX(-50%);border-bottom:1px solid rgba(180,228,255,.48);border-radius:0 0 90% 90%;filter:drop-shadow(0 0 11px rgba(116,208,255,.42)) drop-shadow(0 0 20px rgba(255,204,111,.18));opacity:0;animation:splashMetaIn .82s 2.12s cubic-bezier(.16,1,.3,1) forwards}@keyframes splashMetaIn{from{opacity:0;transform:translateX(-50%) translateY(5px);filter:blur(2px)}to{opacity:1;transform:translateX(-50%) translateY(0);filter:blur(0)}}.splashCurve.beatSync{animation:none!important;opacity:var(--beat-opacity,.62);transform:translateX(-50%);border-bottom-color:rgba(190,232,255,var(--beat-line-alpha,.42));filter:drop-shadow(0 0 var(--beat-blur,9px) rgba(111,209,255,var(--beat-glow-alpha,.34))) drop-shadow(0 0 18px rgba(255,213,126,.20))}.splashVersion.beatSync{animation:none!important;opacity:var(--ver-opacity,.82);text-shadow:0 0 var(--ver-blur,14px) rgba(104,204,255,var(--ver-glow-alpha,.44)),0 0 24px rgba(255,216,134,.28)}
 @media (max-width:420px){.homeIdentity{width:70px;height:70px;border-radius:20px}.homeIdentity img{width:60px}.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
@@ -226,7 +227,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 </div><div class="wizardStep" data-step="3">
 <h3 id="termTitle">返済期間を入力</h3><p class="lead" id="termLead">返済年数を入力してください。</p>
 <div id="epTermFields"><div class="inputUnit"><input class="bigInput" id="wYears" inputmode="numeric" max="50" min="1" type="number" value="10"/><span>年</span></div><div class="pillGrid" id="yearPills"></div></div>
-<div hidden="" id="egTermFields"><div class="fieldLabel">返済回数</div><div class="inputUnit"><input class="smallInput" id="wCount" inputmode="numeric" max="600" min="1" type="number" value="120"/><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input class="smallInput" id="wMonthlyPrincipal" inputmode="decimal" min="0" placeholder="例：1" step="0.01" type="number"/><span id="wMonthlyPrincipalUnit">万円</span></div><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
+<div hidden="" id="egTermFields"><div class="fieldLabel">返済回数</div><div class="inputUnit"><input class="smallInput" id="wCount" inputmode="numeric" max="600" min="1" type="number" value="120"/><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input class="smallInput" id="wMonthlyPrincipal" inputmode="numeric" min="0" placeholder="例：10000" step="1" type="number"/><span id="wMonthlyPrincipalUnit">円</span></div><p class="fieldHint subtleHint" id="egPrincipalHint"></p><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
 </div><div class="wizardStep" data-step="4">
 <h3>詳細条件を確認</h3><p class="lead">返済日と実行日を設定します。ボーナス払いは必要な場合だけ使えます。</p>
 <div class="inlineFields"><div><div class="fieldLabel">返済日</div><input class="smallInput" id="wRepayDay" inputmode="numeric" max="31" min="1" type="number" value="17"/></div><div><div class="fieldLabel">融資実行日</div><input class="smallInput" id="wExecDate" type="date"/></div></div>
@@ -254,7 +255,7 @@ let warekiMode = localStorage.getItem(STORAGE.dateMode) !== 'western';
 
 function defaultData(){
   const today = new Date();
-  return {principal:'',unit:'万円',rate:'',method:'ep',years:'10',count:'120',monthlyPrincipal:'',repayDay:'17',execDate:toISO(today),bonus:false,bonusMonth1:'6',bonusMonth2:'12',bonusAmount:'',wareki:warekiMode};
+  return {principal:'',unit:'万円',rate:'',method:'ep',years:'10',count:'120',monthlyPrincipal:'',monthlyPrincipalUnit:'円',repayDay:'17',execDate:toISO(today),bonus:false,bonusMonth1:'6',bonusMonth2:'12',bonusAmount:'',wareki:warekiMode};
 }
 function toISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function clone(v){return JSON.parse(JSON.stringify(v));}
@@ -264,6 +265,20 @@ function moneyFactor(unit){return unit==='万円'?10000:1;}
 function toMoney(value,unit){return (parseFloat(value)||0)*moneyFactor(unit);}
 function fromMoney(y,unit){return y/moneyFactor(unit);}
 function inputNumber(v){return Number.isInteger(v)?String(v):String(Math.round(v*100)/100);}
+function monthlyPrincipalYen(data){
+  const v=parseFloat(data?.monthlyPrincipal)||0;
+  return data?.monthlyPrincipalUnit==='円'?v:toMoney(v,data?.unit);
+}
+function egPrincipalHint(data,countOverride=null){
+  const P=toMoney(data?.principal,data?.unit), n=parseInt(countOverride??data?.count,10)||0;
+  if(P<=0||n<=0)return '';
+  const exact=P/n, base=Math.floor(exact), last=P-base*Math.max(0,n-1);
+  return `借入金額÷返済回数の目安：約${nfmt(exact)}円（毎月${nfmt(base)}円なら最終回 ${nfmt(last)}円で調整）`;
+}
+function updateEgPrincipalHint(){
+  const hint=$('egPrincipalHint');if(!hint||!wizard?.data)return;
+  hint.textContent=egPrincipalHint(wizard.data,$('wCount')?.value||wizard.data.count);
+}
 function jpDate(d, wareki=true){if(!d)return '-';if(!wareki)return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;const y=d.getFullYear();const era=y>=2019?'令和':'平成';const ey=y>=2019?y-2018:y-1988;return `${era}${ey===1?'元':ey}年${d.getMonth()+1}月${d.getDate()}日`;}
 function formatScenario(d){const term=d.method==='eg'?`${d.count}回`:`${d.years}年（${Number(d.years||0)*12}回）`;return `${nfmt(d.principal)}${d.unit}・年${Number(d.rate||0).toFixed(2)}%・${term}`;}
 function resultMonthlyLabel(d){return d.method==='eg'?'初回返済額':'毎月の返済額';}
@@ -318,7 +333,7 @@ function calc(data){
   const r=rate/12, exec=data.execDate, first=exec?nextBiz(firstRaw(exec,day)):null, firstDays=exec&&first?daysIncl(new Date(exec+'T00:00:00'),first):0, firstInterest=exec&&first?Math.floor(P*rate/365*firstDays):0;
   const dates=Array.from({length:n},(_,i)=>nthDue(exec,day,i+1));let bal=P,totalInterest=0,totalPay=0,regularPayment=0;const rows=[];
   if(data.method==='eg'){
-    const monthlyPrincipal=Math.floor(toMoney(data.monthlyPrincipal,data.unit));
+    const monthlyPrincipal=Math.floor(monthlyPrincipalYen(data));
     if(monthlyPrincipal<=0)return {error:'毎月元金を入力してください。'};
     if(monthlyPrincipal*Math.max(0,n-1)>=P)return {error:'毎月元金 ×（返済回数−1）が借入金額を超えています。毎月元金または返済回数を見直してください。'};
     for(let i=1;i<=n;i++){const interest=(i===1&&exec)?firstInterest:Math.floor(bal*r),principal=i===n?bal:Math.min(monthlyPrincipal,bal),pay=principal+interest;bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal,bonus:false});}
@@ -348,7 +363,7 @@ function calc(data){
 function applyTheme(theme,persist=true){const next=theme==='light'?'light':'dark';document.documentElement.dataset.theme=next;$('themeToggle').dataset.theme=next;$('themeToggle').setAttribute('aria-label',next==='dark'?'ライトモードに切り替え':'ダークモードに切り替え');document.querySelector('meta[name="theme-color"]').setAttribute('content',next==='dark'?'#06142d':'#f5f8fd');if(persist)localStorage.setItem(STORAGE.theme,next);}
 function saveCurrent(data){localStorage.setItem(STORAGE.current,JSON.stringify(data));}
 function loadCurrent(){for(const k of [STORAGE.current,...legacyCurrent]){try{const raw=localStorage.getItem(k);if(raw)return normalizeData(JSON.parse(raw));}catch(_){}}return null;}
-function normalizeData(d){const base=defaultData();return {...base,...d,method:d?.method==='eg'?'eg':'ep',unit:d?.unit==='円'?'円':'万円',bonus:d?.bonus===true};}
+function normalizeData(d){const base=defaultData(),hasMonthlyPrincipalUnit=!!d&&Object.prototype.hasOwnProperty.call(d,'monthlyPrincipalUnit');const next={...base,...d,method:d?.method==='eg'?'eg':'ep',unit:d?.unit==='円'?'円':'万円',bonus:d?.bonus===true};if(next.method==='eg'){if(next.monthlyPrincipal&&!hasMonthlyPrincipalUnit)next.monthlyPrincipal=inputNumber(toMoney(next.monthlyPrincipal,next.unit));next.monthlyPrincipalUnit='円';}return next;}
 function history(){try{const x=JSON.parse(localStorage.getItem(STORAGE.history)||'[]');return Array.isArray(x)?x:[]}catch(_){return[]}}
 function pushHistory(data,result){const item={id:Date.now(),createdAt:new Date().toISOString(),data:clone(data),monthly:result.regularPayment,total:result.totalPay};const next=[item,...history()].slice(0,5);localStorage.setItem(STORAGE.history,JSON.stringify(next));}
 function saved(){try{const x=JSON.parse(localStorage.getItem(STORAGE.saved)||'[]');return Array.isArray(x)?x:[]}catch(_){return[]}}
@@ -376,7 +391,7 @@ function renderSingle(){
   d.wareki=warekiMode;
   const methodLabel=d.method==='eg'?'元金均等':'元利均等';
   const monthlyLabel=resultMonthlyLabel(d);
-  const repayNote=d.method==='eg'?'毎月元金：'+nfmt(toMoney(d.monthlyPrincipal,d.unit))+'円':'通常月の返済額';
+  const repayNote=d.method==='eg'?'毎月元金：'+nfmt(monthlyPrincipalYen(d))+'円':'通常月の返済額';
   $('singleView').innerHTML=`
   <section class="printCover"><section class="printBrand"><div><div class="printBrandTitle">返済予定表</div><div class="printBrandSub">返済試算 Ver2.36.1</div></div><div class="printBrandMeta">${formatScenario(d)}<br>作成日：${new Date().toLocaleDateString('ja-JP')}</div></section>
   <section class="card resultHero"><div class="resultHeroTop"><div><div class="eyebrow">SIMULATION RESULT</div><h2>${monthlyLabel}</h2></div><span class="resultMethod">${methodLabel}</span></div><div class="resultPayment">${yen(r.regularPayment)}<small>/ 月</small></div><div class="resultPaymentFoot">初回返済日：${jpDate(r.first,d.wareki)}　／　返済回数：${r.n}回</div><div class="resultConditionCompact"><strong>${formatScenario(d)}</strong><span>返済日：毎月${d.repayDay}日</span><span>実行日：${d.execDate||'未設定'}</span>${d.bonus?'<span>ボーナス払いあり</span>':''}</div></section></section>
@@ -427,8 +442,8 @@ function openWizard(mode='new', seed=null){
 function closeWizard(){ $('wizardLayer').classList.remove('open');$('wizardLayer').setAttribute('aria-hidden','true'); }
 function renderWizard(){
   const d=wizard.data;const steps=[...document.querySelectorAll('.wizardStep')];steps.forEach((s,i)=>s.classList.toggle('active',i===wizard.step));$('stepDots').innerHTML=steps.map((_,i)=>`<i class="${i<=wizard.step?'active':''}"></i>`).join('');$('wizardBack').hidden=wizard.step===0;$('wizardNext').textContent=wizard.step===4?'試算する':'次へ';$('wizardError').classList.remove('show');
-  $('wPrincipal').value=d.principal;$('wPrincipalUnit').textContent=d.unit;$('wMonthlyPrincipalUnit').textContent=d.unit;$('wBonusUnit').textContent=d.unit;$('wRate').value=d.rate;$('wYears').value=d.years||10;$('wCount').value=d.count||120;$('wMonthlyPrincipal').value=d.monthlyPrincipal||'';$('wRepayDay').value=d.repayDay||17;$('wExecDate').value=d.execDate||toISO(new Date());$('wBonusAmount').value=d.bonusAmount||'';$('wBonusMonth1').value=d.bonusMonth1||'6';$('wBonusMonth2').value=d.bonusMonth2||'12';
-  document.querySelectorAll('#unitSeg button').forEach(b=>b.classList.toggle('selected',b.dataset.unit===d.unit));$('wEP').classList.toggle('selected',d.method==='ep');$('wEG').classList.toggle('selected',d.method==='eg');$('epTermFields').hidden=d.method!=='ep';$('egTermFields').hidden=d.method!=='eg';$('bonusBlock').hidden=d.method==='eg';$('bonusFields').hidden=!d.bonus;$('wBonusNo').classList.toggle('selected',!d.bonus);$('wBonusYes').classList.toggle('selected',d.bonus);$('termTitle').textContent=d.method==='ep'?'返済期間を入力':'返済回数と毎月元金を入力';$('termLead').textContent=d.method==='ep'?'候補を選ぶか、必要なときだけ入力欄をタップして直接入力してください。':'返済回数と毎月元金を指定してください。入力欄は必要なときだけタップして直接入力できます。';
+  $('wPrincipal').value=d.principal;$('wPrincipalUnit').textContent=d.unit;$('wMonthlyPrincipalUnit').textContent='円';$('wBonusUnit').textContent=d.unit;$('wRate').value=d.rate;$('wYears').value=d.years||10;$('wCount').value=d.count||120;$('wMonthlyPrincipal').value=d.monthlyPrincipal||'';$('wRepayDay').value=d.repayDay||17;$('wExecDate').value=d.execDate||toISO(new Date());$('wBonusAmount').value=d.bonusAmount||'';$('wBonusMonth1').value=d.bonusMonth1||'6';$('wBonusMonth2').value=d.bonusMonth2||'12';
+  document.querySelectorAll('#unitSeg button').forEach(b=>b.classList.toggle('selected',b.dataset.unit===d.unit));$('wEP').classList.toggle('selected',d.method==='ep');$('wEG').classList.toggle('selected',d.method==='eg');$('epTermFields').hidden=d.method!=='ep';$('egTermFields').hidden=d.method!=='eg';$('bonusBlock').hidden=d.method==='eg';$('bonusFields').hidden=!d.bonus;$('wBonusNo').classList.toggle('selected',!d.bonus);$('wBonusYes').classList.toggle('selected',d.bonus);$('termTitle').textContent=d.method==='ep'?'返済期間を入力':'返済回数と毎月元金を入力';$('termLead').textContent=d.method==='ep'?'候補を選ぶか、必要なときだけ入力欄をタップして直接入力してください。':'毎月元金は円単位で指定してください。割り切れない分は最終回で自動調整します。';updateEgPrincipalHint();
   renderWizardPills();
 }
 function renderWizardPills(){
@@ -437,16 +452,16 @@ function renderWizardPills(){
 }
 // 入力欄は自動フォーカスしない。キーボードは利用者が欄をタップした時だけ表示する。
 function wizardError(text){const e=$('wizardError');e.textContent=text;e.classList.add('show')}
-function commitStep(){const d=wizard.data; if(wizard.step===1){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===2){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(toMoney(d.monthlyPrincipal,d.unit)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
+function commitStep(){const d=wizard.data; if(wizard.step===1){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===2){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;d.monthlyPrincipalUnit='円';if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(monthlyPrincipalYen(d)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
 function nextWizard(auto=false){const err=commitStep();if(err){if(!auto)wizardError(err);return}if(wizard.step<4){releaseKeyboard();wizard.step++;renderWizard();return}wizard.data.wareki=warekiMode;const result=calc(wizard.data);if(result.error){wizardError(result.error);return}releaseKeyboard();pushHistory(wizard.data,result);const mode=wizard.mode;const data=clone(wizard.data);closeWizard();if(mode==='compare'){const a=clone(currentScenario),ra=currentResult;comparison={a,b:data,ra,rb:result};$('introCard').hidden=true;compareSchedulesOpen=false;compareMetric='pay';renderCompare()}else if(mode==='editA'&&comparison){comparison.a=data;comparison.ra=result;currentScenario=clone(data);currentResult=result;saveCurrent(data);renderCompare()}else if(mode==='editB'&&comparison){comparison.b=data;comparison.rb=result;renderCompare()}else{showCurrent(data,result)}}
 function prevWizard(){if(wizard.step>0){releaseKeyboard();wizard.step--;renderWizard()}}
 function bindWizard(){
   $('wizardNext').onclick=()=>nextWizard(false);$('wizardBack').onclick=prevWizard;$('closeWizard').onclick=closeWizard;
-  $('unitSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;const next=b.dataset.unit;if(next!==wizard.data.unit){const from=wizard.data.unit;['principal','monthlyPrincipal','bonusAmount'].forEach(k=>{const y=toMoney(wizard.data[k],from);wizard.data[k]=y?inputNumber(fromMoney(y,next)):''});wizard.data.unit=next;renderWizard();}};
-  $('wEP').onclick=()=>{wizard.data.method='ep';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};$('wEG').onclick=()=>{wizard.data.method='eg';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};
+  $('unitSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;const next=b.dataset.unit;if(next!==wizard.data.unit){const from=wizard.data.unit;['principal','bonusAmount'].forEach(k=>{const y=toMoney(wizard.data[k],from);wizard.data[k]=y?inputNumber(fromMoney(y,next)):''});wizard.data.unit=next;renderWizard();}};
+  $('wEP').onclick=()=>{wizard.data.method='ep';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};$('wEG').onclick=()=>{wizard.data.method='eg';wizard.data.bonus=false;wizard.data.monthlyPrincipalUnit='円';renderWizard();setTimeout(()=>nextWizard(true),180)};
   $('wBonusNo').onclick=()=>{wizard.data.bonus=false;renderWizard()};$('wBonusYes').onclick=()=>{wizard.data.bonus=true;renderWizard()};
   ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();nextWizard(false)}}));
-  ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount','wBonusMonth1','wBonusMonth2'].forEach(id=>$(id).addEventListener('input',()=>{$('wizardError').classList.remove('show')}));
+  ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount','wBonusMonth1','wBonusMonth2'].forEach(id=>$(id).addEventListener('input',()=>{$('wizardError').classList.remove('show');if(id==='wCount'){wizard.data.count=$('wCount').value;updateEgPrincipalHint()}}));
 }
 
 function openSheet(){renderHistoryList();$('sheetLayer').classList.add('open');$('sheetLayer').setAttribute('aria-hidden','false')}
@@ -559,26 +574,36 @@ function initSplash(){
   const mix=(a,b,n)=>a+(b-a)*n;
   const bezier=(a,b,c,d,t)=>{const u=1-t;return u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d};
 
-  const PARTICLE_COUNT=1560;
+  const PARTICLE_COUNT=1680;
   const particles=Array.from({length:PARTICLE_COUNT},(_,i)=>({
     seed:hash(i+1),drop:hash(i+2711),phase:hash(i+101)*TAU,lane:hash(i+211),
     delay:hash(i+307)*.94,speed:.78+hash(i+401)*.62,
-    size:.11+hash(i+503)*.40,twinkle:hash(i+607)*TAU
+    size:.12+hash(i+503)*.48,twinkle:hash(i+607)*TAU,warm:hash(i+811),flare:hash(i+929)
   }));
-  const atmosphere=Array.from({length:92},(_,i)=>({
-    x:hash(i+701),y:.10+hash(i+809)*.76,r:.12+hash(i+919)*.26,
-    phase:hash(i+1021)*TAU,speed:.003+hash(i+1103)*.007
+  const atmosphere=Array.from({length:112},(_,i)=>({
+    x:hash(i+701),y:.10+hash(i+809)*.76,r:.14+hash(i+919)*.30,
+    phase:hash(i+1021)*TAU,speed:.003+hash(i+1103)*.007,warm:hash(i+1249)
   }));
 
   const query=new URLSearchParams(location.search);const debugTime=Number(query.get('splashDebug'));
   const start=performance.now()-(Number.isFinite(debugTime)?debugTime*1000:0);
 
-  function dot(x,y,r,alpha,glow=false){
+  function dot(x,y,r,alpha,glow=false,warm=0){
     if(alpha<=.008||r<=0)return;
+    const isWarm=warm>.54;
     if(glow||alpha>.13){
-      ctx.beginPath();ctx.fillStyle=`rgba(63,169,255,${alpha*(glow?.20:.10)})`;ctx.arc(x,y,r*(glow?5.4:3.2),0,TAU);ctx.fill();
+      ctx.beginPath();ctx.fillStyle=isWarm?`rgba(255,186,72,${alpha*(glow?.24:.14)})`:`rgba(63,169,255,${alpha*(glow?.24:.12)})`;ctx.arc(x,y,r*(glow?6.1:3.5),0,TAU);ctx.fill();
     }
-    ctx.beginPath();ctx.fillStyle=`rgba(205,241,255,${alpha*(glow?.98:.78)})`;ctx.arc(x,y,r*(glow?1.75:1.14),0,TAU);ctx.fill();
+    ctx.beginPath();ctx.fillStyle=isWarm?`rgba(255,238,190,${alpha*(glow?.98:.86)})`:`rgba(218,247,255,${alpha*(glow?.98:.84)})`;ctx.arc(x,y,r*(glow?1.82:1.16),0,TAU);ctx.fill();
+  }
+  function starSpark(x,y,r,alpha,warm=0){
+    if(alpha<=.03)return;
+    const len=r*(warm>.54?7.2:5.6);
+    ctx.save();ctx.translate(x,y);ctx.rotate(warm*TAU);
+    ctx.strokeStyle=warm>.54?`rgba(255,228,162,${alpha})`:`rgba(218,247,255,${alpha*.86})`;
+    ctx.lineWidth=Math.max(.45,r*.34);ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(-len,0);ctx.lineTo(len,0);ctx.moveTo(0,-len*.72);ctx.lineTo(0,len*.72);ctx.stroke();
+    ctx.restore();
   }
 
   function drawHero(cx,cy,t,fade){
@@ -600,9 +625,9 @@ function initSplash(){
       heartbeat+=amp*Math.exp(-Math.pow((t-at)/width,2));
     }
     const beatNorm=clamp(heartbeat/1.55,0,1.36);
-    const pulse=.40+1.62*beatNorm;
-    const alpha=.90*clamp((t-.12)/.70)*fade;
-    const rr=1.48+2.15*beatNorm;
+    const pulse=.54+1.38*beatNorm+.18*Math.sin(t*5.2);
+    const alpha=.95*clamp((t-.12)/.70)*fade;
+    const rr=1.34+1.65*beatNorm;
 
     // 上昇中の短い尾。中心到着後も周囲の粉と馴染むよう小さく残す。
     if(heroQ<1){
@@ -613,17 +638,22 @@ function initSplash(){
       }
     }
 
-    // 主拍のときだけ、ごく薄い波紋が広がる。ローディングUIではなく光の鼓動に見せる。
+    // 主拍のときだけ、青いハローと白金の星芒が短く開く。点の点滅より、粉が集まって光る印象にする。
     if(beatNorm>.05){
-      const halo=5+beatNorm*15;
+      const halo=7+beatNorm*18;
       ctx.beginPath();
-      ctx.strokeStyle=`rgba(100,202,255,${alpha*beatNorm*.17})`;
-      ctx.lineWidth=.7+beatNorm*.45;
+      ctx.strokeStyle=`rgba(128,216,255,${alpha*beatNorm*.25})`;
+      ctx.lineWidth=.8+beatNorm*.55;
       ctx.arc(x,y,halo,0,TAU);
       ctx.stroke();
+      starSpark(x,y,1.15+beatNorm*.42,alpha*beatNorm*.82,.82);
     }
-    dot(x,y,rr,alpha*pulse,true);
-    dot(x,y,Math.max(.68,rr*.48),alpha,true);
+    for(let i=0;i<5;i++){
+      const a=t*.95+i*TAU/5;
+      dot(x+Math.cos(a)*(.8+beatNorm*3.8),y+Math.sin(a)*(.7+beatNorm*3.1),.28,alpha*(.16+beatNorm*.16),false,i%2?.72:.28);
+    }
+    dot(x,y,rr,alpha*pulse,true,.74);
+    dot(x,y,Math.max(.62,rr*.42),alpha,true,.92);
     return beatNorm;
   }
 
@@ -641,7 +671,7 @@ function initSplash(){
     for(const p of atmosphere){
       const x=((p.x+t*p.speed)%1)*w;
       const y=h*p.y+Math.sin(t*.48+p.phase)*7;
-      dot(x,y,p.r,.018+.013*Math.sin(t*.76+p.phase));
+      dot(x,y,p.r,.030+.020*Math.sin(t*.76+p.phase),false,p.warm);
     }
 
     // 時間の流れ
@@ -685,11 +715,13 @@ function initSplash(){
       x+=Math.cos(p.phase*2.1+t*1.4)*residual;
       y+=Math.sin(p.phase*1.5+t*1.2)*residual*.55;
 
-      const riseAlpha=(.10+.70*(1-p.lane))*Math.pow(Math.sin(Math.PI*Math.min(flowT,1)),.72);
-      const orbitAlpha=(.10+.73*(1-p.lane))*(.76+.24*Math.sin(t*3.1+p.twinkle));
+      const riseAlpha=(.15+.82*(1-p.lane))*Math.pow(Math.sin(Math.PI*Math.min(flowT,1)),.72);
+      const twinkle=.72+.28*Math.sin(t*4.2+p.twinkle);
+      const orbitAlpha=(.16+.82*(1-p.lane))*twinkle;
       let alpha=mix(riseAlpha,orbitAlpha,blend);
       if(t>=fadeStart)alpha*=1-.42*clamp((t-fadeStart)/(fadeEnd-fadeStart));
-      dot(x,y,p.size,alpha);
+      dot(x,y,p.size,alpha,false,p.warm);
+      if(p.flare>.91&&alpha>.20)starSpark(x,y,p.size,alpha*.28,p.warm);
     }
 
     // 中心の1粒は、心電図のような「ドッ、ドッ」で瞬く。下のカーブも同期させる。
@@ -702,14 +734,14 @@ function initSplash(){
     }
     if(metaBeatReady){
       const b=clamp(beatNorm,0,1.22);
-      // 下のカーブは常に淡く保ち、鼓動時もごく薄く発光するだけにする。
-      splashCurve.style.setProperty('--beat-opacity',(0.43+b*.10).toFixed(3));
-      splashCurve.style.setProperty('--beat-line-alpha',(0.22+b*.11).toFixed(3));
-      splashCurve.style.setProperty('--beat-blur',`${5+b*3}px`);
-      splashCurve.style.setProperty('--beat-glow-alpha',(0.16+b*.14).toFixed(3));
-      splashVersion.style.setProperty('--ver-opacity',(0.64+b*.10).toFixed(3));
-      splashVersion.style.setProperty('--ver-blur',`${10+b*4}px`);
-      splashVersion.style.setProperty('--ver-glow-alpha',(0.24+b*.16).toFixed(3));
+      // 下のカーブとVer表示は、中心の星芒に合わせて少し明るく呼吸させる。
+      splashCurve.style.setProperty('--beat-opacity',(0.58+b*.18).toFixed(3));
+      splashCurve.style.setProperty('--beat-line-alpha',(0.38+b*.20).toFixed(3));
+      splashCurve.style.setProperty('--beat-blur',`${8+b*7}px`);
+      splashCurve.style.setProperty('--beat-glow-alpha',(0.28+b*.24).toFixed(3));
+      splashVersion.style.setProperty('--ver-opacity',(0.80+b*.13).toFixed(3));
+      splashVersion.style.setProperty('--ver-blur',`${13+b*7}px`);
+      splashVersion.style.setProperty('--ver-glow-alpha',(0.42+b*.25).toFixed(3));
     }
 
     ctx.restore();
@@ -727,7 +759,11 @@ function restoreCurrent(){
   const result=calc(data);if(result.error)return false;
   showCurrent(data,result);return true;
 }
-function init(){applyTheme(localStorage.getItem(STORAGE.theme)||'dark',false);initSelects();bindWizard();bindSheet();bindTop();initAmbientDust();if(!restoreCurrent())showIntro();initSplash();}
+function registerServiceWorker(){
+  if(!('serviceWorker' in navigator)||location.protocol==='file:')return;
+  addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+function init(){applyTheme(localStorage.getItem(STORAGE.theme)||'dark',false);initSelects();bindWizard();bindSheet();bindTop();registerServiceWorker();initAmbientDust();if(!restoreCurrent())showIntro();initSplash();}
 init();
 })();
 </script>
