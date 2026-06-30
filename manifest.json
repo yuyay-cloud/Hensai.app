@@ -1,19 +1,21 @@
 {
   "name": "返済試算",
   "short_name": "返済試算",
-  "description": "返済条件の試算・比較・返済予定表を確認できるアプリ（Ver2.36.1）",
+  "description": "返済条件の試算・比較・返済予定表を確認できるアプリ Ver1.3.4",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#06142d",
-  "theme_color": "#06142d",
+  "background_color": "#040d1f",
+  "theme_color": "#040d1f",
   "lang": "ja",
   "icons": [
-    {"src":"./icon-180-v2361.png","sizes":"180x180","type":"image/png","purpose":"any"},
-    {"src":"./icon-192-v2361.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"./icon-192-maskable-v2361.png","sizes":"192x192","type":"image/png","purpose":"maskable"},
-    {"src":"./icon-512-v2361.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"./icon-512-maskable-v2361.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {"src":"./icon-180-v2362-circle.png","sizes":"180x180","type":"image/png","purpose":"any"},
+    {"src":"./icon-192-v2362-circle.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./icon-192-maskable-v2362-circle.png","sizes":"192x192","type":"image/png","purpose":"maskable"},
+    {"src":"./icon-512-v2362-circle.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"./icon-512-maskable-v2362-circle.png","sizes":"512x512","type":"image/png","purpose":"maskable"},
+    {"src":"./icon-1024-v2362-circle.png","sizes":"1024x1024","type":"image/png","purpose":"any"},
+    {"src":"./icon-1024-maskable-v2362-circle.png","sizes":"1024x1024","type":"image/png","purpose":"maskable"}
   ]
 }

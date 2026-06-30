@@ -4,7 +4,7 @@
 
 このリポジトリは、日本語の返済試算 PWA です。主な利用環境は Android の Chrome / ホーム画面に追加した PWA で、画面幅 360〜430px のスマートフォンを最優先にします。
 
-- 現在の安定ベース: **Ver2.36.1**
+- 現在の安定ベース: **Ver1.3.4**
 - 構成: **静的 HTML + CSS + Vanilla JavaScript**
 - フレームワーク、ビルドツール、外部 UI ライブラリは導入しない
 - 公開方法: GitHub Pages を想定
@@ -19,7 +19,8 @@
 | `index.html` | アプリ本体。HTML / CSS / JavaScript が 1ファイルに統合されている |
 | `manifest.json` | PWA 名称、起動モード、テーマ色、アイコン設定 |
 | `sw.js` | Service Worker。オフライン時の最低限のキャッシュ処理 |
-| `icon-*-v2361.png` | 現行 Ver2.36.1 の PWA アイコン |
+| `icon-*-v2362-circle.png` | 現行 Ver1.3.4 の PWA アイコン |
+| `icon-180-v2362-circle.png` | iOS / Apple touch icon 用アイコン |
 | `proposal_logo_light_transparent.png` | ホーム画面用ロゴ素材 |
 
 ### 現行の重要な実装箇所（`index.html`）
@@ -148,4 +149,3 @@
    - 変更していない重要機能
    - 確認した項目
    - 残るリスク / 未確認項目
-
