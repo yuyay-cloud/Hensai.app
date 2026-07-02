@@ -7,6 +7,28 @@
 
 Google Play と App Store Connect へ提出するスクリーンショットの撮影リストです。審査担当者と利用者が、アプリの実機能を短時間で理解できる構成にします。
 
+## 自動生成
+
+ローカルにChromeまたはEdgeがある環境では、以下で提出用画像を生成できます。
+
+```powershell
+pnpm install
+pnpm run store:screenshots
+```
+
+Chrome/Edgeの場所を自動検出できない場合は、`CHROME_PATH` にブラウザ実行ファイルを指定してください。
+Codexの同梱Nodeを使う環境では、必要に応じて同梱Nodeの `node\bin` を `Path` に追加してから実行してください。
+
+出力先:
+
+- `outputs/store-screenshots/google-play/feature-graphic-1024x500.jpg`
+- `outputs/store-screenshots/google-play-phone/*.jpg`
+- `outputs/store-screenshots/app-store-iphone-6-9/*.png`
+- `outputs/store-screenshots/app-store-iphone-6-5/*.png`
+- `outputs/store-screenshots/manifest.json`
+
+画像本体は大きいためGit管理対象外です。必要なタイミングで再生成して、Play Console / App Store Connectにアップロードします。
+
 ## 撮影対象シナリオ
 
 推奨の入力例:
@@ -68,15 +90,16 @@ Appleの仕様では、スクリーンショットは1〜10枚、`.jpeg`、`.jpg
 
 推奨:
 
-- iPhone 6.9インチ系: 6〜8枚
-- iPhone 6.5インチ系: 必要に応じて同じ構成で作成
+- iPhone 6.9インチ系: `1320 x 2868` のPNGを6〜8枚
+- iPhone 6.5インチ系: `1242 x 2688` のPNGを必要に応じて同じ構成で作成
 - iPad対応として提出する場合: iPad用も同じ構成で作成
 
 ## Google Play
 
 推奨:
 
-- Phone screenshots: 6〜8枚
+- Feature graphic: `1024 x 500` のJPGまたは24-bit PNG
+- Phone screenshots: `1080 x 1920` のJPGを6〜8枚
 - 画像内テキストは短くし、計算結果・予定表・比較機能を中心に見せる
 - 金融アドバイスや融資提供に見える表現は避ける
 

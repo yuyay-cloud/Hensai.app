@@ -1,4 +1,4 @@
-const CACHE = 'hensai-v2363-schedule-count-fit-2';
+const CACHE = 'hensai-v2363-store-screenshots-1';
 const ASSETS = [
   './', './index.html', './privacy.html', './support.html', './manifest.json', './v2362-ui.css', './v2362-ui.js',
   './icon-180-v2362-circle.png',
