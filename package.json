@@ -1,0 +1,21 @@
+{
+  "name": "hensai-app",
+  "version": "2.36.3",
+  "private": true,
+  "description": "返済条件の試算・比較・返済予定表を確認できるPWA / モバイルアプリ",
+  "scripts": {
+    "build:web": "node scripts/build-mobile-assets.mjs",
+    "cap:sync": "pnpm run build:web && cap sync",
+    "android:sync": "pnpm run build:web && cap sync android",
+    "ios:sync": "pnpm run build:web && cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.4.1",
+    "@capacitor/core": "8.4.1",
+    "@capacitor/ios": "8.4.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.4.1"
+  },
+  "packageManager": "pnpm@11.7.0"
+}
