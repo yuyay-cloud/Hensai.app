@@ -25,6 +25,11 @@
 ## 提出前に必要な作業
 
 - Android Studio で Android プロジェクトを開き、署名設定を行う。
+- GitHub Actions で署名済みAABを作る場合は、以下のSecretsを登録する。
+  - `ANDROID_KEYSTORE_BASE64`
+  - `ANDROID_KEYSTORE_PASSWORD`
+  - `ANDROID_KEY_ALIAS`
+  - `ANDROID_KEY_PASSWORD`
 - Xcode で iOS プロジェクトを開き、Team、Bundle Identifier、Signing を設定する。
 - ストア用スクリーンショットを作成する。
 - App Privacy / Data Safety で、返済条件は端末内保存のみで外部送信しないことを申告する。
@@ -60,3 +65,9 @@ pnpm run ios:sync
 ```
 
 iOS の最終ビルドと提出は macOS + Xcode が必要。
+
+## CI / リリースワークフロー
+
+- `Mobile build check`: PRとmain更新時にWeb生成、Capacitor同期、Android Debug APK、iOS Simulatorビルドを確認する。
+- `Android release bundle`: 手動実行で署名済みAndroid App Bundleを作成する。Google Play提出前に上記Secretsが必要。
+- iOSのApp Store提出用Archiveは、Apple Developer Teamと署名設定が必要なためXcodeで作成する。
