@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '1.3.4';
+  const VERSION = '2.36.2';
   const DATE_MODE_KEY = 'hensai_v236_date_mode';
   const SNAP_A = 'hensai_v2362_compare_a';
   const SNAP_B = 'hensai_v2362_compare_b';
@@ -13,10 +13,10 @@
   const clone = v => JSON.parse(JSON.stringify(v));
 
   function updateVersionText(){
-    document.title = document.title.replace(/Ver\s*(?:2\.36\.[12]|1\.3\.[0-3])/g, `Ver${VERSION}`);
+    document.title = document.title.replace(/Ver\s*(?:2\.36\.\d+|1\.3\.\d+)/g, `Ver${VERSION}`);
     $$('.splashVersion,.printBrandSub').forEach(el => {
-      if(/(?:2\.36\.[12]|1\.3\.[0-3])/.test(el.textContent)){
-        el.textContent = el.textContent.replace(/(?:2\.36\.[12]|1\.3\.[0-3])/g, VERSION);
+      if(/(?:2\.36\.\d+|1\.3\.\d+)/.test(el.textContent)){
+        el.textContent = el.textContent.replace(/(?:2\.36\.\d+|1\.3\.\d+)/g, VERSION);
       }
     });
   }
@@ -92,6 +92,13 @@
 
   /* Calculation mirror for the new comparison matrix/detail table. */
   function toMoney(value,unit){ return (parseFloat(value)||0)*(unit==='万円'?10000:1); }
+  function monthlyPrincipalYen(data){
+    const raw=parseFloat(data?.monthlyPrincipal)||0;
+    if(raw<=0)return 0;
+    if(data?.monthlyPrincipalUnit==='円')return Math.floor(raw);
+    const legacyUnit=data?.monthlyPrincipalUnit||(data?.unit==='万円'&&raw<1000?'万円':'円');
+    return Math.floor(legacyUnit==='万円'?raw*10000:raw);
+  }
   function key(date){ return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
   function nthWeekday(year,month,weekday,occ){ const first=new Date(year,month,1); const offset=(weekday-first.getDay()+7)%7; return new Date(year,month,1+offset+(occ-1)*7); }
   function vernal(y){ return Math.floor(20.8431+.242194*(y-1980)-Math.floor((y-1980)/4)); }
@@ -128,7 +135,7 @@
       if(!P||!n||!data.execDate)return null; const r=rate/12,first=nextBiz(firstRaw(data.execDate,day)),firstDays=daysIncl(new Date(data.execDate+'T00:00:00'),first),firstInterest=Math.floor(P*rate/365*firstDays),dates=Array.from({length:n},(_,i)=>nthDue(data.execDate,day,i+1));
       let bal=P,totalInterest=0,totalPay=0,regularPayment=0;const rows=[];
       if(data.method==='eg'){
-        const monthly=Math.floor(toMoney(data.monthlyPrincipal,data.unit));if(monthly<=0)return null;
+        const monthly=monthlyPrincipalYen(data);if(monthly<=0)return null;
         for(let i=1;i<=n;i++){const interest=(i===1)?firstInterest:Math.floor(bal*r),principal=i===n?bal:Math.min(monthly,bal),pay=principal+interest;bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal});} regularPayment=rows[0]?.pay||0;
       }else{
         let bonusAmount=0,bonusIndexes=[];
@@ -166,6 +173,7 @@
   }
   function decorateCompare(view){
     const top=$('.compareTop',view);if(!top||top.dataset.v2362Done==='1')return;
+    if($('.compareDeltaHero',top)){top.dataset.v2362Done='1';return;}
     const data=getCompareData();if(!data)return;
     top.dataset.v2362Done='1';
     const matrix=document.createElement('div');matrix.className='compareMatrix';matrix.innerHTML=`<div class="cmHead"></div><div class="cmHead">PATTERN A</div><div class="cmHead">PATTERN B</div>${compareRows(data)}`;
@@ -200,7 +208,7 @@
     const selectedUnit=$('#unitSeg .selected')?.dataset.unit || '万円';
     const d={
       principal:$('#wPrincipal')?.value||'',unit:selectedUnit,rate:$('#wRate')?.value||'',method:$('#wEG')?.classList.contains('selected')?'eg':'ep',
-      years:$('#wYears')?.value||'10',count:$('#wCount')?.value||'120',monthlyPrincipal:$('#wMonthlyPrincipal')?.value||'',repayDay:$('#wRepayDay')?.value||'17',execDate:$('#wExecDate')?.value||'',
+      years:$('#wYears')?.value||'10',count:$('#wCount')?.value||'120',monthlyPrincipal:$('#wMonthlyPrincipal')?.value||'',monthlyPrincipalUnit:'円',repayDay:$('#wRepayDay')?.value||'17',execDate:$('#wExecDate')?.value||'',
       bonus:$('#wBonusYes')?.classList.contains('selected')||false,bonusMonth1:$('#wBonusMonth1')?.value||'6',bonusMonth2:$('#wBonusMonth2')?.value||'12',bonusAmount:$('#wBonusAmount')?.value||''
     };
     if(title.includes('パターンA'))sessionStorage.setItem(SNAP_A,JSON.stringify(d));

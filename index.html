@@ -8,7 +8,7 @@
 <link href="./manifest.json" rel="manifest"/>
 <link href="./icon-180-v2362-circle.png" rel="apple-touch-icon"/>
 <link href="./icon-192-v2362-circle.png" rel="icon" type="image/png"/>
-<title>返済試算 Ver1.3.4</title>
+<title>返済試算 Ver2.36.2</title>
 <style>
 :root{
   color-scheme:dark;
@@ -73,6 +73,8 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 .compareMatrix>div{min-width:0;padding:10px 8px;border-bottom:1px solid var(--line);font-size:.75rem;line-height:1.42}
 .compareMatrix>div:nth-last-child(-n+4){border-bottom:0}.compareMatrix .cmHead{background:var(--soft);color:var(--muted);font-size:.67rem;font-weight:900;letter-spacing:.06em;text-align:center}.compareMatrix .cmLabel{background:color-mix(in srgb,var(--soft) 44%,transparent);color:var(--muted);font-weight:900;display:flex;align-items:center}.compareMatrix .cmValue{text-align:right;color:var(--ink);font-weight:800;overflow:hidden;text-overflow:ellipsis}.compareMatrix .cmValue.condition{text-align:left;color:var(--muted);font-size:.70rem}.compareMatrix .cmValue.emphasis{color:var(--blue);font-size:.88rem;font-weight:950}.compareMatrix .cmValue.deltaPlus{color:var(--danger)}.compareMatrix .cmValue.deltaMinus{color:var(--success)}.compareSummary{margin-top:10px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--blue) 24%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--soft) 74%,transparent);color:var(--muted);font-size:.79rem;line-height:1.55}.compareSummary strong{color:var(--blue)}
 .compareDetailCard{overflow:hidden}.compareMetricTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 12px 11px}.compareMetricTabs button{padding:9px 6px;border:1px solid var(--line);border-radius:10px;background:var(--input);color:var(--muted);font-size:.71rem;font-weight:900}.compareMetricTabs button.selected{border-color:transparent;background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 5px 12px rgba(28,112,245,.20)}.compareDetailTable{min-width:560px;font-size:.77rem}.compareDetailTable td:nth-child(2){text-align:left;color:var(--muted);font-size:.70rem;line-height:1.35;white-space:normal}.deltaPlus{color:var(--danger);font-weight:900}.deltaMinus{color:var(--success);font-weight:900}.same{color:var(--muted)}
+.compareDeltaHero{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0 12px}.compareDeltaItem{position:relative;overflow:hidden;padding:14px 13px;border:1px solid var(--line);border-radius:15px;background:color-mix(in srgb,var(--card) 92%,transparent)}.compareDeltaItem span{display:block;color:var(--muted);font-size:.72rem;font-weight:900;line-height:1.35}.compareDeltaItem strong{display:block;margin-top:7px;font-size:1.18rem;line-height:1.1;font-weight:950;letter-spacing:-.01em}.compareDeltaItem.deltaPlus{border-color:color-mix(in srgb,var(--danger) 42%,var(--line));background:color-mix(in srgb,var(--danger) 12%,var(--card))}.compareDeltaItem.deltaPlus strong{color:var(--danger)}.compareDeltaItem.deltaMinus{border-color:color-mix(in srgb,var(--success) 42%,var(--line));background:color-mix(in srgb,var(--success) 12%,var(--card))}.compareDeltaItem.deltaMinus strong{color:var(--success)}.compareDeltaItem.same strong{color:var(--muted)}.comparePrintCover{display:none}.fieldHint{min-height:1.2em;margin:8px 0 0;color:var(--muted);font-size:.78rem;line-height:1.5}.scheduleMiniGrid{display:grid;grid-template-columns:.76fr 1.28fr 1.2fr 1.2fr;gap:0;border-bottom:1px solid var(--line)}.scheduleMiniGrid>div{min-width:0;padding:11px 8px;border-right:1px solid var(--line)}.scheduleMiniGrid>div:last-child{border-right:0}.scheduleMiniGrid span{display:block;color:var(--muted);font-size:.68rem;font-weight:900}.scheduleMiniGrid b{display:block;margin-top:4px;color:var(--ink);font-size:.80rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.scheduleMiniGrid .pay b,.scheduleMiniGrid .balance b{color:var(--blue)}.scheduleBreakdown{padding:0 12px 11px}.scheduleBreakdown summary{list-style:none;margin-top:10px;color:var(--muted);font-size:.74rem;font-weight:900;cursor:pointer}.scheduleBreakdown summary::-webkit-details-marker{display:none}.scheduleBreakdown summary:after{content:"＋";margin-left:6px;color:var(--blue)}.scheduleBreakdown[open] summary:after{content:"－"}.scheduleBreakdownGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.scheduleBreakdownGrid div{padding:9px;border:1px solid var(--line);border-radius:11px;background:color-mix(in srgb,var(--soft) 46%,transparent)}.scheduleBreakdownGrid span{display:block;color:var(--muted);font-size:.68rem;font-weight:900}.scheduleBreakdownGrid b{display:block;margin-top:4px;font-size:.82rem}
+@media screen and (max-width:600px){.compareDeltaHero{grid-template-columns:1fr}.compareDeltaItem{padding:13px 12px}.compareDeltaItem strong{font-size:1.24rem}.scheduleCard:not(.compareDetailCard)>.tableScroll{display:none!important}.scheduleCard:not(.compareDetailCard)>.scheduleMobileList{display:grid!important;gap:10px;padding:0 12px 14px}.scheduleMobileItem{border-radius:15px}.compareDetailCard>.tableScroll{display:block!important;overflow-x:hidden!important}.compareDetailTable{min-width:0!important;width:100%;table-layout:fixed;font-size:.68rem}.compareDetailTable th,.compareDetailTable td{padding:7px 4px;line-height:1.25}.compareDetailTable th:nth-child(1),.compareDetailTable td:nth-child(1){width:15%}.compareDetailTable th:nth-child(2),.compareDetailTable td:nth-child(2){width:25%}.compareDetailTable th:nth-child(3),.compareDetailTable td:nth-child(3),.compareDetailTable th:nth-child(4),.compareDetailTable td:nth-child(4),.compareDetailTable th:nth-child(5),.compareDetailTable td:nth-child(5){width:20%}}
 @media(max-width:380px){.compareMatrix>div{padding:9px 6px;font-size:.70rem}.compareMatrix .cmLabel,.compareMatrix .cmHead{font-size:.64rem}.compareMatrix .cmValue.emphasis{font-size:.80rem}.compareMetricTabs{gap:4px;padding-left:10px;padding-right:10px}.compareMetricTabs button{font-size:.66rem;padding:8px 3px}}
 .note{padding:15px 17px;color:var(--muted);font-size:.84rem;line-height:1.7}.note b{color:var(--ink)}
 .bottomNav{position:fixed;z-index:19;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:var(--appbar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px)}.bottomNavInner{max-width:780px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}.bottomNav button{display:grid;place-items:center;gap:3px;color:var(--muted);font-size:.72rem;font-weight:700;padding:2px 8px}.bottomNav button.active{color:var(--blue)}
@@ -86,9 +88,9 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 @media (max-width:420px){.homeIdentity{width:70px;height:70px;border-radius:20px}.homeIdentity img{width:70px;height:70px;border-radius:20px}.hero h2{font-size:1.25rem}.metric .mValue{font-size:1.15rem}.compareMini .major{font-size:.95rem}.compareMini{padding:10px}.headTitle p{display:none}.choiceBtn{min-height:88px}.wizardBody{padding:18px}.wizardHead{padding:17px 17px 12px}.wizardFoot{padding:12px 17px 17px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}.splashCanvas{display:none}}
 @page{size:A4 portrait;margin:11mm}
-@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver1.3.4";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.scheduleMobileList{display:none!important}.tableScroll{display:block!important;overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
+@media print{html,body{background:#fff!important;color:#071a3d!important;min-height:auto!important;padding:0!important}.appbar,.bottomNav,.modalLayer,.sheetLayer,#splash,#ambientDust,.summaryActions,.scheduleToggle,.hero .outlineBtn{display:none!important}.wrap{display:block!important;max-width:none!important;padding:0!important}.card{background:#fff!important;color:#071a3d!important;border:0!important;border-radius:0!important;box-shadow:none!important;break-inside:avoid}.hero{padding:0 0 9mm!important}.hero:before{content:"返済試算  Ver2.36.2";font-size:16pt;font-weight:800;display:block;margin-bottom:5mm}.hero h2{font-size:14pt!important}.hero p{color:#41516a!important}.summaryCard,.compareTop{padding:0 0 7mm!important}.metrics{gap:4mm!important}.metric{border:1px solid #dfe7f1!important;padding:4mm!important}.metric .mValue{color:#1457d9!important}.scheduleCard{margin-top:6mm!important}.scheduleHead{padding:0 0 4mm!important}.scheduleMobileList{display:none!important}.tableScroll{display:block!important;overflow:visible!important;border-top:1px solid #dfe7f1!important}table{min-width:0!important;font-size:8pt!important}th{background:#f2f6fb!important;color:#42526b!important}th,td{padding:2.5mm 2mm!important;border-bottom:1px solid #dfe7f1!important}.note{display:none!important}.compareSchedules .scheduleCard{page-break-before:always}.compareSchedules .scheduleCard:first-child{page-break-before:auto}.conditionLine,.difference{background:#f6f9fd!important;border-color:#dfe7f1!important;color:#41516a!important}.conditionLine strong,.difference b{color:#071a3d!important}}
 
-/* ---- Ver1.3.4 result-screen + print refinement ---- */
+/* ---- Ver2.36.2 result-screen + print refinement ---- */
 .printBrand{display:none}
 .resultHero{position:relative;overflow:hidden;padding:20px;background:linear-gradient(138deg,rgba(20,75,166,.96),rgba(14,43,99,.96) 60%,rgba(11,29,64,.98));border-color:rgba(123,186,255,.32);box-shadow:0 18px 34px rgba(3,20,55,.22)}
 :root[data-theme="light"] .resultHero{background:linear-gradient(138deg,#eaf4ff,#dbeeff 60%,#e7f4ff);border-color:#c8def7;box-shadow:0 14px 28px rgba(34,93,174,.10)}
@@ -114,7 +116,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 
 
 
-/* ---- Ver1.3.4 PDF Print: Concept C / dark brand cover + white schedule ---- */
+/* ---- Ver2.36.2 PDF Print: Concept C / dark brand cover + white schedule ---- */
 .printCover{display:contents}
 @media print{
   @page{size:A4 portrait;margin:9mm}
@@ -175,9 +177,13 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 }
 
 @media print{
-  .dateModeSwitch,.compareMetricTabs{display:none!important}
+  .dateModeSwitch,.compareMetricTabs,#closeCompare{display:none!important}
   .compareDetailTable{min-width:0!important;font-size:8pt!important}
   .compareDetailTable th,.compareDetailTable td{padding:2.5mm 2mm!important}
+  .comparePrintCover{display:block!important;position:relative!important;overflow:hidden!important;margin:0 0 6mm!important;padding:7mm!important;border:1px solid #12386f!important;border-radius:4mm!important;background:linear-gradient(135deg,#06142d,#123f82)!important;color:#fff!important;break-inside:avoid!important}
+  .comparePrintCover:after{content:"";position:absolute;right:-18mm;bottom:-26mm;width:82mm;height:82mm;border-radius:50%;border:1px solid rgba(169,225,255,.24);box-shadow:0 0 0 9mm rgba(93,177,255,.05)}
+  .comparePrintHead{position:relative;z-index:1;display:flex!important;justify-content:space-between!important;gap:10mm!important;align-items:flex-start!important}.comparePrintHead h2{margin:1mm 0 0!important;color:#fff!important;font-size:20pt!important}.comparePrintHead p,.comparePrintHead strong{color:rgba(222,241,255,.82)!important;font-size:8pt!important}.comparePrintConditions{position:relative;z-index:1;display:grid!important;grid-template-columns:1fr 1fr!important;gap:4mm!important;margin-top:7mm!important}.comparePrintConditions article,.comparePrintDeltas article{padding:4mm!important;border:1px solid rgba(213,236,255,.28)!important;border-radius:3mm!important;background:rgba(255,255,255,.10)!important}.comparePrintConditions span,.comparePrintDeltas span{display:block!important;color:rgba(223,241,255,.76)!important;font-size:8pt!important;font-weight:800!important}.comparePrintConditions b{display:block!important;margin-top:1.5mm!important;color:#fff!important;font-size:9pt!important;line-height:1.55!important}.comparePrintDeltas{position:relative;z-index:1;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:4mm!important;margin-top:5mm!important}.comparePrintDeltas strong{display:block!important;margin-top:1.5mm!important;font-size:16pt!important;line-height:1.1!important}.comparePrintDeltas .deltaPlus strong{color:#ffb3bd!important}.comparePrintDeltas .deltaMinus strong{color:#9ff0d6!important}.comparePrintDeltas .same strong{color:#e7f3ff!important}
+  .compareDeltaHero{grid-template-columns:repeat(3,1fr)!important}.compareDeltaItem{background:#fff!important;border:1px solid #d4e2f0!important}.compareDeltaItem strong{font-size:13pt!important}
 }
 
 </style>
@@ -187,7 +193,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 <div class="app">
 <header class="appbar">
 <div class="head">
-<div class="headTitle"><h1>返済試算</h1><p>REPAYMENT SIMULATOR</p></div>
+<div class="headTitle"><h1>返済試算</h1><p>REPAYMENT SIMULATOR Ver2.36.2</p></div>
 <div class="headActions">
 <button aria-label="ライトモードに切り替え" class="themeToggle" data-theme="dark" id="themeToggle" type="button"><span class="ico moon">☾</span><span class="ico sun">☀</span><span class="knob"></span></button>
 <button aria-label="メニュー" class="iconBtn" id="menuBtn" type="button"><span class="hamburger"></span></button>
@@ -228,7 +234,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 </div><div class="wizardStep" data-step="3">
 <h3 id="termTitle">返済期間を入力</h3><p class="lead" id="termLead">返済年数を入力してください。</p>
 <div id="epTermFields"><div class="inputUnit"><input class="bigInput" id="wYears" inputmode="numeric" max="50" min="1" type="number" value="10"/><span>年</span></div><div class="pillGrid" id="yearPills"></div></div>
-<div hidden="" id="egTermFields"><div class="fieldLabel">返済回数</div><div class="inputUnit"><input class="smallInput" id="wCount" inputmode="numeric" max="600" min="1" type="number" value="120"/><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input class="smallInput" id="wMonthlyPrincipal" inputmode="decimal" min="0" placeholder="例：1" step="0.01" type="number"/><span id="wMonthlyPrincipalUnit">万円</span></div><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
+<div hidden="" id="egTermFields"><div class="fieldLabel">返済回数</div><div class="inputUnit"><input class="smallInput" id="wCount" inputmode="numeric" max="600" min="1" type="number" value="120"/><span>回</span></div><div class="fieldLabel">毎月元金</div><div class="inputUnit"><input class="smallInput" id="wMonthlyPrincipal" inputmode="numeric" min="0" placeholder="例：10000" step="1" type="number"/><span id="wMonthlyPrincipalUnit">円</span></div><p class="fieldHint" id="monthlyPrincipalHint"></p><p class="lead" style="margin-top:9px">最終回の元金は、残った元金を自動で返済します。</p></div>
 </div><div class="wizardStep" data-step="4">
 <h3>詳細条件を確認</h3><p class="lead">返済日と実行日を設定します。ボーナス払いは必要な場合だけ使えます。</p>
 <div class="inlineFields"><div><div class="fieldLabel">返済日</div><input class="smallInput" id="wRepayDay" inputmode="numeric" max="31" min="1" type="number" value="17"/></div><div><div class="fieldLabel">融資実行日</div><input class="smallInput" id="wExecDate" type="date"/></div></div>
@@ -239,7 +245,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 </section>
 </div>
 <div aria-hidden="true" class="sheetLayer" id="sheetLayer"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><button class="sheetClose" id="sheetClose" type="button">閉じる</button></div></div>
-<div aria-label="起動画面" id="splash"><canvas class="splashCanvas" id="splashCanvas"></canvas><div class="splashVersion">v1.3.4</div><div class="splashCurve"></div></div>
+<div aria-label="起動画面" id="splash"><canvas class="splashCanvas" id="splashCanvas"></canvas><div class="splashVersion">v2.36.2</div><div class="splashCurve"></div></div>
 <script>
 (() => {
 'use strict';
@@ -256,7 +262,7 @@ let warekiMode = localStorage.getItem(STORAGE.dateMode) !== 'western';
 
 function defaultData(){
   const today = new Date();
-  return {principal:'',unit:'万円',rate:'',method:'ep',years:'10',count:'120',monthlyPrincipal:'',repayDay:'17',execDate:toISO(today),bonus:false,bonusMonth1:'6',bonusMonth2:'12',bonusAmount:'',wareki:warekiMode};
+  return {principal:'',unit:'万円',rate:'',method:'ep',years:'10',count:'120',monthlyPrincipal:'',monthlyPrincipalUnit:'円',repayDay:'17',execDate:toISO(today),bonus:false,bonusMonth1:'6',bonusMonth2:'12',bonusAmount:'',wareki:warekiMode};
 }
 function toISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function clone(v){return JSON.parse(JSON.stringify(v));}
@@ -266,6 +272,29 @@ function moneyFactor(unit){return unit==='万円'?10000:1;}
 function toMoney(value,unit){return (parseFloat(value)||0)*moneyFactor(unit);}
 function fromMoney(y,unit){return y/moneyFactor(unit);}
 function inputNumber(v){return Number.isInteger(v)?String(v):String(Math.round(v*100)/100);}
+function monthlyPrincipalYen(data){
+  const raw=parseFloat(data?.monthlyPrincipal)||0;
+  if(raw<=0)return 0;
+  if(data?.monthlyPrincipalUnit==='円')return Math.floor(raw);
+  const legacyUnit=data?.monthlyPrincipalUnit||(data?.unit==='万円'&&raw<1000?'万円':'円');
+  return Math.floor(legacyUnit==='万円'?raw*10000:raw);
+}
+function monthlyPrincipalEstimateText(){
+  const d=wizard?.data||defaultData();
+  const principalValue=$('wPrincipal')?.value?.trim()||d.principal;
+  const countValue=$('wCount')?.value?.trim()||d.count;
+  const principal=toMoney(principalValue,d.unit),count=parseInt(countValue,10)||0;
+  if(principal<=0||count<=0)return '';
+  const estimate=principal/count;
+  return `目安：約${new Intl.NumberFormat('ja-JP',{minimumFractionDigits:2,maximumFractionDigits:2}).format(estimate)}円`;
+}
+function syncMonthlyPrincipalHint(){const el=$('monthlyPrincipalHint');if(el)el.textContent=monthlyPrincipalEstimateText();}
+function methodRates(method){return method==='eg'?RATES_EG:RATES_EP;}
+function useMethodRate(d,method){
+  d.method=method;
+  const rates=methodRates(method),rate=Number(d.rate);
+  if(d.rate!==''&&!rates.some(v=>Number(v)===rate))d.rate='';
+}
 function jpDate(d, wareki=true){if(!d)return '-';if(!wareki)return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;const y=d.getFullYear();const era=y>=2019?'令和':'平成';const ey=y>=2019?y-2018:y-1988;return `${era}${ey===1?'元':ey}年${d.getMonth()+1}月${d.getDate()}日`;}
 function formatScenario(d){const term=d.method==='eg'?`${d.count}回`:`${d.years}年（${Number(d.years||0)*12}回）`;return `${nfmt(d.principal)}${d.unit}・年${Number(d.rate||0).toFixed(2)}%・${term}`;}
 function resultMonthlyLabel(d){return d.method==='eg'?'初回返済額':'毎月の返済額';}
@@ -320,7 +349,7 @@ function calc(data){
   const r=rate/12, exec=data.execDate, first=exec?nextBiz(firstRaw(exec,day)):null, firstDays=exec&&first?daysIncl(new Date(exec+'T00:00:00'),first):0, firstInterest=exec&&first?Math.floor(P*rate/365*firstDays):0;
   const dates=Array.from({length:n},(_,i)=>nthDue(exec,day,i+1));let bal=P,totalInterest=0,totalPay=0,regularPayment=0;const rows=[];
   if(data.method==='eg'){
-    const monthlyPrincipal=Math.floor(toMoney(data.monthlyPrincipal,data.unit));
+    const monthlyPrincipal=monthlyPrincipalYen(data);
     if(monthlyPrincipal<=0)return {error:'毎月元金を入力してください。'};
     if(monthlyPrincipal*Math.max(0,n-1)>=P)return {error:'毎月元金 ×（返済回数−1）が借入金額を超えています。毎月元金または返済回数を見直してください。'};
     for(let i=1;i<=n;i++){const interest=(i===1&&exec)?firstInterest:Math.floor(bal*r),principal=i===n?bal:Math.min(monthlyPrincipal,bal),pay=principal+interest;bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal,bonus:false});}
@@ -350,7 +379,17 @@ function calc(data){
 function applyTheme(theme,persist=true){const next=theme==='light'?'light':'dark';document.documentElement.dataset.theme=next;$('themeToggle').dataset.theme=next;$('themeToggle').setAttribute('aria-label',next==='dark'?'ライトモードに切り替え':'ダークモードに切り替え');document.querySelector('meta[name="theme-color"]').setAttribute('content',next==='dark'?'#06142d':'#f5f8fd');if(persist)localStorage.setItem(STORAGE.theme,next);}
 function saveCurrent(data){localStorage.setItem(STORAGE.current,JSON.stringify(data));}
 function loadCurrent(){for(const k of [STORAGE.current,...legacyCurrent]){try{const raw=localStorage.getItem(k);if(raw)return normalizeData(JSON.parse(raw));}catch(_){}}return null;}
-function normalizeData(d){const base=defaultData();return {...base,...d,method:d?.method==='eg'?'eg':'ep',unit:d?.unit==='円'?'円':'万円',bonus:d?.bonus===true};}
+function normalizeData(d){
+  const base=defaultData(),source=d||{};
+  const merged={...base,...source,method:source?.method==='eg'?'eg':'ep',unit:source?.unit==='円'?'円':'万円',bonus:source?.bonus===true};
+  if(merged.method==='eg'){
+    const hasMonthlyUnit=Object.prototype.hasOwnProperty.call(source,'monthlyPrincipalUnit');
+    const raw=parseFloat(merged.monthlyPrincipal)||0;
+    if(!hasMonthlyUnit&&merged.unit==='万円'&&raw>0&&raw<1000)merged.monthlyPrincipal=inputNumber(raw*10000);
+    merged.monthlyPrincipalUnit='円';
+  }
+  return merged;
+}
 function history(){try{const x=JSON.parse(localStorage.getItem(STORAGE.history)||'[]');return Array.isArray(x)?x:[]}catch(_){return[]}}
 function pushHistory(data,result){const item={id:Date.now(),createdAt:new Date().toISOString(),data:clone(data),monthly:result.regularPayment,total:result.totalPay};const next=[item,...history()].slice(0,5);localStorage.setItem(STORAGE.history,JSON.stringify(next));}
 function saved(){try{const x=JSON.parse(localStorage.getItem(STORAGE.saved)||'[]');return Array.isArray(x)?x:[]}catch(_){return[]}}
@@ -378,9 +417,9 @@ function renderSingle(){
   d.wareki=warekiMode;
   const methodLabel=d.method==='eg'?'元金均等':'元利均等';
   const monthlyLabel=resultMonthlyLabel(d);
-  const repayNote=d.method==='eg'?'毎月元金：'+nfmt(toMoney(d.monthlyPrincipal,d.unit))+'円':'通常月の返済額';
+  const repayNote=d.method==='eg'?'毎月元金：'+nfmt(monthlyPrincipalYen(d))+'円':'通常月の返済額';
   $('singleView').innerHTML=`
-  <section class="printCover"><section class="printBrand"><div><div class="printBrandTitle">返済予定表</div><div class="printBrandSub">返済試算 Ver1.3.4</div></div><div class="printBrandMeta">${formatScenario(d)}<br>作成日：${new Date().toLocaleDateString('ja-JP')}</div></section>
+  <section class="printCover"><section class="printBrand"><div><div class="printBrandTitle">返済予定表</div><div class="printBrandSub">返済試算 Ver2.36.2</div></div><div class="printBrandMeta">${formatScenario(d)}<br>作成日：${new Date().toLocaleDateString('ja-JP')}</div></section>
   <section class="card resultHero"><div class="resultHeroTop"><div><div class="eyebrow">SIMULATION RESULT</div><h2>${monthlyLabel}</h2></div><span class="resultMethod">${methodLabel}</span></div><div class="resultPayment">${yen(r.regularPayment)}<small>/ 月</small></div><div class="resultPaymentFoot">初回返済日：${jpDate(r.first,d.wareki)}　／　返済回数：${r.n}回</div><div class="resultConditionCompact"><strong>${formatScenario(d)}</strong><span>返済日：毎月${d.repayDay}日</span><span>実行日：${d.execDate||'未設定'}</span>${d.bonus?'<span>ボーナス払いあり</span>':''}</div></section></section>
   <section class="resultSecondary"><article class="resultStat"><span>利息総額</span><strong>${yen(r.totalInterest)}</strong><div class="statHint">初回日割り：${r.firstDays||0}日</div></article><article class="resultStat highlight"><span>支払総額</span><strong>${yen(r.totalPay)}</strong><div class="statHint">元金＋利息</div></article><article class="resultStat wide"><div><span>返済条件</span><div class="statHint">${repayNote}</div></div><strong>${r.n}回</strong></article></section>
   <section class="resultActionRow"><button id="editCurrent" class="secondaryBtn" type="button">条件を編集</button><button id="startCompare" class="outlineBtn" type="button">この条件と比較</button></section>
@@ -389,10 +428,26 @@ function renderSingle(){
   $('editCurrent').onclick=()=>openWizard('edit',clone(currentScenario));$('startCompare').onclick=()=>openWizard('compare',clone(currentScenario));if($('toggleSchedule'))$('toggleSchedule').onclick=()=>{scheduleOpen=!scheduleOpen;renderSingle()};
   bindDateModeSwitches($('singleView'));
 }
-function tableHTML(rows,data){const mobile=rows.map(x=>`<article class="scheduleMobileItem"><div class="scheduleMobileTop"><span class="scheduleNo">第${x.i}回</span><span class="scheduleDate">${jpDate(x.date,data.wareki)}${x.bonus?'<span class="scheduleBonus">● ボーナス</span>':''}</span></div><div class="schedulePay"><span>今回の返済額</span><strong>${yen(x.pay)}</strong></div><div class="scheduleStats"><div class="scheduleStat"><span>元金</span><b>${yen(x.principal)}</b></div><div class="scheduleStat"><span>利息</span><b>${yen(x.interest)}</b></div><div class="scheduleStat balance"><span>返済後残高</span><b>${yen(x.bal)}</b></div></div></article>`).join('');return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td data-label="回数">${x.i}回目</td><td data-label="返済日">${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td data-label="返済額">${yen(x.pay)}</td><td data-label="元金">${yen(x.principal)}</td><td data-label="利息">${yen(x.interest)}</td><td data-label="残高">${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div><div class="scheduleMobileList">${mobile}</div>`}
+function tableHTML(rows,data){
+  const mobile=rows.map(x=>`<article class="scheduleMobileItem"><div class="scheduleMiniGrid"><div><span>回数</span><b>${x.i}回目</b></div><div><span>返済日</span><b>${jpDate(x.date,data.wareki)}${x.bonus?'<span class="scheduleBonus">●</span>':''}</b></div><div class="pay"><span>返済額</span><b>${yen(x.pay)}</b></div><div class="balance"><span>残高</span><b>${yen(x.bal)}</b></div></div><details class="scheduleBreakdown"><summary>元金・利息</summary><div class="scheduleBreakdownGrid"><div><span>元金</span><b>${yen(x.principal)}</b></div><div><span>利息</span><b>${yen(x.interest)}</b></div></div></details></article>`).join('');
+  return `<div class="tableScroll"><table><thead><tr><th>回数</th><th>返済日</th><th>返済額</th><th>元金</th><th>利息</th><th>残高</th></tr></thead><tbody>${rows.map(x=>`<tr><td data-label="回数">${x.i}回目</td><td data-label="返済日">${x.bonus?'<span class="bonusDot"></span>':''}${jpDate(x.date,data.wareki)}</td><td data-label="返済額">${yen(x.pay)}</td><td data-label="元金">${yen(x.principal)}</td><td data-label="利息">${yen(x.interest)}</td><td data-label="残高">${yen(x.bal)}</td></tr>`).join('')}</tbody></table></div><div class="scheduleMobileList">${mobile}</div>`;
+}
 function signedYen(v){return `${v>=0?'+':''}${yen(v)}`}
 function signedCount(v){return `${v>=0?'+':''}${v}回`}
 function deltaClass(v){return v>0?'deltaPlus':v<0?'deltaMinus':'same'}
+function compareDiffItems(ra,rb){
+  return [
+    ['月々の差額',rb.regularPayment-ra.regularPayment],
+    ['総返済額の差額',rb.totalPay-ra.totalPay],
+    ['利息総額の差額',rb.totalInterest-ra.totalInterest]
+  ];
+}
+function compareDeltaSummaryHTML(ra,rb){
+  return `<div class="compareDeltaHero">${compareDiffItems(ra,rb).map(([label,value])=>`<article class="compareDeltaItem ${deltaClass(value)}"><span>${label}</span><strong>${signedYen(value)}</strong></article>`).join('')}</div>`;
+}
+function comparePrintCoverHTML(a,b,ra,rb){
+  return `<section class="comparePrintCover"><div class="comparePrintHead"><div><div class="eyebrow">A/B COMPARISON</div><h2>A/B比較資料</h2><p>作成日：${new Date().toLocaleDateString('ja-JP')}</p></div><strong>返済試算 Ver2.36.2</strong></div><div class="comparePrintConditions"><article><span>パターンAの条件</span><b>${formatScenario(a)}</b></article><article><span>パターンBの条件</span><b>${formatScenario(b)}</b></article></div><div class="comparePrintDeltas">${compareDiffItems(ra,rb).map(([label,value])=>`<article class="${deltaClass(value)}"><span>${label}</span><strong>${signedYen(value)}</strong></article>`).join('')}</div></section>`;
+}
 function compareMetricLabel(metric){return ({pay:'返済額',principal:'元金',interest:'利息',bal:'残高'})[metric]||'返済額'}
 function compareMatrixHTML(a,b,ra,rb){
   const rows=[
@@ -415,7 +470,7 @@ function compareDetailHTML(a,b,ra,rb){
 }
 function renderCompare(){
   if(!comparison){$('compareView').hidden=true;return;} const {a,b,ra,rb}=comparison;a.wareki=warekiMode;b.wareki=warekiMode;$('singleView').hidden=true;$('compareView').hidden=false;const diff=rb.totalPay-ra.totalPay,mdiff=rb.regularPayment-ra.regularPayment;
-  $('compareView').innerHTML=`<section class="card compareTop"><div class="compareHeading"><div><div class="eyebrow">COMPARE MODE</div><h2>比較結果</h2></div><button id="closeCompare" class="outlineBtn" type="button">比較を閉じる</button></div>${compareMatrixHTML(a,b,ra,rb)}<div class="compareSummary">BはAより、月々 <strong>${signedYen(mdiff)}</strong> ／ 総額 <strong>${signedYen(diff)}</strong></div><div class="summaryActions"><button id="swapCompare" class="secondaryBtn" type="button">A/B入替</button><button id="editA" class="secondaryBtn" type="button">Aを編集</button><button id="editB" class="outlineBtn" type="button">Bを編集</button><button id="toggleCompareSchedules" class="primaryBtn" type="button">${compareSchedulesOpen?'予定表を閉じる':'予定表を表示'}</button></div></section>${compareSchedulesOpen?compareDetailHTML(a,b,ra,rb):''}<section class="card note">ⓘ 比較表は同じ項目ごとにA/B/差額を並べています。予定表では返済額・元金・利息・残高を切り替えできます。</section>`;
+  $('compareView').innerHTML=`${comparePrintCoverHTML(a,b,ra,rb)}<section class="card compareTop"><div class="compareHeading"><div><div class="eyebrow">COMPARE MODE</div><h2>比較結果</h2></div><button id="closeCompare" class="outlineBtn" type="button">比較を閉じる</button></div>${compareDeltaSummaryHTML(ra,rb)}${compareMatrixHTML(a,b,ra,rb)}<div class="summaryActions"><button id="swapCompare" class="secondaryBtn" type="button">A/B入替</button><button id="editA" class="secondaryBtn" type="button">Aを編集</button><button id="editB" class="outlineBtn" type="button">Bを編集</button><button id="toggleCompareSchedules" class="primaryBtn" type="button">${compareSchedulesOpen?'予定表を閉じる':'予定表を表示'}</button></div></section>${compareSchedulesOpen?compareDetailHTML(a,b,ra,rb):''}<section class="card note">ⓘ 比較表は同じ項目ごとにA/B/差額を並べています。予定表では返済額・元金・利息・残高を切り替えできます。</section>`;
   $('closeCompare').onclick=()=>{comparison=null;compareSchedulesOpen=false;compareMetric='pay';renderSingle()};$('swapCompare').onclick=()=>{comparison={a:clone(b),b:clone(a),ra:rb,rb:ra};currentScenario=clone(comparison.a);currentResult=comparison.ra;saveCurrent(currentScenario);renderCompare()};$('editA').onclick=()=>openWizard('editA',clone(a));$('editB').onclick=()=>openWizard('editB',clone(b));$('toggleCompareSchedules').onclick=()=>{compareSchedulesOpen=!compareSchedulesOpen;renderCompare()};
   $('compareView').querySelectorAll('[data-compare-metric]').forEach(btn=>btn.onclick=()=>{compareMetric=btn.dataset.compareMetric;renderCompare()});
   bindDateModeSwitches($('compareView'));
@@ -429,26 +484,26 @@ function openWizard(mode='new', seed=null){
 function closeWizard(){ $('wizardLayer').classList.remove('open');$('wizardLayer').setAttribute('aria-hidden','true'); }
 function renderWizard(){
   const d=wizard.data;const steps=[...document.querySelectorAll('.wizardStep')];steps.forEach((s,i)=>s.classList.toggle('active',i===wizard.step));$('stepDots').innerHTML=steps.map((_,i)=>`<i class="${i<=wizard.step?'active':''}"></i>`).join('');$('wizardBack').hidden=wizard.step===0;$('wizardNext').textContent=wizard.step===4?'試算する':'次へ';$('wizardError').classList.remove('show');
-  $('wPrincipal').value=d.principal;$('wPrincipalUnit').textContent=d.unit;$('wMonthlyPrincipalUnit').textContent=d.unit;$('wBonusUnit').textContent=d.unit;$('wRate').value=d.rate;$('wYears').value=d.years||10;$('wCount').value=d.count||120;$('wMonthlyPrincipal').value=d.monthlyPrincipal||'';$('wRepayDay').value=d.repayDay||17;$('wExecDate').value=d.execDate||toISO(new Date());$('wBonusAmount').value=d.bonusAmount||'';$('wBonusMonth1').value=d.bonusMonth1||'6';$('wBonusMonth2').value=d.bonusMonth2||'12';
+  $('wPrincipal').value=d.principal;$('wPrincipalUnit').textContent=d.unit;$('wMonthlyPrincipalUnit').textContent='円';$('wBonusUnit').textContent=d.unit;$('wRate').value=d.rate;$('wRate').placeholder=d.method==='eg'?'例：1.20':'例：9.00';$('wYears').value=d.years||10;$('wCount').value=d.count||120;$('wMonthlyPrincipal').value=d.monthlyPrincipal||'';$('wRepayDay').value=d.repayDay||17;$('wExecDate').value=d.execDate||toISO(new Date());$('wBonusAmount').value=d.bonusAmount||'';$('wBonusMonth1').value=d.bonusMonth1||'6';$('wBonusMonth2').value=d.bonusMonth2||'12';
   document.querySelectorAll('#unitSeg button').forEach(b=>b.classList.toggle('selected',b.dataset.unit===d.unit));$('wEP').classList.toggle('selected',d.method==='ep');$('wEG').classList.toggle('selected',d.method==='eg');$('epTermFields').hidden=d.method!=='ep';$('egTermFields').hidden=d.method!=='eg';$('bonusBlock').hidden=d.method==='eg';$('bonusFields').hidden=!d.bonus;$('wBonusNo').classList.toggle('selected',!d.bonus);$('wBonusYes').classList.toggle('selected',d.bonus);$('termTitle').textContent=d.method==='ep'?'返済期間を入力':'返済回数と毎月元金を入力';$('termLead').textContent=d.method==='ep'?'候補を選ぶか、必要なときだけ入力欄をタップして直接入力してください。':'返済回数と毎月元金を指定してください。入力欄は必要なときだけタップして直接入力できます。';
-  renderWizardPills();
+  renderWizardPills();syncMonthlyPrincipalHint();
 }
 function renderWizardPills(){
   const d=wizard.data;function pills(id,arr,label,on){$(id).innerHTML=arr.map(v=>`<button class="pillBtn ${String(v)===String(on)?'selected':''}" type="button" data-v="${v}">${v}${label}</button>`).join('');$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{const v=b.dataset.v;if(id==='amountPills'){d.principal=v;renderWizard();setTimeout(()=>nextWizard(true),180)}else if(id==='ratePills'){d.rate=Number(v).toFixed(2);renderWizard();setTimeout(()=>nextWizard(true),180)}else{d.years=v;renderWizard()}})}
-  pills('amountPills',AMOUNTS,'万',d.unit==='万円'?d.principal:'');pills('ratePills',d.method==='eg'?RATES_EG:RATES_EP,'%',Number(d.rate));pills('yearPills',YEARS,'年',d.years);
+  pills('amountPills',AMOUNTS,'万',d.unit==='万円'?d.principal:'');pills('ratePills',methodRates(d.method),'%',Number(d.rate));pills('yearPills',YEARS,'年',d.years);
 }
 // 入力欄は自動フォーカスしない。キーボードは利用者が欄をタップした時だけ表示する。
 function wizardError(text){const e=$('wizardError');e.textContent=text;e.classList.add('show')}
-function commitStep(){const d=wizard.data; if(wizard.step===1){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===2){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(toMoney(d.monthlyPrincipal,d.unit)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
+function commitStep(){const d=wizard.data; if(wizard.step===1){d.principal=$('wPrincipal').value.trim();if(toMoney(d.principal,d.unit)<=0)return '借入金額を入力してください。'}if(wizard.step===2){d.rate=$('wRate').value.trim();if(d.rate===''||Number(d.rate)<0)return '年利率を入力してください。'}if(wizard.step===3){if(d.method==='ep'){d.years=$('wYears').value;if(!Number(d.years)||Number(d.years)<1)return '返済年数を入力してください。'}else{d.count=$('wCount').value;d.monthlyPrincipal=$('wMonthlyPrincipal').value;d.monthlyPrincipalUnit='円';if(!Number(d.count)||Number(d.count)<1)return '返済回数を入力してください。';if(monthlyPrincipalYen(d)<=0)return '毎月元金を入力してください。'}}if(wizard.step===4){d.repayDay=$('wRepayDay').value;d.execDate=$('wExecDate').value;d.bonus=d.method==='ep'&&d.bonus;d.bonusAmount=$('wBonusAmount').value;d.bonusMonth1=$('wBonusMonth1').value;d.bonusMonth2=$('wBonusMonth2').value;if(!d.execDate)return '融資実行日を入力してください。';}return '';}
 function nextWizard(auto=false){const err=commitStep();if(err){if(!auto)wizardError(err);return}if(wizard.step<4){releaseKeyboard();wizard.step++;renderWizard();return}wizard.data.wareki=warekiMode;const result=calc(wizard.data);if(result.error){wizardError(result.error);return}releaseKeyboard();pushHistory(wizard.data,result);const mode=wizard.mode;const data=clone(wizard.data);closeWizard();if(mode==='compare'){const a=clone(currentScenario),ra=currentResult;comparison={a,b:data,ra,rb:result};$('introCard').hidden=true;compareSchedulesOpen=false;compareMetric='pay';renderCompare()}else if(mode==='editA'&&comparison){comparison.a=data;comparison.ra=result;currentScenario=clone(data);currentResult=result;saveCurrent(data);renderCompare()}else if(mode==='editB'&&comparison){comparison.b=data;comparison.rb=result;renderCompare()}else{showCurrent(data,result)}}
 function prevWizard(){if(wizard.step>0){releaseKeyboard();wizard.step--;renderWizard()}}
 function bindWizard(){
   $('wizardNext').onclick=()=>nextWizard(false);$('wizardBack').onclick=prevWizard;$('closeWizard').onclick=closeWizard;
-  $('unitSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;const next=b.dataset.unit;if(next!==wizard.data.unit){const from=wizard.data.unit;['principal','monthlyPrincipal','bonusAmount'].forEach(k=>{const y=toMoney(wizard.data[k],from);wizard.data[k]=y?inputNumber(fromMoney(y,next)):''});wizard.data.unit=next;renderWizard();}};
-  $('wEP').onclick=()=>{wizard.data.method='ep';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};$('wEG').onclick=()=>{wizard.data.method='eg';wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};
+  $('unitSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;const next=b.dataset.unit;if(next!==wizard.data.unit){const from=wizard.data.unit;['principal','bonusAmount'].forEach(k=>{const y=toMoney(wizard.data[k],from);wizard.data[k]=y?inputNumber(fromMoney(y,next)):''});wizard.data.unit=next;renderWizard();}};
+  $('wEP').onclick=()=>{useMethodRate(wizard.data,'ep');wizard.data.bonus=false;renderWizard();setTimeout(()=>nextWizard(true),180)};$('wEG').onclick=()=>{useMethodRate(wizard.data,'eg');wizard.data.bonus=false;wizard.data.monthlyPrincipalUnit='円';renderWizard();setTimeout(()=>nextWizard(true),180)};
   $('wBonusNo').onclick=()=>{wizard.data.bonus=false;renderWizard()};$('wBonusYes').onclick=()=>{wizard.data.bonus=true;renderWizard()};
   ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();nextWizard(false)}}));
-  ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount','wBonusMonth1','wBonusMonth2'].forEach(id=>$(id).addEventListener('input',()=>{$('wizardError').classList.remove('show')}));
+  ['wPrincipal','wRate','wYears','wCount','wMonthlyPrincipal','wRepayDay','wExecDate','wBonusAmount','wBonusMonth1','wBonusMonth2'].forEach(id=>$(id).addEventListener('input',()=>{$('wizardError').classList.remove('show');if(id==='wCount'||id==='wPrincipal')syncMonthlyPrincipalHint()}));
 }
 
 function openSheet(){renderHistoryList();$('sheetLayer').classList.add('open');$('sheetLayer').setAttribute('aria-hidden','false')}
