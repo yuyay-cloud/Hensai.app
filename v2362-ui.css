@@ -1,4 +1,4 @@
-/* Ver1.3.4 — comparison, schedule density, date switch, orbit motif, ambient enhancement */
+/* Ver2.36.2 — comparison, schedule density, date switch, orbit motif, ambient enhancement */
 :root{--v2362-cyan:#a8e7ff;--v2362-blue:#5a9cff;--v2362-grid:rgba(155,200,255,.16)}
 
 /* The PDF-style orbital motif, kept behind the result text. */
@@ -31,14 +31,16 @@
   .tableScroll th,.tableScroll td{padding:8px 7px!important;line-height:1.2!important}
   .tableScroll th{position:sticky;top:0;z-index:1}
   .scheduleMobileList{display:none!important}
+  .scheduleCard:not(.compareDetailCard)>.tableScroll{display:none!important}
+  .scheduleCard:not(.compareDetailCard)>.scheduleMobileList{display:grid!important;gap:10px!important;padding:0 12px 14px!important}
   .scheduleDensityNote{padding:0 14px 9px}
 }
 
 /* Summary comparison: rows are aligned by metric instead of separate cards. */
 .compareTop{position:relative;overflow:hidden}
-.compareMatrix{display:grid;grid-template-columns:minmax(76px,.9fr) minmax(0,1.05fr) minmax(0,1.05fr);margin-top:13px;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:color-mix(in srgb,var(--card) 92%,transparent)}
+.compareMatrix{display:grid;grid-template-columns:minmax(64px,.72fr) minmax(0,1fr) minmax(0,1fr) minmax(0,.95fr);margin-top:13px;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:color-mix(in srgb,var(--card) 92%,transparent)}
 .compareMatrix > div{min-width:0;padding:10px 9px;border-bottom:1px solid var(--line)}
-.compareMatrix > div:nth-last-child(-n+3){border-bottom:0}
+.compareMatrix > div:nth-last-child(-n+4){border-bottom:0}
 .compareMatrix .cmHead{background:var(--soft);color:var(--muted);font-size:.69rem;font-weight:900;letter-spacing:.07em;text-align:center}
 .compareMatrix .cmLabel{background:color-mix(in srgb,var(--soft) 44%,transparent);color:var(--muted);font-size:.71rem;font-weight:900;display:flex;align-items:center}
 .compareMatrix .cmValue{color:var(--ink);font-size:.79rem;font-weight:800;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -47,6 +49,7 @@
 .compareDelta{margin-top:10px;padding:11px 12px;border:1px solid color-mix(in srgb,var(--blue) 24%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--soft) 74%,transparent);color:var(--muted);font-size:.79rem;line-height:1.55}
 .compareDelta b{color:var(--ink)}
 .compareDelta strong{color:var(--blue)}
+.compareDeltaHero{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0 12px}.compareDeltaItem{position:relative;overflow:hidden;padding:14px 13px;border:1px solid var(--line);border-radius:15px;background:color-mix(in srgb,var(--card) 92%,transparent)}.compareDeltaItem span{display:block;color:var(--muted);font-size:.72rem;font-weight:900;line-height:1.35}.compareDeltaItem strong{display:block;margin-top:7px;font-size:1.18rem;line-height:1.1;font-weight:950}.compareDeltaItem.deltaPlus{border-color:color-mix(in srgb,var(--danger) 42%,var(--line));background:color-mix(in srgb,var(--danger) 12%,var(--card))}.compareDeltaItem.deltaPlus strong{color:var(--danger)}.compareDeltaItem.deltaMinus{border-color:color-mix(in srgb,var(--success) 42%,var(--line));background:color-mix(in srgb,var(--success) 12%,var(--card))}.compareDeltaItem.deltaMinus strong{color:var(--success)}.compareDeltaItem.same strong{color:var(--muted)}
 .compareTop .compareGrid,.compareTop .difference{display:none!important}
 .compareTop .summaryActions{margin-top:12px}.compareTop .summaryActions button{min-width:0}
 
@@ -56,7 +59,7 @@
 .compareDenseHead h2{margin:0;font-size:1.04rem}.compareDenseHead p{margin:5px 0 0;color:var(--muted);font-size:.76rem;line-height:1.45}
 .compareMetricTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 12px 11px}
 .compareMetricTabs button{padding:9px 6px;border:1px solid var(--line);border-radius:10px;background:var(--input);color:var(--muted);font-size:.71rem;font-weight:900}
-.compareMetricTabs button.active{border-color:transparent;background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 5px 12px rgba(28,112,245,.20)}
+.compareMetricTabs button.active,.compareMetricTabs button.selected{border-color:transparent;background:linear-gradient(135deg,#155bd7,#4b9fff);color:#fff;box-shadow:0 5px 12px rgba(28,112,245,.20)}
 .compareDenseWrap{overflow:auto;border-top:1px solid var(--line);-webkit-overflow-scrolling:touch}
 .compareDenseTable{border-collapse:collapse;width:100%;min-width:560px;font-size:.77rem}
 .compareDenseTable th,.compareDenseTable td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -79,5 +82,6 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
   radial-gradient(1px 1px at 42% 72%,rgba(22,106,210,.25),transparent 78%),
   radial-gradient(1.1px 1.1px at 88% 79%,rgba(30,116,210,.22),transparent 78%);opacity:.62}
 
+@media(max-width:600px){.compareDeltaHero{grid-template-columns:1fr}.compareDetailCard>.tableScroll{display:block!important;overflow-x:hidden!important}.compareDetailTable{min-width:0!important;width:100%;table-layout:fixed;font-size:.68rem}.compareDetailTable th,.compareDetailTable td{padding:7px 4px;line-height:1.25}}
 @media(max-width:380px){.compareMatrix > div{padding:9px 6px}.compareMatrix .cmLabel{font-size:.67rem}.compareMatrix .cmValue{font-size:.73rem}.compareMatrix .cmValue.emphasis{font-size:.82rem}.compareMetricTabs{gap:4px;padding-left:10px;padding-right:10px}.compareMetricTabs button{font-size:.66rem;padding:8px 3px}}
 @media print{.dateModeSwitch,.scheduleDensityNote,.resultOrbitDecor,.compareMetricTabs{display:none!important}.compareDenseCard{display:block!important;page-break-before:always}.compareDenseWrap{overflow:visible!important}.compareDenseTable{min-width:0!important;font-size:8pt!important}.compareDenseTable th,.compareDenseTable td{padding:2.5mm 2mm!important}.compareSchedules{display:none!important}#ambientEcho{display:none!important}}
