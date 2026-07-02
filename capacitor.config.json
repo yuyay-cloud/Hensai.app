@@ -1,0 +1,11 @@
+{
+  "appId": "cloud.yuyay.hensai",
+  "appName": "返済試算",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "scheme": "Hensai"
+  }
+}

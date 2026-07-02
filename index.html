@@ -244,7 +244,7 @@ button,input,select{font:inherit} button{color:inherit;cursor:pointer;border:0;b
 <div class="wizardFoot"><button class="ghostBtn" id="wizardBack" type="button">戻る</button><button class="primaryBtn" id="wizardNext" type="button">次へ</button></div>
 </section>
 </div>
-<div aria-hidden="true" class="sheetLayer" id="sheetLayer"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><button class="sheetClose" id="sheetClose" type="button">閉じる</button></div></div>
+<div aria-hidden="true" class="sheetLayer" id="sheetLayer"><div class="sheet"><div class="sheetTitle">メニュー</div><button id="sheetNew" type="button">＋ 新しく試算する</button><button id="sheetEdit" type="button">✎ 現在の条件を編集</button><button id="sheetCompare" type="button">⇄ 現在の条件と比較する</button><button id="sheetSave" type="button">▱ この条件を保存</button><button id="sheetPrint" type="button">⎙ PDF出力 / 印刷</button><div class="sheetTitle">直近5件</div><div id="historyList"></div><div class="sheetTitle">アプリ情報</div><button id="sheetPrivacy" type="button">プライバシーポリシー</button><button id="sheetSupport" type="button">サポート</button><button class="sheetClose" id="sheetClose" type="button">閉じる</button></div></div>
 <div aria-label="起動画面" id="splash"><canvas class="splashCanvas" id="splashCanvas"></canvas><div class="splashVersion">v2.36.3</div><div class="splashCurve"></div></div>
 <script>
 (() => {
@@ -568,6 +568,7 @@ function printWithSchedules(){
 function bindSheet(){
   $('menuBtn').onclick=openSheet;$('sheetClose').onclick=closeSheet;$('sheetLayer').addEventListener('click',e=>{if(e.target===$('sheetLayer'))closeSheet()});
   $('sheetNew').onclick=()=>{closeSheet();openWizard('new')};$('sheetEdit').onclick=()=>{closeSheet();openWizard('edit',currentScenario||defaultData())};$('sheetCompare').onclick=()=>{if(!currentScenario){closeSheet();openWizard('new');return}closeSheet();openWizard('compare',clone(currentScenario))};$('sheetSave').onclick=saveNamed;$('sheetPrint').onclick=printWithSchedules;
+  $('sheetPrivacy').onclick=()=>{location.href='./privacy.html'};$('sheetSupport').onclick=()=>{location.href='./support.html'};
 }
 
 function initAmbientDust(){

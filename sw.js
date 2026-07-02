@@ -1,6 +1,6 @@
-const CACHE = 'hensai-v2363-remainder-date-fit-1';
+const CACHE = 'hensai-v2363-store-prep-1';
 const ASSETS = [
-  './', './index.html', './manifest.json', './v2362-ui.css', './v2362-ui.js',
+  './', './index.html', './privacy.html', './support.html', './manifest.json', './v2362-ui.css', './v2362-ui.js',
   './icon-180-v2362-circle.png',
   './icon-192-v2362-circle.png', './icon-512-v2362-circle.png',
   './icon-1024-v2362-circle.png',
