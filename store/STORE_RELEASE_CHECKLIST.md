@@ -22,6 +22,12 @@
 - プライバシーポリシー: `https://yuyay-cloud.github.io/Hensai.app/privacy.html`
 - サポート: `https://yuyay-cloud.github.io/Hensai.app/support.html`
 
+## 提出資料
+
+- Google Play Console 回答案: `store/google-play-console-answers-ja.md`
+- App Store Connect 回答案: `store/app-store-connect-answers-ja.md`
+- ストア用スクリーンショット計画: `store/screenshot-plan-ja.md`
+
 ## 提出前に必要な作業
 
 - Android Studio で Android プロジェクトを開き、署名設定を行う。
