@@ -1,4 +1,4 @@
-const CACHE = 'hensai-v2362-compare-eg-yen-1';
+const CACHE = 'hensai-v2363-remainder-date-fit-1';
 const ASSETS = [
   './', './index.html', './manifest.json', './v2362-ui.css', './v2362-ui.js',
   './icon-180-v2362-circle.png',

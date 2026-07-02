@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '2.36.2';
+  const VERSION = '2.36.3';
   const DATE_MODE_KEY = 'hensai_v236_date_mode';
   const SNAP_A = 'hensai_v2362_compare_a';
   const SNAP_B = 'hensai_v2362_compare_b';
@@ -99,6 +99,14 @@
     const legacyUnit=data?.monthlyPrincipalUnit||(data?.unit==='万円'&&raw<1000?'万円':'円');
     return Math.floor(legacyUnit==='万円'?raw*10000:raw);
   }
+  function remainderAdjustMode(data){return data?.remainderAdjust==='first'?'first':'last';}
+  function monthlyPrincipalRemainder(data){
+    const P=toMoney(data.principal,data.unit), n=parseInt(data.count,10)||0, monthly=monthlyPrincipalYen(data);
+    if(P<=0||n<=0||monthly<=0)return null;
+    const adjusted=P-monthly*Math.max(0,n-1);
+    if(Math.abs(adjusted-monthly)>P)return 0;
+    return adjusted>0?Math.floor(adjusted):0;
+  }
   function key(date){ return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
   function nthWeekday(year,month,weekday,occ){ const first=new Date(year,month,1); const offset=(weekday-first.getDay()+7)%7; return new Date(year,month,1+offset+(occ-1)*7); }
   function vernal(y){ return Math.floor(20.8431+.242194*(y-1980)-Math.floor((y-1980)/4)); }
@@ -136,7 +144,9 @@
       let bal=P,totalInterest=0,totalPay=0,regularPayment=0;const rows=[];
       if(data.method==='eg'){
         const monthly=monthlyPrincipalYen(data);if(monthly<=0)return null;
-        for(let i=1;i<=n;i++){const interest=(i===1)?firstInterest:Math.floor(bal*r),principal=i===n?bal:Math.min(monthly,bal),pay=principal+interest;bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal});} regularPayment=rows[0]?.pay||0;
+        const adjustedPrincipal=monthlyPrincipalRemainder(data);if(!adjustedPrincipal)return null;
+        const adjustMode=remainderAdjustMode(data);
+        for(let i=1;i<=n;i++){const interest=(i===1)?firstInterest:Math.floor(bal*r),adjusted=adjustMode==='first'?i===1:i===n,principal=Math.min(adjusted?adjustedPrincipal:monthly,bal),pay=principal+interest;bal=Math.max(0,bal-principal);totalInterest+=interest;totalPay+=pay;rows.push({i,date:dates[i-1],pay,principal,interest,bal,adjusted});} regularPayment=rows[0]?.pay||0;
       }else{
         let bonusAmount=0,bonusIndexes=[];
         if(data.bonus){bonusAmount=Math.floor(toMoney(data.bonusAmount,data.unit));const b1=parseInt(data.bonusMonth1,10),b2=parseInt(data.bonusMonth2,10);bonusIndexes=dates.map((d,i)=>d&&[b1,b2].includes(d.getMonth()+1)?i+1:0).filter(Boolean);}
@@ -208,7 +218,7 @@
     const selectedUnit=$('#unitSeg .selected')?.dataset.unit || '万円';
     const d={
       principal:$('#wPrincipal')?.value||'',unit:selectedUnit,rate:$('#wRate')?.value||'',method:$('#wEG')?.classList.contains('selected')?'eg':'ep',
-      years:$('#wYears')?.value||'10',count:$('#wCount')?.value||'120',monthlyPrincipal:$('#wMonthlyPrincipal')?.value||'',monthlyPrincipalUnit:'円',repayDay:$('#wRepayDay')?.value||'17',execDate:$('#wExecDate')?.value||'',
+      years:$('#wYears')?.value||'10',count:$('#wCount')?.value||'120',monthlyPrincipal:$('#wMonthlyPrincipal')?.value||'',monthlyPrincipalUnit:'円',remainderAdjust:$('#remainderAdjustSeg .selected')?.dataset.remainderAdjust||'last',repayDay:$('#wRepayDay')?.value||'17',execDate:$('#wExecDate')?.value||'',
       bonus:$('#wBonusYes')?.classList.contains('selected')||false,bonusMonth1:$('#wBonusMonth1')?.value||'6',bonusMonth2:$('#wBonusMonth2')?.value||'12',bonusAmount:$('#wBonusAmount')?.value||''
     };
     if(title.includes('パターンA'))sessionStorage.setItem(SNAP_A,JSON.stringify(d));
