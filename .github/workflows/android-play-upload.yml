@@ -1,0 +1,106 @@
+name: Android Play upload
+
+on:
+  workflow_dispatch:
+    inputs:
+      track:
+        description: Google Play track to upload to
+        required: true
+        default: internal
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+      status:
+        description: Release status
+        required: true
+        default: draft
+        type: choice
+        options:
+          - draft
+          - completed
+
+permissions:
+  contents: read
+
+jobs:
+  android-play-upload:
+    name: Build signed AAB and upload to Google Play
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6.0.9
+        with:
+          version: 11.7.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6.4.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Set up Java
+        uses: actions/setup-java@v5.4.0
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install Android SDK platform
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare Android signing files
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          test -n "$ANDROID_KEYSTORE_BASE64" || { echo "::error::ANDROID_KEYSTORE_BASE64 is missing"; exit 1; }
+          test -n "$ANDROID_KEYSTORE_PASSWORD" || { echo "::error::ANDROID_KEYSTORE_PASSWORD is missing"; exit 1; }
+          test -n "$ANDROID_KEY_ALIAS" || { echo "::error::ANDROID_KEY_ALIAS is missing"; exit 1; }
+          test -n "$ANDROID_KEY_PASSWORD" || { echo "::error::ANDROID_KEY_PASSWORD is missing"; exit 1; }
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/release.keystore
+          {
+            echo "storeFile=release.keystore"
+            echo "storePassword=$ANDROID_KEYSTORE_PASSWORD"
+            echo "keyAlias=$ANDROID_KEY_ALIAS"
+            echo "keyPassword=$ANDROID_KEY_PASSWORD"
+          } > android/keystore.properties
+
+      - name: Sync Capacitor Android project
+        run: |
+          pnpm run build:web
+          pnpm exec cap sync android
+
+      - name: Build signed release AAB
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew :app:bundleRelease --no-daemon --stacktrace
+
+      - name: Upload release AAB artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: hensai-release-aab
+          path: android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
+
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: cloud.yuyay.hensai
+          releaseFiles: android/app/build/outputs/bundle/release/*.aab
+          track: ${{ inputs.track }}
+          status: ${{ inputs.status }}
