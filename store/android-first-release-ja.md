@@ -83,6 +83,19 @@ gh run list --repo yuyay-cloud/Hensai.app --workflow "Android Play upload" --lim
 
 内部テスト配布後、Google Playからインストールして確認する。
 
+内部テスト前にDebug APKで先に確認する場合:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/install-android-debug-apk.ps1
+```
+
+前提:
+
+- `outputs/mobile-artifacts/app-debug.apk` がある。
+- Android端末でUSBデバッグを有効にする。
+- USB接続後、端末側のRSA確認を許可する。
+- `private/tools/platform-tools/adb.exe` がある。無い場合は通常の `adb` をPATHから探す。
+
 - 新規試算
 - 元利均等返済
 - 元金均等返済
