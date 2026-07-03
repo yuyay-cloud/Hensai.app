@@ -1,6 +1,6 @@
 {
   "name": "hensai-app",
-  "version": "2.36.3",
+  "version": "2.36.4",
   "private": true,
   "description": "返済条件の試算・比較・返済予定表を確認できるPWA / モバイルアプリ",
   "scripts": {

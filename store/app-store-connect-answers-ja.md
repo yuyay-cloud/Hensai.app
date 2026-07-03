@@ -1,7 +1,7 @@
 # App Store Connect 回答案
 
 作成日: 2026-07-02
-対象版: Ver2.36.3
+対象版: Ver2.36.4
 Bundle ID: `cloud.yuyay.hensai`
 
 この文書は、App Store Connect の提出画面で使う回答下書きです。Apple Developer Program のTeam、署名、App Store Connect上の表示に合わせて最終確認してください。
@@ -22,7 +22,7 @@ Bundle ID: `cloud.yuyay.hensai`
 - Secondary category案: Utilities
 - SKU案: `cloud.yuyay.hensai`
 - Bundle ID: `cloud.yuyay.hensai`
-- Version: 2.36.3
+- Version: 2.36.4
 - Copyright: App Store Connectの開発者名に合わせて入力
 - Privacy Policy URL: `https://yuyay-cloud.github.io/Hensai.app/privacy.html`
 - Support URL: `https://yuyay-cloud.github.io/Hensai.app/support.html`
@@ -114,6 +114,6 @@ Bundle ID: `cloud.yuyay.hensai`
 
 現状のiOS設定:
 
-- `MARKETING_VERSION`: 2.36.3
-- `CURRENT_PROJECT_VERSION`: 23603
+- `MARKETING_VERSION`: 2.36.4
+- `CURRENT_PROJECT_VERSION`: 23604
 - `IPHONEOS_DEPLOYMENT_TARGET`: 15.0

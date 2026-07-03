@@ -1,7 +1,7 @@
 # Google Play Console 回答案
 
 作成日: 2026-07-02
-対象版: Ver2.36.3
+対象版: Ver2.36.4
 パッケージ名: `cloud.yuyay.hensai`
 
 この文書は、Google Play Console の提出画面で使う回答下書きです。最終提出前に、実際のアプリ内容とGoogle Play Console上の最新表示に合わせて確認してください。
@@ -102,8 +102,8 @@ Financial features / personal loans:
 - `targetSdkVersion`: 36
 - `compileSdkVersion`: 36
 - `minSdkVersion`: 24
-- `versionName`: 2.36.3
-- `versionCode`: 23603
+- `versionName`: 2.36.4
+- `versionCode`: 23604
 
 提出前に必要:
 

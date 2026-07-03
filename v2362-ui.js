@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const VERSION = '2.36.3';
+  const VERSION = '2.36.4';
   const DATE_MODE_KEY = 'hensai_v236_date_mode';
   const SNAP_A = 'hensai_v2362_compare_a';
   const SNAP_B = 'hensai_v2362_compare_b';
