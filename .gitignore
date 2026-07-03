@@ -6,3 +6,4 @@ outputs/
 android/keystore.properties
 android/*.keystore
 android/*.jks
+private/
