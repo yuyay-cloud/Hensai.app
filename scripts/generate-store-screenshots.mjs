@@ -71,6 +71,44 @@ const shots = [
   ['07-light-mode-result', page => setupResultSummary(page, { theme: 'light' })]
 ];
 
+const shotCaptions = {
+  '01-input-method': {
+    kicker: 'STEP INPUT',
+    title: '返済方式から順に入力',
+    body: '元利均等・元金均等を選び、必要な条件だけを確認します。'
+  },
+  '02-result-summary': {
+    kicker: 'RESULT',
+    title: '月々・総額・利息を一画面で確認',
+    body: '返済額と支払総額を、見やすいサマリーで把握できます。'
+  },
+  '03-repayment-schedule': {
+    kicker: 'SCHEDULE',
+    title: '返済予定表をスマホで確認',
+    body: '回数、返済日、返済額、残高を中心に表示します。'
+  },
+  '04-compare-summary': {
+    kicker: 'A/B COMPARE',
+    title: '差額がすぐ分かるA/B比較',
+    body: '月々の差額、総返済額、利息総額を並べて確認できます。'
+  },
+  '05-compare-schedule': {
+    kicker: 'DETAIL COMPARE',
+    title: '回ごとの返済額と差額を比較',
+    body: '同じ返済回数ごとにA/Bと差額を確認できます。'
+  },
+  '06-equal-principal-input': {
+    kicker: 'EQUAL PRINCIPAL',
+    title: '元金均等の余り調整に対応',
+    body: '毎月元金を円単位で入力し、初回または最終回で調整できます。'
+  },
+  '07-light-mode-result': {
+    kicker: 'LIGHT MODE',
+    title: '明るい画面でも数字を読みやすく',
+    body: 'ライトモードでも返済額と条件をはっきり確認できます。'
+  }
+};
+
 function contentType(file) {
   const ext = path.extname(file).toLowerCase();
   return {
@@ -235,6 +273,7 @@ class AppPage {
     await this.waitFor('document.readyState === "complete"');
     await this.waitFor('!document.querySelector("#splash")');
     await wait(160);
+    if (this.storeCaption) await this.applyStoreCaption(this.storeCaption);
   }
 
   async evaluate(expression) {
@@ -284,6 +323,26 @@ class AppPage {
     await this.waitFor(`document.querySelector(${safe})`);
     await this.evaluate(`document.querySelector(${safe}).scrollIntoView({ block: 'start', inline: 'nearest' })`);
     await wait(220);
+  }
+
+  async applyStoreCaption(caption) {
+    const payload = JSON.stringify(caption);
+    await this.evaluate(`(() => {
+      const caption = ${payload};
+      document.body.classList.add('storeShotCapture');
+      let el = document.querySelector('.storeShotCaption');
+      if (!el) {
+        el = document.createElement('aside');
+        el.className = 'storeShotCaption';
+        el.setAttribute('aria-hidden', 'true');
+        el.innerHTML = '<span></span><strong></strong><small></small>';
+        document.body.prepend(el);
+      }
+      el.querySelector('span').textContent = caption.kicker || '';
+      el.querySelector('strong').textContent = caption.title || '';
+      el.querySelector('small').textContent = caption.body || '';
+    })()`);
+    await wait(100);
   }
 
   async screenshot(file) {
@@ -436,8 +495,9 @@ async function captureFeatureGraphic(cdp, origin) {
       const style = document.createElement('style');
       style.textContent = \`
         html,body{width:1024px;height:500px;margin:0;overflow:hidden;background:#06142d;color:#f6fbff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-        .featureShot{position:relative;box-sizing:border-box;width:1024px;height:500px;padding:58px 72px;display:grid;grid-template-columns:1.18fr .82fr;gap:42px;align-items:center;background:radial-gradient(circle at 82% 12%,rgba(168,231,255,.30),transparent 34%),linear-gradient(135deg,#06142d,#0d3270 58%,#1359b7)}
-        .featureShot:after{content:"";position:absolute;right:-64px;bottom:-114px;width:350px;height:350px;border-radius:50%;border:1px solid rgba(190,232,255,.30);box-shadow:0 0 0 34px rgba(94,177,255,.07)}
+        .featureShot{position:relative;box-sizing:border-box;width:1024px;height:500px;padding:58px 72px;display:grid;grid-template-columns:1.18fr .82fr;gap:42px;align-items:center;background:linear-gradient(135deg,#06142d,#0d3270 58%,#1359b7);overflow:hidden}
+        .featureShot:before{content:"";position:absolute;left:-150px;right:-170px;top:34px;height:330px;border-top:1px solid rgba(190,232,255,.28);border-bottom:1px solid rgba(111,199,255,.12);border-radius:50%;transform:rotate(-9deg);filter:drop-shadow(0 18px 28px rgba(76,179,255,.18))}
+        .featureShot:after{content:"";position:absolute;right:-64px;bottom:-114px;width:350px;height:350px;border-radius:50%;border:1px solid rgba(190,232,255,.24);box-shadow:0 0 0 34px rgba(94,177,255,.05)}
         .eyebrow{font-size:22px;letter-spacing:.12em;color:#a8e7ff;font-weight:800}
         h1{margin:14px 0 0;font-size:84px;line-height:1;font-weight:950;letter-spacing:0}
         p{margin:24px 0 0;max-width:560px;font-size:30px;line-height:1.45;color:#dbeeff;font-weight:700}
@@ -476,6 +536,7 @@ async function captureAll() {
       await mkdir(targetDir, { recursive: true });
       for (const [name, setup] of shots) {
         const page = await createPage(cdp, origin, target);
+        page.storeCaption = shotCaptions[name];
         const file = path.join(targetDir, `${name}.${target.extension}`);
         try {
           await setup(page);
@@ -486,6 +547,7 @@ async function captureAll() {
             target: target.id,
             label: target.label,
             shot: name,
+            caption: shotCaptions[name]?.title || '',
             ...size
           });
           console.log(`${relative(file)} ${size.width}x${size.height}`);

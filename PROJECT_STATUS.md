@@ -1,15 +1,15 @@
-﻿# PROJECT_STATUS.md — 返済試算 PWA 現状・引き継ぎメモ
+# PROJECT_STATUS.md — 返済試算 PWA 現状・引き継ぎメモ
 
 最終更新: 2026-07-02
-現行の安定ベース: **Ver2.36.3**
+現行の安定ベース: **Ver2.36.4**
 
 ## 1. 現在の状態
 
-`index.html`、`manifest.json`、`sw.js` の現行実装は Ver2.36.3 です。
+`index.html`、`manifest.json`、`sw.js` の現行実装は Ver2.36.4 です。
 
-Ver2.36.3 では、比較表示、返済予定表の表示密度、比較PDF、元金均等の円単位入力、返済日の見切れ対策、元金均等の余り調整を現行ソースへ反映済みです。
+Ver2.36.4 では、比較表示、返済予定表の表示密度、比較PDF、元金均等の円単位入力、返済日の見切れ対策、元金均等の余り調整に加え、入力ウィザードのUI polishとストア用スクリーンショットのキャプション生成を現行ソースへ反映済みです。
 
-以後の作業は、必ず Ver2.36.3 の現行ソースを基準に行います。
+以後の作業は、必ず Ver2.36.4 の現行ソースを基準に行います。
 
 ## 2. 現在実装済みの機能
 
@@ -63,18 +63,21 @@ Ver2.36.3 では、比較表示、返済予定表の表示密度、比較PDF、�
 
 - Capacitor による Android / iOS ラッパーを追加
 - Bundle ID / Application ID: `cloud.yuyay.hensai`
-- Android `versionCode`: `23603`
-- Android `versionName`: `2.36.3`
-- iOS `MARKETING_VERSION`: `2.36.3`
-- iOS `CURRENT_PROJECT_VERSION`: `23603`
+- Android `versionCode`: `23604`
+- Android `versionName`: `2.36.4`
+- iOS `MARKETING_VERSION`: `2.36.4`
+- iOS `CURRENT_PROJECT_VERSION`: `23604`
 - ストア提出用URL:
   - プライバシーポリシー: `https://yuyay-cloud.github.io/Hensai.app/privacy.html`
   - サポート: `https://yuyay-cloud.github.io/Hensai.app/support.html`
+- ストア提出用スクリーンショット:
+  - `pnpm run store:screenshots` で Google Play / App Store Connect 用画像を生成
+  - 生成画像には、実UIの上に短い説明キャプションを重ねる
 - ストア公開に必要な残作業は `store/STORE_RELEASE_CHECKLIST.md` を参照
 
-## 3. Ver2.36.3 までに統合済みの改善項目
+## 3. Ver2.36.4 までに統合済みの改善項目
 
-以下の 1〜5 は、Ver2.36.3 までに統合済みです。今後触る場合は、回帰を防ぐためスマホ幅 360〜430px、ダーク / ライト、印刷、PWA キャッシュを確認してください。
+以下の 1〜5 は、Ver2.36.4 までに統合済みです。今後触る場合は、回帰を防ぐためスマホ幅 360〜430px、ダーク / ライト、印刷、PWA キャッシュを確認してください。
 
 ### 優先 1 — 比較画面を「同じ項目の横比較」に作り直す
 
@@ -212,18 +215,18 @@ Ver2.36.3 では、比較表示、返済予定表の表示密度、比較PDF、�
 
 ## 6. リリース / バージョン運用
 
-次の作業を開始する前に、現在の Ver2.36.3 を Git タグまたはリリースで固定することを推奨します。
+次の作業を開始する前に、現在の Ver2.36.4 を Git タグまたはリリースで固定することを推奨します。
 
 例:
 
 ```text
-タグ: v2.36.3-store-prep
+タグ: v2.36.4-store-prep
 ```
 
 現在の公開候補バージョン:
 
 ```text
-Ver2.36.3
+Ver2.36.4
 ```
 
 バージョンを更新する際は、必要に応じて以下を揃える。
