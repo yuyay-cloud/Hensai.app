@@ -39,6 +39,26 @@ jobs:
           node-version: 24
           cache: pnpm
 
+      - name: Select Xcode 26 or later
+        run: |
+          CURRENT_XCODE_VERSION="$(xcodebuild -version | awk '/^Xcode / { print $2 }')"
+          case "$CURRENT_XCODE_VERSION" in
+            2[6-9]*|[3-9][0-9]*)
+              xcodebuild -version
+              exit 0
+              ;;
+          esac
+
+          XCODE_APP="$(find /Applications -maxdepth 1 -name 'Xcode_2[6-9]*.app' -print | sort | tail -n 1)"
+          test -n "$XCODE_APP" || {
+            echo "::error::Xcode 26 or later is required for App Store Connect uploads."
+            find /Applications -maxdepth 1 -name 'Xcode*.app' -print
+            exit 1
+          }
+
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          xcodebuild -version
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
