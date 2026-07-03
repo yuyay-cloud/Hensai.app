@@ -65,11 +65,13 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
         run: |
           test -n "$ANDROID_KEYSTORE_BASE64" || { echo "::error::ANDROID_KEYSTORE_BASE64 is missing"; exit 1; }
           test -n "$ANDROID_KEYSTORE_PASSWORD" || { echo "::error::ANDROID_KEYSTORE_PASSWORD is missing"; exit 1; }
           test -n "$ANDROID_KEY_ALIAS" || { echo "::error::ANDROID_KEY_ALIAS is missing"; exit 1; }
           test -n "$ANDROID_KEY_PASSWORD" || { echo "::error::ANDROID_KEY_PASSWORD is missing"; exit 1; }
+          test -n "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" || { echo "::error::GOOGLE_PLAY_SERVICE_ACCOUNT_JSON is missing"; exit 1; }
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/release.keystore
           {
             echo "storeFile=release.keystore"
